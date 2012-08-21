@@ -1,0 +1,13 @@
+########################
+# Tex compilation files
+########################
+*.aux
+*.log
+*.lof
+*.lot
+*.toc
+*.synctex.gz
+*.xml
+
+
+
