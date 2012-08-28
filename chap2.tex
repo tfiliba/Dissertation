@@ -20,16 +20,53 @@ There is a small number of real time algorithms commonly used to reduce the data
 
 
 \subsection{Spectroscopy}
-A spectrometer is simply an instrument that produces an integrated spectrum from a time domain signal. After digitizing the data, a spectrum is constantly computed (channelization), then each channel is summed for a predetermined amount of time to compute the average power in that channel. Figure (TODO: add spectrometer block diagram) shows a block diagram for a simple spectrometer design. After digitization, there is the channelization step, where the signal is processed by a digital filter bank, and then the channels are accumulated. 
+A spectrometer is simply an instrument that produces an integrated spectrum from a time domain signal. 
+After digitizing the data, a spectrum is constantly computed (channelization), then each channel is summed for a predetermined amount of time to compute the average power in that channel. 
+Figure (TODO: add spectrometer block diagram) shows a block diagram for a simple spectrometer design. 
+After digitization, there is the channelization step, where the signal is processed by a digital filter bank, and then the channels are accumulated. 
 
-High-resolution, high-bandwidth spectrometers often require more complexity in their design. Once the number of channels is sufficiently high, it becomes infeasible to compute the spectrum using a single filter bank. To cope with this, the channelization is done in two steps as shown in figure (TODO: add hi res spectrometer block diagram). In the first step, the signal is divided into coarse channels using a filter bank. At this point the channels are much wider than intended and can't be accumulated yet. After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. This step breaks up the wide channel into a number of smaller channels . At this point the data can be accumulated since it has the desired resolution.
+High-resolution, high-bandwidth spectrometers often require more complexity in their design. 
+Once the number of channels is sufficiently high, it becomes infeasible to compute the spectrum using a single filter bank. 
+To cope with this, the channelization is done in two steps as shown in figure (TODO: add hi res spectrometer block diagram). 
+In the first step, the signal is divided into coarse channels using a filter bank. 
+At this point the channels are much wider than intended and can't be accumulated yet. 
+After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. 
+This step breaks up the wide channel into a number of smaller channels . At this point the data can be accumulated since it has the desired resolution.
 
 \subsection{Pulsar processing}
-A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. A pulsar is a 
+A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
+A pulsar is a rotating neutron star that emits a beam. 
+When the beam sweeps past Earth, due to the rotation of the star, it is observed as a wideband pulse. 
+As the pulse travels through the interstellar medium (the matter filling interstellar space), the pulsar gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
+
+A normal spectrometer that accumulates the spectrum would smear the pulse, so there will need to be a few adjustments to the spectroscopy algorithm to make it suitable for processing transient events. 
+In the case of pulsars, the algorithm starts with a high-resolution spectrometer minus the accumulator. 
+Instead, the algorithm becomes specialized to detect this type of quickly occurring event.
+
+The high resolution data is then sent to a process called dedispersion, which undoes the dispersion caused by the ISM, realigning the pulse.
+%TODO: describe dm, pulsar searching
+There are 2 techniques to do this.
+First, the pulse can be dedispersed by shifting the frequency channels by different amounts to compensate for the different delays as shown in figure TODO: add figure, in a process called \emph{incoherent dedispersion}.
+This process can't be used to reconstruct the original pulse, but due to its relatively low compute cost, is a useful algorithm to search for new pulsars.
+The second technique, \emph{coherent dedispersion}, models the effect of the ISM as a convolving filter. 
+To remove this effect, the signal is deconvolved with the model.
+This is more compute intensive than incoherent dedispersion, but can recover the original pulse.
+
+After dedispersion, there is a still a lot of data and the pulse has very low SNR. 
+The next step in processing is \emph{folding}, or adds together many pulses, reducing the signal and improving the SNR.
+At this point, the data has been significantly reduced and can be recorded. 
+
+%TODO: Graphic to describe this process. Block diagram + images
+
 %Detect dispersed pulses
 %
-%\subsection{Beamforming}
+\subsection{Beamforming}
+Beamforming is one technique for combining data from an array of antennas.
+The beamformer combines the data from multiple antennas into a single beam pointed at a single point in the sky.
+This is done by 
+%TODO: Add 2 element beamformer
 %%Add together multiple (delayed) signals to improve SNR
+
 %\subsection{Interferometry}
 %%Form an image
 %An interferometer 
