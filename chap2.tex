@@ -16,6 +16,7 @@ Once the data is partially processed, and reduced to a manageable bandwidth, it 
 
 
 \section{Real Time Algorithms}
+%TODO add complexity analysis
 There is a small number of real time algorithms commonly used to reduce the data, in this section we focus on spectroscopy, pulsar processing, beamforming and interferometry. 
 
 
@@ -33,7 +34,7 @@ At this point the channels are much wider than intended and can't be accumulated
 After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. 
 This step breaks up the wide channel into a number of smaller channels . At this point the data can be accumulated since it has the desired resolution.
 
-\subsection{Pulsar processing}
+\subsection{Pulsar Processing}
 A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
 A pulsar is a rotating neutron star that emits a beam. 
 When the beam sweeps past Earth, due to the rotation of the star, it is observed as a wideband pulse. 
@@ -67,7 +68,13 @@ This is done by
 %TODO: Add 2 element beamformer
 %%Add together multiple (delayed) signals to improve SNR
 
-%\subsection{Interferometry}
+\subsection{Correlation}
+Interferometery is another technique to combine the data from array of antennas.
+Unlike beamforming, rather than forming a single beam, an interferometer uses the data from the antennas to form a sky image. 
+In order to form a the sky image, the instrument must calculate the cross-correlation of each pair of antennas.
+
+A spectral correlator
+
 %%Form an image
 %An interferometer 
 
