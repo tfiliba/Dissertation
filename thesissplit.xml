@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pdfsam_saved_jobs version="2.2.1" savedate="27-Sep-2012" selection="org.pdfsam.plugin.split.GUI.SplitMainGUI">
+  <plugin class="org.pdfsam.guiclient.gui.panels.JInfoPanel" name="About"/>
+  <plugin class="org.pdfsam.plugin.mix.GUI.MixMainGUI" name="Alternate Mix">
+    <destination value=""/>
+    <step value="1"/>
+    <secondstep value="1"/>
+    <reverse_first value="false"/>
+    <reverse_second value="true"/>
+    <overwrite value="true"/>
+    <compressed value="true"/>
+    <pdfversion value="5"/>
+  </plugin>
+  <plugin class="org.pdfsam.plugin.merge.GUI.MergeMainGUI" name="Merge/Extract">
+    <filelist/>
+    <destination value=""/>
+    <overwrite value="true"/>
+    <merge_type value="false"/>
+    <compressed value="true"/>
+    <pdfversion value="5"/>
+  </plugin>
+  <plugin class="org.pdfsam.plugin.rotate.GUI.RotateMainGUI" name="Rotate">
+    <filelist/>
+    <rotation value="90"/>
+    <pages value="all"/>
+    <destination value=""/>
+    <overwrite value="true"/>
+    <compressed value="true"/>
+    <pdfversion value="5"/>
+    <prefix value="pdfsam_"/>
+  </plugin>
+  <plugin class="org.pdfsam.guiclient.gui.panels.JSettingsPanel" name="Settings"/>
+  <plugin class="org.pdfsam.plugin.split.GUI.SplitMainGUI" name="Split">
+    <source value="/Users/tfiliba/Projects/Dissertation/thesis.pdf"/>
+    <split_option value="BLEVEL"/>
+    <npages value=""/>
+    <thispage value=""/>
+    <splitsize value=""/>
+    <bookmarkslevel value="1"/>
+    <destination value="/Users/tfiliba/Projects/Dissertation/splitpdfs"/>
+    <prefix value="[BASENAME]_[FILENUMBER##]_[BOOKMARK_NAME]"/>
+    <overwrite value="true"/>
+    <compressed value="true"/>
+    <pdfversion value="1000"/>
+  </plugin>
+  <plugin class="org.pdfsam.plugin.vcomposer.GUI.VComposerMainGUI" name="Visual document composer">
+    <input-documents/>
+    <output-document/>
+    <destination value=""/>
+    <overwrite value="true"/>
+    <compressed value="true"/>
+    <pdfversion value="5"/>
+  </plugin>
+  <plugin class="org.pdfsam.plugin.vpagereorder.GUI.VPageReorderMainGUI" name="Visual reorder">
+    <source/>
+    <destination value=""/>
+    <overwrite value="true"/>
+    <compressed value="true"/>
+    <pdfversion value="5"/>
+  </plugin>
+</pdfsam_saved_jobs>
