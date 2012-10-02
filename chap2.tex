@@ -55,6 +55,8 @@ At this point the channels are much wider than intended and can't be accumulated
 After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. 
 This step breaks up the wide channel into a number of smaller channels . At this point the data can be accumulated, since it has the desired resolution.
 
+\subsection{Applications}
+
 This high resolution spectroscopy technique is used in the SERENDIP V.v (Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations) project. 
 This project is part of the SETI (Search for Extraterrestrial Intelligence) effort to detect extraterrestrial intelligence. 
 The SERENDIP V.v project is a commensal survey at the Arecibo observatory, meaning anytime the ALFA receiver is used for any observation, the SERENDIP spectrometer will also process and record data. %TODO: add time estimate 
@@ -88,7 +90,7 @@ To remove this effect, the signal is deconvolved with the model.
 This is more compute intensive than incoherent dedispersion, but can recover the original pulse.
 
 After dedispersion, there is a still a lot of data and the pulse has very low SNR. 
-The next step in processing is \emph{folding}, or adds together many pulses, reducing the signal and improving the SNR.
+The next step in processing is \emph{folding}, or adds together many pulses, reducing the amount of data and improving the SNR.
 At this point, the data has been significantly reduced and can be recorded. 
 
 %TODO add scaling into
@@ -98,6 +100,15 @@ At this point, the data has been significantly reduced and can be recorded.
 %Detect dispersed pulses
 %
 %TODO: add science info
+\subsection{Applications}
+Some pulsars serve as a very accurate astronomical time keeper.
+There are millisecond pulsars with extremely stable periods, allowing any perturbations in the observed pulse period to be attributed to some external effect.
+This makes pulsars extremely useful for conducting relativity experiments. 
+One such example is the North American Nanohertz Observatory for Gravitational Waves, or NANOGrav, Project, %TODO: add citation The international pulsar timing array project: using
+which uses pulsars in an attempt to make the first detection of gravitational waves. 
+The project will try to detect gravitational waves by observing an array of pulsars, measuring the effect of the waves passing between Earth and the pulsars as changes in observed pulse periods.
+
+%Beyond astronomy, pulsars could also serve as 
 
 \section{Beamforming}
 Beamforming is one technique for combining data from an array of antennas.
@@ -121,14 +132,14 @@ Applying these 2 steps, results in a new delayed signal $f[n] = f[n-n_f]\ast b_{
 In practice, it is common to calculate the spectrum of the beamformed signal. 
 %TODO: explain why spectrum is desirable
 A typical 2 element beamformer, with discrete input signals $f[n]$ and $g[n]$ is trying to calculate the spectrum of beam $i$, $H_i$, using coarse delays $n_{fi}$  $n_{gi}$ and delay filters $b_{fi}$ and $b_{gi}$, as follows: 
-$$H_i(x) = FFT(f[n-n_{fi}]\ast b_{fi} + g[n-n_{gi}]\ast b_{gi})$$
-We describe this as BF beamforming because the delay operation (B), happens before the FFT operation (F).
+$$H_i(x) = FT(f[n-n_{fi}]\ast b_{fi} + g[n-n_{gi}]\ast b_{gi})$$
+We describe this as BF beamforming because the delay operation (B), happens before the FT operation (F).
 
 %TODO add info on scaling here
 
 \subsection{FB Beamforming}
-In the case where many beams are required, each beam needs a different FIR filter for every antenna, and a separate FFT. 
-This is called FB beamforming because the FFT operations (F) occur before the delay (B). 
+In the case where many beams are required, each beam needs a different FIR filter for every antenna, and a separate FT. 
+This is called FB beamforming because the FT operations (F) occur before the delay (B). 
 Using linearity of the fourier transform and the convolution theorem, the computation can be rearranged as follows:
 
 %TODO fix this
@@ -140,10 +151,12 @@ $$H_i(x) = F[x] \cdot B'_{fi} + G[x] \cdot B'_{gi}$$
 
 Where $F[x]$ and $G[x]$ are the fourier transforms of the signals $f$ and $g$.
 The signal delay becomes a phase shift in frequency domain that is represented by $B'_{fi}$ and $B'_{gi}$. 
-In this case, there is an FFT for each antenna, rather than one FFT per beam. 
+In this case, there is a FT for each antenna, rather than one FT per beam. 
 When forming multiple beams, there is no need to recalculate the Fourier transform of the signals. 
 %$A$ signals, $n$ frequency channels, $B$ beams and a $$
 So, as the number of beams increases, it can be advantageous to use this algorithm rather than the BF algorithm described in the previous section. 
+
+\subsection{Applications}
 
 %TODO add info on scaling here
 
@@ -155,21 +168,39 @@ Aperture synthesis is another technique to combine that data from many antennas.
 %TODO: why?
 The goal is to form an image of the sky, using 2 steps, correlation followed by imaging.
 In the correlation step, the cross-correlation of each pair of antennas is calculated. 
-The cross-correlation of an antenna pair represents a point in the uv plane, called a \emph{visibility}. 
+Once the cross-correlation is calculated, it is possible to accumulate the data, greatly reducing the amount of data that needs to be processed in the imaging step.
 
 The uv plane represents the Fourier transform of the 2-dimensional sky image. 
+The cross-correlation of an antenna pair represents a point in the uv plane, called a \emph{visibility}. 
+Since the visibilities are not evenly or continuously sampled, the imager must interpolate points on the uv plane in an evenly spaced grid so the FFT algorithm, which relies on even spacings, can be applied to the data. 
+The imager must also account for the fact that the response of the telescope distorts the image, undoing the effect using iterative algorithms like CLEAN or Maximum Entropy. 
+Once this is done, a two dimensional inverse Fourier transform can be applied to recover the sky image. 
 
+Typically, large telescope arrays do correlation in real time and finish the imaging offline, but there are a few notable exceptions.
+One of these is the VLBA, or Very Long Baseline Array. 
+When designing antenna arrays, one important parameter is the distance between the antennas, or \emph{baselines}. 
+Arrays with longer baselines provide images with better angular resolution. 
+The VLBA is an extremely high resolution array, achieving this resolution by using telescopes on opposite ends of the Earth. 
+The distance between the antennas, while useful for science, creates a logistical issue for any real time processing that depends on data from different antennas. 
+Instead of correlating in real time, the VLBA records the digitized data directly from the telescopes at each site, without any reduction.
+Later, the recorded data is flown to a central location, where it gets correlated.
 
+The cross-correlation of two signals, f[n] and g[n] is defined as:
+$$h[n] = f[n]\star g[n] = \sum_{i=0}^m f^*[i]g[n+i]$$
+Like in beamforming, it is often desirable to calculate a spectrum, so the correlation step typically also calculates the spectrum of the cross-correlations. 
+So, the final result of the correlator produces the spectrum of the visibilities, H[x].
+$$H[x] = FT(f[n]\star g[n])$$
 
 
 \subsection{XF Correlation}
-The cross-correlation of two signals, f[n] and g[n] is defined as:
-$$f[n]\star g[n] = \sum_{i=0}^m f^*[i]g[n+i]$$
-
-Like in beamforming, it is often desirable to calculate a spectrum, so the correlation step typically also calculates the spectrum of the cross-correlations. 
+An XF, or lag, correlator calculates the spectrum by calculating the cross-correlation first (X), followed by a Fourier transform (F).
+For an antennal with $n$ antennas, this would require $O(n^2)$ cross-correlations, followed by $O(n^2)$ Fourier transform operations.
+ 
 
 
 \subsection{FX Correlation}
+As $n$ gets larger, the 
+The cross-correlation theorem further extends the parallel between correlation and convolution, relating the Fourier transform of the cross-correlation of two signals to the Fourier transforms of 
 
 
 %%Form an image
