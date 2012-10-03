@@ -3,28 +3,47 @@
 %Goal: Explain why we can mesh them together successfully in this case\\
 %State: Can be written now \\
 %List of references already compiled into Papers archive \\
-\section{Radio Astronomy}
+\section{Radio Astronomy} \label{Related Work:Radio Astronomy}
 \subsection{Digital Signal Processing for Radio Astronomy}
 \subsection{DiFX}
-%DiFX (Distributed FX Correlator) is a scalable software implementation%Designed for VLBI (Very Long Baseline Interferometry)%Requires a large cluster to do a lot of computation%64 MHz, 10 antennas required ~100 nodes in 2007
+%DiFX (Distributed FX Correlator) is a scalable software implementation
+%Designed for VLBI (Very Long Baseline Interferometry)
+%Requires a large cluster to do a lot of computation
+%64 MHz, 10 antennas required ~100 nodes in 2007
 \subsection{LOFAR}
 \subsection{xGPU}
 
 \subsection{CASPER}
 
-\section{Tuning}
+
+
+\section{Tuning} \label{Related Work:Tuning}
 \subsection{Metropolis}
-Abhijit Davare. Automated mapping for heterogeneous multiprocessor embedded systems. PhD thesis, 2007. 
-Provides an abstract block based description of the system (Metropolis)Easy to stitch algorithms together Simulation is abstracted from the eventual hardware implementationMapping is focused on scheduling onto heterogeneous platformsStrong focus on embedded systems
+Abhijit Davare. Automated mapping for heterogeneous multiprocessor embedded systems. PhD thesis, 2007.
+ 
+Provides an abstract block based description of the system (Metropolis)
+Easy to stitch algorithms together 
+Simulation is abstracted from the eventual hardware implementation
+Mapping is focused on scheduling onto heterogeneous platforms
+Strong focus on embedded systems
 
-Some people have thought about how to use technologyMetropolis works on simulation extensively (supporting Embedded systems – we have 1 cpu and 1 dsp let’s make it go fast
-This doesn’t solve our problemJust does scheduling
+Some people have thought about how to use technology
+Metropolis works on simulation extensively (supporting 
+Embedded systems – we have 1 cpu and 1 dsp let’s make it go fast
+This doesn’t solve our problem
+Just does scheduling
 
-Doesn’t help design the clusterA “heterogeneous node” has a fixed mix of resourcesCan’t reduce costs by throwing away certain types of hardwareOptimization is based on a fixed architecture and flexible performanceDoesn’t match our “always running” modelPerformance is “good enough”, not an optimization target
+Doesn’t help design the cluster
+A “heterogeneous node” has a fixed mix of resources
+Can’t reduce costs by throwing away certain types of hardware
+Optimization is based on a fixed architecture and flexible performance
+Doesn’t match our “always running” model
+Performance is “good enough”, not an optimization target
 
 
 
 Lisa Marie Guerra (?)
+
 
 \subsection{ILP for scheduling}
 An integer linear programming model for mapping applications on hybrid systems
