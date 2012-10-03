@@ -47,24 +47,29 @@ The percentage of the resource $r$ required by some block type, or utilization, 
 Multiplying the resources required for a specific block type by the number of blocks needed on that specific board determines the total percent of resource $r$ block type $b$ will require on the board. 
 Summing over all of the block types determines what percent of resource $r$ is used in the final design, which gives us the final format of the constraint needed to ensure that some resource $r$ is not overmapped on board $i$:
 
-$$\sum_{b\in Blocks} n_{i,b} r_{p,b} \leq 1$$
+\begin{equation}
+\sum_{b\in Blocks} n_{i,b} r_{p,b} \leq 1
+\end{equation}
 
 Each resource will require a separate constraint in the ILP of this form. By ensuring that the total utilization of each resource required is less than 100\%, we guarantee that there are enough resources to allow all the blocks mapped to that board to complete their tasks. 
 
 
 \subsection{Network Resources}
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \centering
+     \includegraphics[width=0.3\textwidth]{Images/C5/cluster_instruments.pdf}
+  \caption{TODO}
+  \label{fig:cluster_instruments.pdf}
+\end{wrapfigure}
+
 The ILP does not design the network topology. 
 While it would be possible to design the network using an ILP, %TODO: add ref
 this would add unnecessary complexity to the program (therefore increasing the runtime) with little gain.
 As described in Section \ref{Related Work:Radio Astronomy}, most radio astronomy applications require a full-crossbar interconnect at some point, because many computational blocks have an all-to-all or one-to-all communication pattern.
 Rather than have the ILP redesign the same topology over and over, we simply assume this interconnect exists and every board can communicate with every other board directly.
 
-\begin{figure}[ht!]
-  \centering
-     \includegraphics[height=0.25\textheight]{Images/C5/cluster_instruments.pdf}
-  \caption{TODO}
-  \label{fig:cluster_instruments.pdf}
-\end{figure}
+
 
 Figure \ref{fig:cluster_instruments.pdf} shows an example of this topology. 
 Each board gets connected to the same switch and can communicate with any other board on the switch, regardless of the platform type. 
@@ -86,39 +91,62 @@ The constraint on output bandwidth is calculated the same way, generating a pair
 %#check that we don't exceed the input/output bandwidth
 %prob += lpSum(blockinputbw[blocktype]*num_receive_data[blocktype,currentplatform,currentboard] for blocktype in range(blocktypes)) <= platforminputbw[currentplatform]
 %        prob += lpSum(blockoutputbw[blocktype]*num_send_data[blocktype,currentplatform,currentboard] for blocktype in range(blocktypes)) <= platformoutputbw[currentplatform]
+\begin{align}
+\sum_{b\in Blocks} nr_{i,b} bw_{b} \leq bw\_in_{p} \\
+\sum_{b\in Blocks} ns_{i,b} bw_{b} \leq bw\_out_{p}
+\end{align}
 
-$$\sum_{b\in Blocks} nr_{i,b} bw_{b} \leq bw\_in_{p}$$
-$$\sum_{b\in Blocks} ns_{i,b} bw_{b} \leq bw\_out_{p}$$
 
-While this might seem simple, getting the correct $nr_{i,b}$ and $ns_{i,b}$ values requires additional constraints.
 
 \subsubsection{Defining connections}
-First, we observe that the both must be bounded by $0$ and $n_{i,b}$, since there cannot be a negative number of blocks that need to communicate, and the number of blocks of type $b$ that need to communicate can't exceed the number of blocks physically on the board. 
+While the constraints on the total input and output bandwidth might seem simple, ensuring the values for $nr_{i,b}$ and $ns_{i,b}$ are sane requires additional constraints.
+
+First, we observe that the these variables must be bounded by $0$ and $n_{i,b}$, since there cannot be a negative number of blocks that need to communicate, and the number of blocks of type $b$ that need to communicate can't exceed the number of blocks physically on the board. 
 Next, we must take into account the structure of the algorithm to determine whether or not a given block needs to communicate with a separate board. 
 
 In order to appropriately define the linear program, it is first important to look at the different ways the computational blocks in a design may need to communicate. 
 
-Suppose we know we have 2 types of blocks $A$, and $B$. $A$ is a source of data, meaning it does not data from any computation block. 
-Blocks of type $A$ must communicate with blocks of type $B$.
-And finally, block $B$ is a sink, with no data to send to another block.
+Suppose we know we have 2 types of blocks: $A$, and $B$. 
+$A$ is a source of data, meaning it does not data from any computation block. 
+Similarly, block $B$ is a sink, with no data to send to another block.
+Blocks of type $A$ must send data to blocks of type $B$.
 Knowing that $A$ is a source and $B$ is a sink tells us that $nr_{i,A}=0$ and $ns_{i,B}=0$. 
 Regardless of how many $A$ and $B$ blocks get placed on platform $i$, none of the $A$ blocks will need to receive data and none of the $B$ blocks will need to send data. 
 Now, we need to understand how blocks of type $A$ send data to blocks of type $B$.
-This could happen in 4 ways, defining 4 types of links, `one-to-one', `one-to-all', `all-to-one' and `all-to-all'. 
+This could happen in 4 ways, defining 2 types of links, `one-to-one' and `all-to-all'. 
 
-A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure x. %TODO: add figure
+\begin{wrapfigure}{l}{0.37\textwidth}
+  \centering
+    \includegraphics[width=0.35\textwidth]{Images/C5/one-to-one.pdf}
+  \caption{TODO}
+  \label{fig:one-to-one.pdf}
+\end{wrapfigure}
 
-A good example of this lies in the F-engine of a correlator.
-Every PFB\_FIR filter must communicate with a single 
+A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:one-to-one.pdf}. 
+With this type of connection, the number of blocks of type $A$ must be equal to the number of blocks of type $B$.
+The F-engines in a FX correlator are a good example of this type of connection. 
+The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
+Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
+In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
 
-While other link types may seem possible, like `one-to-some' or `some-to-some', this turns out to be impossible. 
-Either a block of type $A$ needs to send all of its data to a single block of type $B$, a `to-one' connection, or a single block may need to send data to every block of type $B$, a `to-all' connection. 
-A third connection type, where a block of type $A$ may need to communicate with some blocks of type $B$, is not possible because every block of type $B$ should be interchangeable. 
-Even if they do the same computation, the blocks that do not communicate with a block of type $A$ should have a different type than a block that does communicate with a block of type $A$. 
+With this type of connection, communication is required when the number of $A$ blocks is different than the number of $B$ blocks on a single board. 
+When there are more $A$ blocks then $B$ blocks, $n_{i,A}>n_{i,B}$, the number of $A$ blocks that need to send data to the cluster is $n_{i,A}-n_{i,B}$ and none of the $B$ blocks on that board need to receive data from the cluster. 
+In the opposite case, $n_{i,A}<n_{i,B}$, and the none of the $A$ blocks need to send data to the cluster, but $n_{i,B}-n_{i,A}$ blocks of type $B$ will need to receive data from the cluster.
+Both of these cases are captured by the same pair of constraints:
+
+\begin{align}
+ns_{i,A} \geq n_{i,A}-n_{i,B} \\
+nr_{i,B} \geq n_{i,B}-n_{i,A} 
+\end{align}
+
+When $n_{i,A}-n_{i,B}$ is non-negative, we are guaranteed that we will not underestimate $ns_{i,A}$, and when $n_{i,A}-n_{i,B}$ is negative, $ns_{i,A}$ will be forced to at least 0 because of the lower limit on the variable. 
 
 
 
-%if inputfrom[blocktype]!=-1:
+
+%#for constraints on receiving data
+%            #check that this isn't a source
+%            if inputfrom[blocktype]!=-1:
 %                receivingfrom=inputfrom[blocktype]
 %                #if this is a 1 to 1 connection, just see how many blocks need to receive data
 %                if inputconnection[blocktype]==0:
@@ -143,7 +171,51 @@ Even if they do the same computation, the blocks that do not communicate with a 
 %                else:
 %                    prob += num_send_data[blocktype,currentplatform,currentboard] == board_blocks[blocktype,currentplatform,currentboard]
 %                    #prob += numblocks[receivingfrom] - board_blocks[receivingfrom,currentplatform,currentboard] < numblocks[blocktype]*num_receive_data[blocktype,currentplatform,currentboard]
-% 
+%                 
+
+An `all-to-all' connection occurs when every block of type $A$ must send some data to ever block of type $B$. 
+Figure \ref{fig:all-to-all.pdf} shows 
+
+
+\begin{wrapfigure}{r}{0.47\textwidth}
+  \centering
+    \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
+  \caption{TODO}
+  \label{fig:all-to-all.pdf}
+\end{wrapfigure}
+
+%\begin{wrapfigure}{r}{0.37\textwidth}
+%  \centering
+%    \includegraphics[width=0.35\textwidth]{Images/C5/one-to-all.pdf}
+%  \caption{TODO}
+%  \label{fig:one-to-all.pdf}
+%\end{wrapfigure}
+
+%\begin{wrapfigure}{l}{0.37\textwidth}
+%  \centering
+%    \includegraphics[width=0.35\textwidth]{Images/C5/all-to-one.pdf}
+%  \caption{TODO}
+%  \label{fig:all-to-one.pdf}
+%\end{wrapfigure}
+
+There are two more possible types of links, `one-to-all' and `all-to-one' 
+
+\begin{wrapfigure}{r}{0.47\textwidth}
+  \centering
+    \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
+    \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
+  \caption{TODO}
+  \label{fig: one-to-all_vs_all-to-one}
+\end{wrapfigure}
+
+While it may seem like additional link types exist like `all-to-some' or `one-to-some', this turns out to be impossible. 
+Either a block of type $A$ cannot send its data to only some blocks of type $B$ because of the way blocktypes are defined.
+Any block of the same type should be interchangeable with another block of the same type.
+In an `all-to-some' connection, blocks of type $A$ would need to send data to $B_1$ but not send data to $B_2$.
+But that connection patterns implys that the blocks $B_1$ and $B_2$ are \emph{not} interchangeable and therefore cannot have the same blocktype.
+
+
+
 
 
         
