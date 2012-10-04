@@ -15,15 +15,78 @@
 
 
 
+%TODO: Place
+%Cluster abstraction
+%Treat platforms as cluster nodes
+%Assume all platforms elements are attached to a switch
+%Assume a full crossbar network
+%Fully connected network
+%Often necessary in radio astronomy
+%Try to determine the best mapping based on some cost metric
+
+%A number of options are available but which is best?%Need to understand how to choose the right platform(s) for each implementation%With constant changes in technology and algorithm implementations an automatic approach is required
+
+
+
+
 \section{Toolflow Goals} \label{High Level Toolflow:Toolflow Goals}
 %Describe what the tool flow should to, for whom, etc
 
+%Ideal instrument design
+%Buy technology at the last minute
+%Ensure we get the best price for the performance we need
+%Choose hardware based on cost ($, watts, rack space)
+%Low instrument development time
+%Assess impacts of potential optimization without implementing anything
+%Quickly assess performance on new or nonexistent technology
+%Reduce debugging time on new platforms
+%Support whatever hardware is currently most appropriate
+
+%Goals
+%Interface
+%Accessible to astronomers (domain experts)
+%Accessible computer experts
+%Implementation
+%Generate code for an instrument optimally mapped across a heterogeneous cluster
+%Retain improvements offered by low-level optimization
+
+
 \section{Instrument Definition} \label{High Level Toolflow:Instrument Definition}
+%Describe instrument using parameters an astronomer can understand
+%Small number of predefined instrument types
+%Need to input
+%Instrument type (predefined patterns)
+%Total Bandwidth
+%Array size (n)
+%Etc
+%Generates a dataflow representation
+
 
 
 \section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}
-\subsection{Computational Blocks}
 
+%Dataflow representation of instrument
+%Define input/output connections
+%Define input/output bandwidth
+%Generates a series of blocks configured to talk to each other
+
+\subsection{Computational Blocks}
+%Collection of blocks necessary to solve most problems
+%Can be parameterized
+%Include a method to assess performance on each (supported) platform
+%Performance model
+%Benchmark
+%Unit tests
+%Uniform interconnect model
+%Optimization: remove interconnect overhead for cores running on the same hardware
+
+%Not certain this belongs here, possibly should go with the models?
+%Before mapping, need to determine which blocks can be mapped to which platforms
+%Synthesize/compile existing implementations to determine which platforms can support the spec
+%Sanity check bandwidth requirements
+%Test for acceptable noise tolerance in different implementations
+%Known signals
+%Test against arbitrary precision (exact) floating point implementation
 
 
 \subsection{Connection Types}
@@ -116,8 +179,14 @@ The connection between any two blocktypes still must be described as above.
 \subsection{Case Studies}
 
 
-
-
+%TODO: think hard about this, we're not actually going to do this and it's optional
+%This could be a good place to describe PASP, this is doable, we've shown it's possible
+%Don't actually want to implement the entire thing but show feasibility
+\section{Optional: Code Generation}
+%Use a mapped dataflow to stitch together blocks
+%To generate code the blocks must have an implementation for the target platform (not necessary for mapping)
+%Include an automatic test suite for each platform
+%Block communication is standardized so they can be connected in arbitrary ways
 
 
 
