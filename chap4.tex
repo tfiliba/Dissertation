@@ -12,9 +12,120 @@
 %Content already exists in the form of talks and a short paper.
 
 
-%TODO: This will likely be moved elsewhere, including it here temporarily
-\section{Instrument Generation}
 
+
+
+\section{Toolflow Goals} \label{High Level Toolflow:Toolflow Goals}
+%Describe what the tool flow should to, for whom, etc
+
+\section{Instrument Definition} \label{High Level Toolflow:Instrument Definition}
+
+
+\section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}
+\subsection{Computational Blocks}
+
+
+
+\subsection{Connection Types}
+
+Suppose we know we have 2 types of blocks: $A$, and $B$. 
+Blocks of type $A$ must send their output to blocks of type $B$.
+Now, we need to understand how blocks of type $A$ send data to blocks of type $B$.
+This could happen in 2 ways, `one-to-one' and `all-to-all'. 
+
+\begin{wrapfigure}[18]{l}{0.37\textwidth}
+  \centering
+    \includegraphics[width=0.35\textwidth]{Images/C5/one-to-one.pdf}
+  \caption{TODO}
+  \label{fig:one-to-one.pdf}
+\end{wrapfigure}
+
+A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:one-to-one.pdf}. 
+With this type of connection, the number of blocks of type $A$ must be equal to the number of blocks of type $B$.
+The F-engines in a FX correlator are a good example of this type of connection. 
+The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
+Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
+In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
+
+
+
+\begin{wrapfigure}[18]{r}{0.47\textwidth}
+  \centering
+    \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
+  \caption{TODO}
+  \label{fig:all-to-all.pdf}
+\end{wrapfigure}
+      
+
+
+
+An `all-to-all' connection occurs when every block of type $A$ must send some data to ever block of type $B$. 
+Figure \ref{fig:all-to-all.pdf} shows what an all-to-all connection between 3 blocks of type $A$, and 3 blocks of type $B$ will look like. 
+In this case, every block of type $A$ must send some data to every block of type $B$. 
+For example, the type of connection between the per-antenna FFTs and the per-channel X-engines in an FX correlator would be `all-to-all'. 
+Each X-engine needs a small amount of data from every F-engine to compute the cross-correlations from a single channel. 
+In the `all-to-all' case, there is no reason for the number of sending nodes needs to be the same as the number of receiving nodes. 
+%The n's do not get introduced until the ILP is defined
+%This means that $n_{i,A}$ and $n_{i,B}$ do not have to be equal, and as long as the data can be distributed appropriately, there is no enforced relationship between the two variables. 
+
+
+
+
+%TODO: make this an a,b figure
+\begin{wrapfigure}{r}{0.47\textwidth}
+  \centering
+    \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
+    \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
+  \caption{TODO}
+  \label{fig: one-to-all_vs_all-to-one}
+\end{wrapfigure}
+
+
+
+It might seem like there are two more possible types of connection, `one-to-all' and `all-to-one' .
+A data flow with a `one-to-all' connection, shown in Figure x %TODO: fix reference, image
+would have exactly one block of type $A$ that needs to send data to many blocks of type $B$. 
+This is exemplified in the dataflow for a high-resolution spectrometer.
+The coarse channelization is done in a single FFT block, which then needs to send the data to many other FFTs to do the fine channelization. 
+The `all-to-one' connection shown in Figure x %TODO: fix ref
+is there reverse of the `one-to-all' case. 
+In this type of connection, there are many blocks of type $A$ and they all need to send data to a single instance of a block of type $B$. 
+An example of this arises when some processing is done in a distributed manner but the instrument needs to record the final result in a central place. 
+The $A$ blocks are responsible for the distributed processing, and then the $B$ block needs to collect the results and combine them.
+%TODO: discuss scatter-gather?
+
+It turns out, these are both special instances of the `all-to-all' connection. 
+The `one-to-all' connection is simply an `all-to-all' where the number of $A$ blocks is fixed at 1.
+Similarly, the `all-to-one' connection is also an `all-to-all' where the number of $B$ blocks is fixed at 1.
+Because of this, there is no need to include or support these cases as unique connection types. 
+
+
+While it may seem like additional link types exist like `all-to-some' or `one-to-some', this turns out to be impossible. 
+Either a block of type $A$ cannot send its data to only some blocks of type $B$ because of the way blocktypes are defined.
+Any block of the same type should be interchangeable with another block of the same type.
+In an `all-to-some' connection, blocks of type $A$ would need to send data to $B_1$ but not send data to $B_2$.
+But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{not} interchangeable and therefore cannot have the same blocktype.
+
+
+%TODO: This isn't implemented in the ILP
+%TODO: Add correlator beamformer example. 
+This does not preclude asymmetrical designs. 
+Instead, asymmetry is supported by allowing blocks to define a list of blocktypes they must send data to or receive data from. 
+The connection between any two blocktypes still must be described as above.
+
+\subsection{Case Studies}
+
+
+
+
+
+
+
+%TODO: This will likely be moved elsewhere, including it here temporarily
+\pagebreak
+
+
+\section{Instrument Generation}
 %From USRI 2011 paper
 Automatic Generation of Heterogeneous Spectrometers for Radio Astronomy
 

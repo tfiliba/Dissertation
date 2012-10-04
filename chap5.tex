@@ -9,15 +9,31 @@
 
 After coming up with an instrument description, it is necessary to determine how that instrument will be implemented in hardware. 
 
-%Treat platforms as cluster nodes%Assume all platforms elements are attached to a switch%Assume a full crossbar network%Fully connected network%Often necessary in radio astronomy%Try to determine the best mapping based on some cost metric
+%Treat platforms as cluster nodes
+%Assume all platforms elements are attached to a switch
+%Assume a full crossbar network
+%Fully connected network
+%Often necessary in radio astronomy
+%Try to determine the best mapping based on some cost metric
 
-%Results are repeatable%Easy to add user input%Easy to “build out” a cluster, just add (a limited amount of) free hardware
+%Results are repeatable
+%Easy to add user input
+%Easy to “build out” a cluster, just add (a limited amount of) free hardware
 
 
 We use Integer Linear Programming (ILP) to model and solve this problem. 
 As described in Section \ref{Related Work:Tuning}, ILP is a powerful technique 
 
-%But… it’s NP-Hard to solve optimally%Current ILP benchmarks run 100k variable problems in hours%Beyond that size, problems become infeasible%ILP runtime highly sensitive to%ILP solver (underlying algorithm) – 100k problem infeasible with one tool vs <3 minute solution with another %Problem structure%We can help the algorithm out for large designs%Reduce number of variables (combine blocks)%Early stopping (non-optimal result)%Guided optimization
+%But… it’s NP-Hard to solve optimally
+%Current ILP benchmarks run 100k variable problems in hours
+%Beyond that size, problems become infeasible
+%ILP runtime highly sensitive to
+%ILP solver (underlying algorithm) – 100k problem infeasible with one tool vs <3 minute solution with another 
+%Problem structure
+%We can help the algorithm out for large designs
+%Reduce number of variables (combine blocks)
+%Early stopping (non-optimal result)
+%Guided optimization
 
 \section{Variables}
 The variables in the ILP are used to infer the optimal mapping for the system, and the cluster architecture. 
@@ -32,7 +48,8 @@ A solution to the ILP, with each of the $n_{i,b}$ variables filled in, gives a c
 \section{Constraints}
 
 %Constraints are used to determine a valid mapping (ex. total bandwidth mapped to a link must be less than total link bandwidth) 
-%Constraints (resources)%I/O
+%Constraints (resources)
+%I/O
 
 The constraints serve 2 purposes.
 First, they ensure that no resource is overmapped, so that the amount of hardware the ILP generates will be sufficient to do the computation required.
@@ -42,6 +59,8 @@ Second, they make sure that the correct design gets implemented.
 \subsection{Platform Resources}
 Any resource on some platform that gets used by mapping computation blocks to that platform must be accounted for in the linear program. 
 This is abstracted in the ILP using a single constraint for each resource.
+
+\subsubsection{Resource Limitations}
 For some resource, $r$, we use our performance model of each block to assess how much of the resource is used up by each block type. 
 The percentage of the resource $r$ required by some block type, or utilization, is represented by a constant (not a variable), $r_{p,b}$, where $p$ represents the platform, and $b$ represents the block type. 
 Multiplying the resources required for a specific block type by the number of blocks needed on that specific board determines the total percent of resource $r$ block type $b$ will require on the board. 
@@ -52,6 +71,23 @@ Summing over all of the block types determines what percent of resource $r$ is u
 \end{equation}
 
 Each resource will require a separate constraint in the ILP of this form. By ensuring that the total utilization of each resource required is less than 100\%, we guarantee that there are enough resources to allow all the blocks mapped to that board to complete their tasks. 
+
+\subsubsection{Dataflow Model Constraints}
+After getting assurance that no resources are overused, it is important to verify that the correct design was implemented. 
+The resource utilization on the value of $n_{i,b}$, but there are is an additional constraint on these variables.
+Namely, that the correct number of blocks actually get implemented. 
+This adds a simple constraint to each block type:
+
+%TODO: check that this can't be geq (probably can't because of certain types of links)
+\begin{align}
+\sum_{board in boards} n_{board,block type} == n_{block type}
+\end{align}
+
+The total number of blocks of a certain type should be equal to the number of blocks of that type we actually need in the design. 
+ 
+%#check that all blocks are allocated        
+%prob+=lpSum(board_blocks[blocktype,currentplatform,currentboard] for currentplatform in range(numplatforms) for currentboard in range(numboards)) >= numblocks[blocktype]
+
 
 
 \subsection{Network Resources}
@@ -74,7 +110,7 @@ Rather than have the ILP redesign the same topology over and over, we simply ass
 Figure \ref{fig:cluster_instruments.pdf} shows an example of this topology. 
 Each board gets connected to the same switch and can communicate with any other board on the switch, regardless of the platform type. 
 
-\subsubsection{Constraining bandwidth}
+\subsubsection{Bandwidth Limitations}
 But, there still are constraints on this communication and this must be taken into account in the ILP.
 While there might be a link available between each pair of boards, the bandwidth into and out of these boards is limited. 
 Consider Figure \ref{fig:cluster_instruments.pdf} again.
@@ -92,44 +128,30 @@ The constraint on output bandwidth is calculated the same way, generating a pair
 %prob += lpSum(blockinputbw[blocktype]*num_receive_data[blocktype,currentplatform,currentboard] for blocktype in range(blocktypes)) <= platforminputbw[currentplatform]
 %        prob += lpSum(blockoutputbw[blocktype]*num_send_data[blocktype,currentplatform,currentboard] for blocktype in range(blocktypes)) <= platformoutputbw[currentplatform]
 \begin{align}
-\sum_{b\in Blocks} nr_{i,b} bw_{b} \leq bw\_in_{p} \\
-\sum_{b\in Blocks} ns_{i,b} bw_{b} \leq bw\_out_{p}
+\sum_{b\in Blocks} nr_{i,b} bw\_in_{b} \leq bw\_in_{p} \\
+\sum_{b\in Blocks} ns_{i,b} bw\_out_{b} \leq bw\_out_{p}
 \end{align}
 
 
-
-\subsubsection{Defining connections}
-While the constraints on the total input and output bandwidth might seem simple, ensuring the values for $nr_{i,b}$ and $ns_{i,b}$ are sane requires additional constraints.
-
+%TODO: this might be better explained in chapter 4, putting it here so the relevant info is available
+\subsubsection{Connection Constraints}
 First, we observe that the these variables must be bounded by $0$ and $n_{i,b}$, since there cannot be a negative number of blocks that need to communicate, and the number of blocks of type $b$ that need to communicate can't exceed the number of blocks physically on the board. 
 Next, we must take into account the structure of the algorithm to determine whether or not a given block needs to communicate with a separate board. 
 
-In order to appropriately define the linear program, it is first important to look at the different ways the computational blocks in a design may need to communicate. 
 
+While the constraints on the total input and output bandwidth might seem simple, ensuring the values for $nr_{i,b}$ and $ns_{i,b}$ are sane requires additional constraints.
 Suppose we know we have 2 types of blocks: $A$, and $B$. 
 $A$ is a source of data, meaning it does not data from any computation block. 
 Similarly, block $B$ is a sink, with no data to send to another block.
-Blocks of type $A$ must send data to blocks of type $B$.
-Knowing that $A$ is a source and $B$ is a sink tells us that $nr_{i,A}=0$ and $ns_{i,B}=0$. 
 Regardless of how many $A$ and $B$ blocks get placed on platform $i$, none of the $A$ blocks will need to receive data and none of the $B$ blocks will need to send data. 
-Now, we need to understand how blocks of type $A$ send data to blocks of type $B$.
-This could happen in 4 ways, defining 2 types of links, `one-to-one' and `all-to-all'. 
+Knowing that $A$ is a source and $B$ is a sink tells us that $nr_{i,A}=0$ and $ns_{i,B}=0$. 
 
-\begin{wrapfigure}{l}{0.37\textwidth}
-  \centering
-    \includegraphics[width=0.35\textwidth]{Images/C5/one-to-one.pdf}
-  \caption{TODO}
-  \label{fig:one-to-one.pdf}
-\end{wrapfigure}
+In order to appropriately define the linear program, it is first important to look at the different ways the computational blocks in a design may need to communicate, and create appropriate constraints. 
+We must revisit the connection types introduced in Section \ref{High Level Toolflow:Dataflow Model}, and determine how the different types of links affect the linear program.
 
-A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:one-to-one.pdf}. 
-With this type of connection, the number of blocks of type $A$ must be equal to the number of blocks of type $B$.
-The F-engines in a FX correlator are a good example of this type of connection. 
-The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
-Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
-In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
 
-With this type of connection, communication is required when the number of $A$ blocks is different than the number of $B$ blocks on a single board. 
+
+When two blocktypes are linked via a `one-to-one' connection, communication is required when the number of $A$ blocks is different than the number of $B$ blocks on a single board. 
 When there are more $A$ blocks then $B$ blocks, $n_{i,A}>n_{i,B}$, the number of $A$ blocks that need to send data to the cluster is $n_{i,A}-n_{i,B}$ and none of the $B$ blocks on that board need to receive data from the cluster. 
 In the opposite case, $n_{i,A}<n_{i,B}$, and the none of the $A$ blocks need to send data to the cluster, but $n_{i,B}-n_{i,A}$ blocks of type $B$ will need to receive data from the cluster.
 Both of these cases are captured by the same pair of constraints:
@@ -140,108 +162,134 @@ nr_{i,B} \geq n_{i,B}-n_{i,A}
 \end{align}
 
 When $n_{i,A}-n_{i,B}$ is non-negative, we are guaranteed that we will not underestimate $ns_{i,A}$, and when $n_{i,A}-n_{i,B}$ is negative, $ns_{i,A}$ will be forced to at least 0 because of the lower limit on the variable. 
+ 
 
+%TODO: fix linear program to calculate this
+Setting the $ns$ and $nr$ variable is a little more complicated for the `all-to-all' case, and requires the implementation of some conditional logic in the linear program.
+When any of the $B$ blocks are not on the board $i$, then every $A$ block must send data to the cluster, and $ns_{i,A} = n_{i,A}$.
+Otherwise, none of the $A$ blocks need to send and $ns_{i,A}=0$.
+Similarly on the receive side, if any of the $A$ blocks are not of board $i$, $nr_{i,B}=n_{i,B}$, otherwise $nr_{i,B}=0$.
+The conditional logic is easily implemented in an ILP, as describe in X. %TODO: add reference to ILP tips and tricks
 
+When a block must send to or receive data from multiple different block types, the is constraint the same way an `all-to-all' connection gets constrained. 
+If any of the blocks it must link to reside outside the board, it is assumed that all of the data must be sent over the link to the cluster.
 
-
-%#for constraints on receiving data
-%            #check that this isn't a source
-%            if inputfrom[blocktype]!=-1:
-%                receivingfrom=inputfrom[blocktype]
-%                #if this is a 1 to 1 connection, just see how many blocks need to receive data
-%                if inputconnection[blocktype]==0:
-%                    #at least this much data needs to go over the network
-%                    prob += num_receive_data[blocktype,currentplatform,currentboard] >= board_blocks[blocktype,currentplatform,currentboard] - board_blocks[receivingfrom,currentplatform,currentboard]
-%                #this is a all to 1 connection, receive *all* data over the network
-%                #TODO: add when any blocks we are communicating with reside on a different platform
-%                else:
-%                    prob += num_receive_data[blocktype,currentplatform,currentboard] == board_blocks[blocktype,currentplatform,currentboard]
-%                    #prob += numblocks[receivingfrom] - board_blocks[receivingfrom,currentplatform,currentboard] < numblocks[blocktype]*num_receive_data[blocktype,currentplatform,currentboard]
-%
-%            #for constraints on sending data
-%            #check that this isn't a sink
-%            if outputto[blocktype]!=-1:
-%                sendingto=outputto[blocktype]
-%                #if this is a 1 to 1 connection, just see how many blocks need to send data
-%                if outputconnection[blocktype]==0:
-%                    #at least this much data needs to go over the network
-%                    prob += num_send_data[blocktype,currentplatform,currentboard] >= board_blocks[blocktype,currentplatform,currentboard] - board_blocks[sendingto,currentplatform,currentboard]
-%                #this is a 1 to all connection, send *all* data over the network
-%                #TODO: when any blocks we are communicating with reside on a different platform
-%                else:
-%                    prob += num_send_data[blocktype,currentplatform,currentboard] == board_blocks[blocktype,currentplatform,currentboard]
-%                    #prob += numblocks[receivingfrom] - board_blocks[receivingfrom,currentplatform,currentboard] < numblocks[blocktype]*num_receive_data[blocktype,currentplatform,currentboard]
-%                 
-
-An `all-to-all' connection occurs when every block of type $A$ must send some data to ever block of type $B$. 
-Figure \ref{fig:all-to-all.pdf} shows 
-
-
-\begin{wrapfigure}{r}{0.47\textwidth}
-  \centering
-    \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
-  \caption{TODO}
-  \label{fig:all-to-all.pdf}
-\end{wrapfigure}
-
-%\begin{wrapfigure}{r}{0.37\textwidth}
-%  \centering
-%    \includegraphics[width=0.35\textwidth]{Images/C5/one-to-all.pdf}
-%  \caption{TODO}
-%  \label{fig:one-to-all.pdf}
-%\end{wrapfigure}
-
-%\begin{wrapfigure}{l}{0.37\textwidth}
-%  \centering
-%    \includegraphics[width=0.35\textwidth]{Images/C5/all-to-one.pdf}
-%  \caption{TODO}
-%  \label{fig:all-to-one.pdf}
-%\end{wrapfigure}
-
-There are two more possible types of links, `one-to-all' and `all-to-one' 
-
-\begin{wrapfigure}{r}{0.47\textwidth}
-  \centering
-    \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
-    \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
-  \caption{TODO}
-  \label{fig: one-to-all_vs_all-to-one}
-\end{wrapfigure}
-
-While it may seem like additional link types exist like `all-to-some' or `one-to-some', this turns out to be impossible. 
-Either a block of type $A$ cannot send its data to only some blocks of type $B$ because of the way blocktypes are defined.
-Any block of the same type should be interchangeable with another block of the same type.
-In an `all-to-some' connection, blocks of type $A$ would need to send data to $B_1$ but not send data to $B_2$.
-But that connection patterns implys that the blocks $B_1$ and $B_2$ are \emph{not} interchangeable and therefore cannot have the same blocktype.
-
-
-
-
-
-        
-\subsection{Design Constraints}
-%#check that all blocks are allocated        
-%prob+=lpSum(board_blocks[blocktype,currentplatform,currentboard] for currentplatform in range(numplatforms) for currentboard in range(numboards)) >= numblocks[blocktype]
+%TODO: some numbers on why this is ok
+Implementing the ILP this way results in an overestimation of the required bandwidth. 
+In the case where $ns_{i,A} = n_{i,A}$, it's true that every block of type $A$ will need to send some data.
+However, they might not need to send the full bandwidth $bw\_out_{A}$ to the switch, since some portion of the data sent by an $A$ block may be required by $B$ blocks residing on the same board. 
+A more exact version of this calculation would also take into account the smaller bandwidth, but due to the complexity and rarity of this case the approximation is sufficient.
+As described in Section \ref{Related Work:Radio Astronomy}, many architectures have this type of connection but there very few cases where the $A$ and $B$ blocks connected this way reside on the same board. 
                     
                 
 \section{Cost Modeling}
-%Costs%Power%Money%Development time%Rack space
+%Costs
+%Power
+%Money
+%Development time
+%Rack space
 
 \section{Final Mapping}
-%Variables%Design choices
+%Variables
+%Design choices
+
 
 \section{Optimization}
+While Integer Linear Programming has a number of desirable properties, the lack of efficient algorithms to solve it can constitute a significant obstacle in designing an ILP with reasonable performance.
+This section describes how the design of this ILP and the introduction of a few extra constraints serve to improve the performance and scalability of the program defined in this chapter. 
 
-%Refer to:%Stephen P Bradley, Arnoldo C Hax, and Thomas L Magnanti. Applied mathematical programming. Addison-Wesley, 1977. %G Gibeling. Rdlc2: The ramp model, compiler & description language. Master’s report, 2008. %J J Bisschop. AIMMS Modeling Guide - Integer Programming Tricks. pages 1–14, April 2011. %F Margot. Symmetry in integer linear programming. 50 Years of Integer Programming 1958-2008, pages 647–686, 2010. %Fallback to random heuristics (i.e. simulated annealing)
+\subsection{Scaling}
+%physical cluster size ??
 
-\subsection{Symmetry}
+
+%Refer to:
+%Stephen P Bradley, Arnoldo C Hax, and Thomas L Magnanti. Applied mathematical programming. Addison-Wesley, 1977. 
+%G Gibeling. Rdlc2: The ramp model, compiler & description language. Master’s report, 2008. 
+%J J Bisschop. AIMMS Modeling Guide - Integer Programming Tricks. pages 1–14, April 2011. 
+%Fallback to random heuristics (i.e. simulated annealing)
+
+%But… it’s NP-Hard to solve optimally%Current ILP benchmarks run 100k variable problems in hours%Beyond that size, problems become infeasible%ILP runtime highly sensitive to%ILP solver (underlying algorithm) – 100k problem infeasible with one tool vs <3 minute solution with another %Problem structure%We can help the algorithm out for large designs%Reduce number of variables (combine blocks)
+
+\subsection{Symmetry} %TODO add reference
+% F Margot. Symmetry in integer linear programming. 50 Years of Integer Programming 1958-2008, pages 647–686, 2010. 
+In this type of program, symmetry can often significantly increase the amount of time required to confirm the optimal solution. %TODO: what type of program?
+The boards that have the same platform type are interchangeable, so if board $i$ implements some design and board $j$ implements a different design in the optimal solution, there is another optimal solution where their designs are swapped.
+% TODO add example (?)
+% TODO add a graphic for this example
+For example, suppose 2 ROACH boards are available to implement a FIR filter and an FFT. 
+The ILP might observe that both blocks cannot fit on a single board and assigns the FIR to the first ROACH and the FFT to the second ROACH.
+This obviously seems like an optimal solution, but the ILP may also need to check the case where the FFT is placed on ROACH\_0 and the FIR is on ROACH\_1, only to find that it has the same cost as the previous result.
+In this simple example there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
+
+Searching symmetric solutions can become a major time sink, because the ILP solver will find an optimal solution early on, but will require a long time to confirm that it is actually the optimal result, spending time going over many other solutions that are isomorphic to the first one. 
+
+
+% Early stopping (non-optimal result)The simplest solution is stopping the ILP solver before returns an optimal mapping. 
+This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, because solving that problem would be analogous to solving the ILP.
+Early stopping works well when it's clear that symmetry is the cause of the long runtime and the amount of time it would take to get one of the isomorphic optimal solutions is short. 
+Even so, the lack of predictable and repeatable results makes early stopping an unappealing solution.
+
+% Guided optimization
+%TODO: add to this... I think there's more to say here
+Another solution relies on user aid to guide the mapping.
+The ILP may spend time going over solutions that may be obviously wrong to a human user.
+In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
+While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
+This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:Toolflow Goals}.
+The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
+To maintain usability for domain experts, guided optimization will not be the solution used to solve this issue.
+
+%TODO: subset mapping
+
+% Break symmetry - this is a good idea
+The solutions above outline ways to cope with the existing symmetry. 
+Another way to reduce the runtime is to remove the symmetry altogether. 
+In order to do this, the ILP must be modified so that only 1 of the isometric optimal solutions is a valid solution to the ILP. 
+First, a variable $lex\_order_i$ is added for each board.
+This variable is meant to uniquely identifies the design running on the board; it is simply the concatenation of all the $n_{i,b}$ variables for that board.
+Note that the ordering of $n_{i,b}$ variables when the concatenation is done is irrelevant, the only thing that matters is that the order is consistent for every board.
+When $lex\_order_i =lex\_order_j$ we can infer that for all blocks $b$, $n_{i,b} = n_{j,b}$.
+Otherwise, there must be some block $b$ where $n_{i,b} \neq n_{j,b}$.
+Now that the designs can be identified, they can be ordered. 
+They are simply ordered lexicographically, by adding the constraints in Equation \ref{eqn:leq_constraint} for every $i \geq 1$
+
+\begin{align} \label{eqn:leq_constraint}
+lex\_order_{i-1} \geq lex\_order_i
+\end{align}
+
+While this make the ILP, adding both constraints and variables, it reduces the amount of time the solver takes to find a solution. %TODO add a benchmark if feasible (?)
+This lexicographic ordering makes it impossible to swap designs between different blocks, resulting in unique and valid mappings. 
+
+Revisiting the symmetry example at the beginning of this section, the design with 1 FIR and no FFTs would be encoded with a $lex\_order = 10$, and the design the no FIRs and a single FFT would get the encoding $lex\_order = 01$. 
+When the FIR is placed on ROACH\_0, then $lex\_order_0 = 10 \geq lex\_order_0 = 01$, satisfying the new constraint.
+The solution where the blocks are swapped and FIR is on ROACH\_1 violates the new constraint  $lex\_order_0 = 01 \not \geq lex\_order_0 = 10$, and will not be considered by the ILP solver.
+
+Generalizing this, it is impossible to take a valid solution (with the lexicographic constraint) and get another valid solution by swapping distinct designs between boards.
+Suppose, without loss of generality, board $i$ has a design with $lex\_order_i = x$ and board $j$ has a distinct design with $lex\_order_j = y$ and $i < j$.
+Knowing that the design is valid implies $x \geq y$. 
+Another optimal mapping exists where the designs are swapped and $lex\_order_i = y$, $lex\_order_j = x$, but we are guaranteed that this is not a valid solution to the ILP because it violates the lexicographic ordering constraint.
+
+These constraints have been implemented in the final ILP and drastically reduces the amount of time it takes to solve the ILP. 
+The additional constraints do not change the cost of the optimal solution, instead they just reduce the number of valid optimal solutions. 
+By modifying the ILP, the performance is greatly improved without sacrificing optimality or usability.
+
+
+
+
+%Here's how we do it. 
+%TODO: add google ref that talks about lex ordering
+
+
+
+
+
 %# impose an ordering on the boards, this doesn't do anything to the solution, just breaks some of the symmetry
 %        #lex_order[currentplatform,currentboard]=LpVariable('lex_order_'+unique_id,0,(maxblockperplatform+1).prod(),LpInteger)
 %prob+=board_isused[currentplatform,currentboard-1]>=board_isused[currentplatform,currentboard]
 %            prob+=lex_order[currentplatform,currentboard-1]>=lex_order[currentplatform,currentboard]
 %           
 
-\subsection{Scaling}
+
 
 
 \section{Performance}
