@@ -7,7 +7,14 @@
 %References already compiled \\
 
 %Radio Astronomy Problems
-%Are we alone?%When were the first stars and galaxies formed?%Galactic structure and formation (mapping the galaxy)%Nature of gravitational wave background (pulsar timing)%Transient universe%Black hole imaging%Searching for extrasolar planets
+%Are we alone?
+%When were the first stars and galaxies formed?
+%Galactic structure and formation (mapping the galaxy)
+%Nature of gravitational wave background (pulsar timing)
+%Transient universe
+%Black hole imaging
+%Searching for extrasolar planets
+
 
 
 Radio astronomy simply refers to the type of science that can be done by observing astronomical objects at radio wavelengths, rather than a specific scientific goal. 
@@ -136,7 +143,7 @@ Applying these 2 steps, results in a new delayed signal $f[n] = f[n-n_f]\ast b_{
 In practice, it is common to calculate the spectrum of the beamformed signal. 
 %TODO: explain why spectrum is desirable
 A typical 2 element beamformer, with discrete input signals $f[n]$ and $g[n]$ is trying to calculate the spectrum of beam $i$, $H_i$, using coarse delays $n_{fi}$  $n_{gi}$ and delay filters $b_{fi}$ and $b_{gi}$, as follows: 
-$$H_i(x) = FT(f[n-n_{fi}]\ast b_{fi} + g[n-n_{gi}]\ast b_{gi})$$
+\[H_i(x) = FT(f[n-n_{fi}]\ast b_{fi} + g[n-n_{gi}]\ast b_{gi})\]
 We describe this as BF beamforming because the delay operation (B), happens before the FT operation (F).
 
 %TODO add info on scaling here
@@ -151,7 +158,7 @@ Using linearity of the fourier transform and the convolution theorem, the comput
 %H_i(x) &= FFT(f[t-t_{fi}]) \cdot FFT(b_{fi}) + FFT(g[t-t_{gi}]) \cdot FFT(b_{gi}) \\
 %&= F[x] \cdot B'_{fi} + G[x] \cdot B'_{gi} \\
 %\end{align*}
-$$H_i(x) = F[x] \cdot B'_{fi} + G[x] \cdot B'_{gi}$$
+\[H_i[x] = F[x] \cdot B'_{fi} + G[x] \cdot B'_{gi}\]
 
 Where $F[x]$ and $G[x]$ are the fourier transforms of the signals $f$ and $g$.
 The signal delay becomes a phase shift in frequency domain that is represented by $B'_{fi}$ and $B'_{gi}$. 
@@ -190,21 +197,30 @@ Instead of correlating in real time, the VLBA records the digitized data directl
 Later, the recorded data is flown to a central location, where it gets correlated.
 
 The cross-correlation of two signals, f[n] and g[n] is defined as:
-$$h[n] = f[n]\star g[n] = \sum_{i=0}^m f^*[i]g[n+i]$$
+\[h[n] = f[n]\star g[n] = \sum_{i=0}^m f^*[i]g[n+i]\]
 Like in beamforming, it is often desirable to calculate a spectrum, so the correlation step typically also calculates the spectrum of the cross-correlations. 
 So, the final result of the correlator produces the spectrum of the visibilities, H[x].
-$$H[x] = FT(f[n]\star g[n])$$
+\[H[x] = FT(f[n]\star g[n])\]
 
 
 \subsection{XF Correlation}
 An XF, or lag, correlator calculates the spectrum by calculating the cross-correlation first (X), followed by a Fourier transform (F).
-For an antennal with $n$ antennas, this would require $O(n^2)$ cross-correlations, followed by $O(n^2)$ Fourier transform operations.
+
+The calculation of the cross-correlation is very similar to a convolution, in fact the cross-correlation of 2 signals can be re-expressed as a convolution. 
+\[\]
+\[\]
+
+For an telescope with $n$ antennas, this algorithm requires $O(n^2)$ cross-correlations, followed by $O(n^2)$ Fourier transform operations.
  
 
 
 \subsection{FX Correlation}
-As $n$ gets larger, the 
-The cross-correlation theorem further extends the parallel between correlation and convolution, relating the Fourier transform of the cross-correlation of two signals to the Fourier transforms of 
+The cross-correlation theorem further extends the parallel between correlation and convolution, relating the Fourier transform of the cross-correlation of two signals to the Fourier transforms of the original signals. 
+\[ signal = other stuff\]
+
+\[H_i[x] = F^*[x] \cdot G[x]\]
+
+\subsection{Applications}
 
 
 %%Form an image
