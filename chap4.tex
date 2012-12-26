@@ -15,6 +15,7 @@
 
 
 
+
 %TODO: Place
 %Cluster abstraction
 %Treat platforms as cluster nodes
@@ -24,12 +25,15 @@
 %Often necessary in radio astronomy
 %Try to determine the best mapping based on some cost metric
 
-%A number of options are available but which is best?%Need to understand how to choose the right platform(s) for each implementation%With constant changes in technology and algorithm implementations an automatic approach is required
+%A number of options are available but which is best?
+%Need to understand how to choose the right platform(s) for each implementation
+%With constant changes in technology and algorithm implementations an automatic approach is required
 
 
 
 
 \section{Toolflow Goals} \label{High Level Toolflow:Toolflow Goals}
+
 %Describe what the tool flow should to, for whom, etc
 
 %Ideal instrument design
@@ -45,10 +49,19 @@
 %Goals
 %Interface
 %Accessible to astronomers (domain experts)
+Ideally, this tool should be accessible to both computer experts and radio astronomers, or other domain experts.
+For a domain expert, the tool should allow someone to define the algorithm they need without worrying how it will ultimately map to hardware.
 %Accessible computer experts
 %Implementation
 %Generate code for an instrument optimally mapped across a heterogeneous cluster
 %Retain improvements offered by low-level optimization
+The computer expert should be able to define the algorithm, but also needs some means for providing optimization.
+For example, if an engineer wrote an optimized FFT algorithm, the tool will be able to incorporate that into the final optimized result.
+And in the end, Regardless of who is using this tool, an optimal mapping of the algorithm gets produced. 
+Because the needs of these groups are so different, Sections \ref{High Level Toolflow:Instrument Definition} and  \ref{High Level Toolflow:Dataflow Model} will describe how this is addressed at different steps in the tool flow.
+
+
+
 
 
 \section{Instrument Definition} \label{High Level Toolflow:Instrument Definition}
@@ -60,7 +73,8 @@
 %Array size (n)
 %Etc
 %Generates a dataflow representation
-
+At the first step in the toolflow, the user must describe the instrument using high level parameters. 
+These parameters should all 
 
 
 \section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}

@@ -6,17 +6,37 @@
 \section{Radio Astronomy} \label{Related Work:Radio Astronomy}
 \subsection{Digital Signal Processing for Radio Astronomy}
 \subsection{DiFX}
+%TODO: add reference
+%A. T Deller, S. J Tingay, M Bailes, and C West. Difx: A software correlator for very long baseline interferometry using multiprocessor computing environments. Publications of the Astronomical Society of the Pacific, 119(853):318–336, Mar 2007.
+%If you have a cluster available…%Why do cpu-only?%It’s easy%Compared to 27 antenna 2GHz EVLA in New Mexico
 The DiFX Correlator is a scalable software implementation of an FX Correlator. 
+The correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
+DiFX was designed as a software correlator in order to maintain flexibility in the design, but that flexibility comes at a high hardware cost. 
+To process 64 MHz of bandwidth and only 10 antennas, about 100 nodes are required to cross correlate all the data. 
+%TODO: define expensive
+
 %DiFX (Distributed FX Correlator) is a scalable software implementation
 %Designed for VLBI (Very Long Baseline Interferometry)
 %Requires a large cluster to do a lot of computation
 %64 MHz, 10 antennas required ~100 nodes in 2007
-%A. T Deller, S. J Tingay, M Bailes, and C West. Difx: A software correlator for very long baseline interferometry using multiprocessor computing environments. Publications of the Astronomical Society of the Pacific, 119(853):318–336, Mar 2007.
+
 \subsection{LOFAR}
-%R Van Nieuwpoort. Correlating Radio Astronomy Signals with Many-Core Hardware. International Journal of Parallel Programming, 2009.
+%R Van Nieuwpoort. Correlating Radio Astronomy Signals with Many-Core Hardware. International Journal of Parallel Programming, 2009
+%On a blue gene, real time but still costly power hungry solution 64 stations
+%TODO: add reference
+%TODO: read this paper
+Like DiFX, the correlator for Low-Frequency Array for Radio Astronomy (or LOFAR) was also built using CPUs.
+This project used a Blue Gene BG/P %TODO: check this
+to implement a 64 station correlator.
+The implementation got very high performance out of the cluster, 96\% of the peak, but required an entire cluster and required finely tuned code to achieve that performance. 
+
+
 \subsection{xGPU}
 %M Clark and P La Plante. Accelerating Radio Astronomy Cross-Correlation with Graphics Processing Units. Arxiv preprint arXiv:1107.4264, 2011.
+
+
 \subsection{CASPER}
+%TODO: add reference
 %A Parsons, et al. PetaOp/Second FPGA Signal Processing for SETI and Radio Astronomy. Signals, Systems and Computers, 2006. ACSSC ’06. Fortieth Asilomar Conference on, pages 2031–2035, 2006.
 
 %CASPER = Collaboration for Astronomy Signal Processing and Electronics Research
@@ -26,16 +46,76 @@ The DiFX Correlator is a scalable software implementation of an FX Correlator.
 %Accumulators
 %Digital downconverters/mixers
 %Scripts are used to configure parameterized blocks
+The goal of Collaboration for Astronomy Signal Processing and Electronics Research (CASPER) is to provide common libraries, tools, and hardware for radio astronomers developing instrumentation. 
+This is achieved by identifying commonly used DSP blocks in radio astronomy instruments and developing parameterized implementations of these common blocks, making them useful for a variety of instruments. 
+For example, the CASPER library provides FFTs, polyphase filter banks, accumulators, digital downconverters, digital mixers which can be linked together to make an instrument. 
+Figure \ref{fig:casper_fft_lib.pdf} shows the FFT library, which contains different types of FFT like blocks that can process multiple samples in parallel and blocks that only compute the FFT of a real signal.
+
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \centering
+     \includegraphics[width=0.45\textwidth]{Images/C3/casper_fft_lib.pdf}
+  \caption{TODO}
+  \label{fig:casper_fft_lib.pdf}
+\end{wrapfigure}
+
+
+
+Figure \ref{fig:casper_fft_lib_options.pdf} shows the options menu for one of the FFT blocks. 
+In order to support a variety of instruments, the block can be reconfigured to support different FFT lengths.
+There are a number of other parameters provided like input bit width, which helps support a number of different ADCs or preprocessing algorithms, and FPGA-specific parameters like add latency, and multiply latency which have no effect on the result of the computation but change how the FFT gets mapped into hardware. 
+
+
+\begin{wrapfigure}{R}{0.50\textwidth}
+  \centering
+     \includegraphics[width=0.45\textwidth]{Images/C3/casper_fft_lib_options.pdf}
+  \caption{TODO}
+  \label{fig:casper_fft_lib_options.pdf}
+\end{wrapfigure}
+
+
+%TODO: add yellow block/interface stuff
+
+\begin{wrapfigure}{R}{0.50\textwidth}
+  \centering
+     \includegraphics[width=0.45\textwidth]{Images/C3/yellow_blocks.pdf}
+  \caption{TODO}
+  \label{fig:yellow_blocks.pdf}
+\end{wrapfigure}
 
 %Modular Hardware
 %Low number of FPGA board designs
 %Can be upgraded piecemeal or all together
 %Standard signal processing model which is consistent between upgrades
+The library is implemented in Simulink, which allows for both simulation and, using Xilinx System Generator, compilation to FPGA code.
+In addition to software libraries, CASPER also develops general purpose FPGA boards designed for real time radio astronomy signal processing.
+These boards are designed to provide high bandwidth IO and dense computation.
+CASPER seeks to develop a small number of boards that can be deployed without a lot of effort and upgraded without doing a major redesign of the instrument. 
+This is achieved in 2 steps.
+FIrst, the Simulink designs can be retargeted to different boards without changed the original implementation.
+Second, the boards are designed to communicate using common protocols, like 10GbE, so a board can be upgraded without modifying how it communicates with other boards. 
+The use of 10GbE also makes communication to non-CASPER boards simple, allowing an FPGA to create UDP packets that eventually get processed on a CPU or GPU server, making these boards an ideal component of a heterogeneous cluster. 
+This makes it simple to design a cluster, and allows continuous upgrades as technology improves, as the signal processing model and communication model do not change between boards.
+
+\begin{wrapfigure}{R}{0.50\textwidth}
+  \centering
+     \includegraphics[width=0.45\textwidth]{Images/C3/roach.pdf}
+  \caption{TODO}
+  \label{fig:roach.pdf}
+\end{wrapfigure}
+
+%Toolflow for compilation, ref BEE2 compile path, borph, etc
+%TODO: add reference-BORPH
+To simplify the use of the FPGA further, the CASPER boards run linux directly on the board. 
+Using this linux environment, called the Berkeley Os for ReProgrammable Hardware or BORPH, programming the FPGA is as simple as running an executable on the command line. 
+Then, once the board has been programmed, BORPH can communicate with the chip using a interface where components on the FPGA like registers or memory appear as a file system in the operating system. 
+These files can be accessed using normal file IO, making it simple to send control signals or monitor the status of the chip.
+
 
 %Boards work with a variety of ADCs/DACs etc.
 %Dual input 8 bit 1 Gsps (or 2 Gsps single input interleaved)
 %3 Gsps single input 8 bit ADC (interleave 2 for 6 Gsps)
 %Provides tested hardware for new instruments
+
 
 %Aaron Parsons, et al.  A Scalable Correlator Architecture Based on Modular FPGA Hardware, Reuseable Gateware, and Data Packetization. Publications of the Astronomy Society of the Pacific, 120:1207–1221, September 2008.
 
@@ -43,11 +123,14 @@ The DiFX Correlator is a scalable software implementation of an FX Correlator.
 
 \section{Tuning} \label{Related Work:Tuning}
 \subsection{Metropolis}
+%TODO: add reference
 %Abhijit Davare. Automated mapping for heterogeneous multiprocessor embedded systems. PhD thesis, 2007.
- 
-%Provides an abstract block based description of the system (Metropolis)
-%Easy to stitch algorithms together 
-%Simulation is abstracted from the eventual hardware implementation
+
+The Metropolis project focused on mapping algorithms onto embedded system. 
+The tool provides a framework for an abstract block based description of an embedded system. 
+This description makes it easy to stitch algorithms together without specifying the eventual hardware implementation, providing a simple path to simulation and algorithm development that is separate from the implemented design. 
+Then, the tool automatically maps the description onto an existing heterogeneous embedded system. 
+
 %Mapping is focused on scheduling onto heterogeneous platforms
 %Strong focus on embedded systems
 
@@ -57,12 +140,28 @@ The DiFX Correlator is a scalable software implementation of an FX Correlator.
 %This doesn’t solve our problem
 %Just does scheduling
 
+The mapping generated by the tool is simply a schedule, specifying where and when each part of the computation gets executed. 
+The tool seeks to optimize performance of the algorithm, ensuring the generated schedule runs as fast as possible on the hardware provided. 
+This technique requires a fixed hardware model and uses the existing hardware to optimize performance. 
+While this work is useful when a hardware model exists, it does not provide any flexibility in the hardware model while mapping the algorithm. 
+So, when it is necessary to design the hardware to begin with, this does not solve the problem. 
+
 %Doesn’t help design the cluster
 %A “heterogeneous node” has a fixed mix of resources
 %Can’t reduce costs by throwing away certain types of hardware
 %Optimization is based on a fixed architecture and flexible performance
 %Doesn’t match our “always running” model
 %Performance is “good enough”, not an optimization target
+
+Additionally, this type of solution is ill-suited to mapping the computation required to do real-time radio astronomy signal processing. 
+This tool assumes it must schedule a discrete task onto a fixed piece of hardware and attempts maximize the performance of the task. 
+In the applications described in Chapter \ref{chap:Real Time Radio Astronomy Algorithms}, the computation should always be running and needs to meet some minimum performance target.
+Once the performance target is met, it's better to have a tool that will other costs like power or amount of hardware, rather attempting to improve the runtime of the algorithm. 
+
+
+
+
+
 
 
 
