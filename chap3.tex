@@ -8,7 +8,10 @@
 \subsection{DiFX}
 %TODO: add reference
 %A. T Deller, S. J Tingay, M Bailes, and C West. Difx: A software correlator for very long baseline interferometry using multiprocessor computing environments. Publications of the Astronomical Society of the Pacific, 119(853):318–336, Mar 2007.
-%If you have a cluster available…%Why do cpu-only?%It’s easy%Compared to 27 antenna 2GHz EVLA in New Mexico
+%If you have a cluster available…
+%Why do cpu-only?
+%It’s easy
+%Compared to 27 antenna 2GHz EVLA in New Mexico
 The DiFX Correlator is a scalable software implementation of an FX Correlator. 
 The correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
 DiFX was designed as a software correlator in order to maintain flexibility in the design, but that flexibility comes at a high hardware cost. 
@@ -36,6 +39,15 @@ The implementation got very high performance out of the cluster, 96\% of the pea
 
 
 \subsection{CASPER}
+%TODO: work this in
+The need for high bandwidth spectroscopy manifests in many different radio astronomy applications.
+Keeping up with increasing computation demands has often resulted in the specialized design of spectrometers.
+At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we have developed a software package to automatically generate spectrometers for a variety of applications.
+
+The CASPER FPGA libraries were developed to mitigate the need to redevelop common signal processing blocks for every new instrument \cite{Parsons:2009vc}. 
+Parameterized blocks such as FFTs and digital down-converters can easily be used to design many different instruments. 
+Coupled with open source FPGA boards, such as the ROACH (Reconfigurable Open Architecture Computing Hardware), the CASPER libraries provide a useful toolbox for radio astronomy instrumentation development.
+
 %TODO: add reference
 %A Parsons, et al. PetaOp/Second FPGA Signal Processing for SETI and Radio Astronomy. Signals, Systems and Computers, 2006. ACSSC ’06. Fortieth Asilomar Conference on, pages 2031–2035, 2006.
 

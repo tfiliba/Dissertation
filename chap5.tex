@@ -7,6 +7,15 @@
 %for now ”cost” and ”performance” are still variables
 %State: intro to ILP can be written now. documenting the actual ILP for this application will be done after the analysis/results
 
+%TODO: Place
+%Cluster abstraction
+%Treat platforms as cluster nodes
+%Assume all platforms elements are attached to a switch
+%Assume a full crossbar network
+%Fully connected network
+%Often necessary in radio astronomy
+%Try to determine the best mapping based on some cost metric
+
 After coming up with an instrument description, it is necessary to determine how that instrument will be implemented in hardware. 
 
 %Treat platforms as cluster nodes
@@ -180,7 +189,8 @@ In the case where $ns_{i,A} = n_{i,A}$, it's true that every block of type $A$ w
 However, they might not need to send the full bandwidth $bw\_out_{A}$ to the switch, since some portion of the data sent by an $A$ block may be required by $B$ blocks residing on the same board. 
 A more exact version of this calculation would also take into account the smaller bandwidth, but due to the complexity and rarity of this case the approximation is sufficient.
 As described in Section \ref{Related Work:Radio Astronomy}, many architectures have this type of connection but there very few cases where the $A$ and $B$ blocks connected this way reside on the same board. 
-                    
+
+\section{Performance Modeling}                    
                 
 \section{Cost Modeling}
 %Costs
@@ -208,9 +218,26 @@ This section describes how the design of this ILP and the introduction of a few 
 %J J Bisschop. AIMMS Modeling Guide - Integer Programming Tricks. pages 1–14, April 2011. 
 %Fallback to random heuristics (i.e. simulated annealing)
 
-%But… it’s NP-Hard to solve optimally%Current ILP benchmarks run 100k variable problems in hours%Beyond that size, problems become infeasible%ILP runtime highly sensitive to%ILP solver (underlying algorithm) – 100k problem infeasible with one tool vs <3 minute solution with another %Problem structure%We can help the algorithm out for large designs%Reduce number of variables (combine blocks)
+%But… it’s NP-Hard to solve optimally
+%Current ILP benchmarks run 100k variable problems in hours
+%Beyond that size, problems become infeasible
+%ILP runtime highly sensitive to
+%ILP solver (underlying algorithm) – 100k problem infeasible with one tool vs <3 minute solution with another 
+%Problem structure
+%We can help the algorithm out for large designs
+%Reduce number of variables (combine blocks)
+
+
 
 \subsection{Symmetry} %TODO add reference
+\begin{figure}[ht!]
+  \centering
+     \includegraphics[width=0.48\textwidth]{Images/C5/symmetrya.pdf}
+     \includegraphics[width=0.48\textwidth]{Images/C5/symmetryb.pdf}
+  \caption{TODO}
+  \label{fig:symmetry.pdf}
+\end{figure}
+
 % F Margot. Symmetry in integer linear programming. 50 Years of Integer Programming 1958-2008, pages 647–686, 2010. 
 In this type of program, symmetry can often significantly increase the amount of time required to confirm the optimal solution. %TODO: what type of program?
 The boards that have the same platform type are interchangeable, so if board $i$ implements some design and board $j$ implements a different design in the optimal solution, there is another optimal solution where their designs are swapped.
@@ -289,8 +316,40 @@ By modifying the ILP, the performance is greatly improved without sacrificing op
 %            prob+=lex_order[currentplatform,currentboard-1]>=lex_order[currentplatform,currentboard]
 %           
 
+\section{Mapped Dataflow}
 
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=0.5\textwidth]{Images/C5/universal_arch.png}
+  \caption{A potential architecture for multiple scientific instruments simultaneously processing data from the same telescope}
+  \label{fig: C5/universal_arch.png}
+\end{figure}
 
 
 \section{Performance}
 %TODO: this will have to be written after ch 6 is complete, to make sure we are benchmarking the correct thing. in the meantime we'll write in introduction 
+
+%TODO: put this somewhere
+\pagebreak
+\subsection{Server Benchmarking}
+PASP has proven useful in many applications by itself, but the goal of automatically generating a spectrometer for any cluster requires more than just a reconfigurable FPGA design. 
+It is difficult to determine what size the subbands or the cluster should be without knowing how much data the target servers can receive and process.
+Our benchmarking tools are designed to quickly determine how much bandwidth a server is capable of handling so the PASP parameters can be set appropriately.
+
+We have developed a general purpose benchmark to test the networking capability of a server. 
+This test uses an FPGA design to generate 10 gigabit Ethernet packets and transmits them to the server under test.
+The FPGA design has a runtime programable packet size and packet rate. 
+The packet size is set to the largest size allowed by the server and the packet rate is initially set low and ramped up while the receive software running on the server checks for dropped packets.
+By searching for the highest bandwidth with no dropped packets, we find the maximum allowable data rate where the server should reliably receive all the data.
+
+%The processing capabilities must also be tested. 
+While specific processing algorithms may vary between scientific applications, an FFT benchmark provides insight into possible processing requirements for a variety of radio astronomy applications.
+We developed an FFT benchmark using CUFFT, the CUDA FFT library, which supports FFT of arbitrary sizes and allows them to be run in batches on the GPU. 
+Our benchmark tests a variety of FFT sizes and batch sizes.
+In general, we have found that running larger FFTs and batching many FFTs together is necessary to fully take advantage of the computing resources on GPU.
+Running this benchmark allows us to determine the maximum bandwidth that can be processed with the available resources.
+
+Using these benchmarks, we can see how much compute power is provided by the server and determine the parameters that need to be entered into PASP.
+The benchmarks also allow us to identify potential bottlenecks by comparing the maximum bandwidth the server can receive to the maximum bandwidth the server can process.
+If the system is upgraded to reduce bottlenecks, it is easy to retest the server and recompile a PASP design that takes advantage of the new resources.
