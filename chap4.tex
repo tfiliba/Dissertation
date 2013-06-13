@@ -21,11 +21,11 @@ Rather than designing a completely different instrument for every different spec
 %Need to understand how to choose the right platform(s) for each implementation
 %With constant changes in technology and algorithm implementations an automatic approach is required
 
+In this chapter I introduce a toolflow called ORCA or Optimal Rearrangement of Cluster-based Astronomy signal processing pipelines
 
 
-
-\section{Toolflow Goals} \label{High Level Toolflow:Toolflow Goals}
-
+\section{ORCA Goals} \label{High Level Toolflow:ORCA Goals}
+ORCA extends the CASPER philosophy discussed in Section \ref{Related Work:Radio Astronomy} by providing an end-to-end toolflow that allows the user to go from a high level description of the instrument to a low level implementation automatically. 
 
 
 %Describe what the tool flow should to, for whom, etc
@@ -43,26 +43,26 @@ Rather than designing a completely different instrument for every different spec
 %Goals
 %Interface
 %Accessible to astronomers (domain experts)
-This tool is be accessible to both computer experts and radio astronomers, or other domain experts.
-For a domain expert, the tool should allows someone to choose the algorithm they need without worrying how it will ultimately map to hardware.
+ORCA is designed to be be accessible to both computer experts and radio astronomers, or other domain experts.
+For a domain expert, the ORCA allows the user to choose a predefined instrument type without worrying how it will ultimately map to hardware.
 %Accessible computer experts
 %Implementation
 %Generate code for an instrument optimally mapped across a heterogeneous cluster
 %Retain improvements offered by low-level optimization
-The computer expert can to define a new algorithm, and has a way to providing optimization.
+The computer expert can to define a new instrument, by specifying the algorithm, and has a way to providing optimization.
 %TODO: fix this, I don't like it
 For example, if an engineer wrote an optimized FFT algorithm, the tool will be able to incorporate that into the final optimized result.
 And in the end, regardless of who is using this tool, an optimal mapping of the algorithm gets produced. 
 
-%TODO: Add tool name
+%TODO: Add description
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal.pdf}
-  \caption{TODO Toolflow}
+  \caption{The ORCA Toolflow}
   \label{fig: C4/toolflow_horizontal.pdf}
 \end{figure}
 
-These goals are achieved through a four stage toolflow. The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of these different users. 
+These goals are achieved through ORCA, a four stage tool that allows the user to go from a high level description of an instrument to an optimized cluster design. Each stage of the ORCA toolflow is represented in Figure \ref{fig: C4/toolflow_horizontal.pdf}. The first stage is instrument definition, which is described in Section \ref{High Level Toolflow:Instrument Definition}. This stage is designed based on the needs of the domain expert. It should allow the radio astronomer to create a predefined instrument using a handful of parameters. The instrument definition is converted into a dataflow model, as described in Section \ref{High Level Toolflow:Dataflow Model}. The dataflow model is aimed at the computer expect, since it allows for a more detailed and flexible definition of the algorithm than the previous stage and provides the means to include optimized blocks.  The dataflow model represents an abstract definition of the algorithm without taking into account the eventual hardware target; the next stage, appropriately named mapping, maps the dataflow model to specific hardware  In the mapping stage, each block defined by the dataflow model gets mapped to a specific piece of hardware. This stage takes into account hardware and network limitations to produce a cost optimal mapping of the original dataflow. Finally, once each block has been mapped to a piece of hardware, the code can be stitched together into a working instrument. The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
 
 
 
@@ -74,9 +74,70 @@ These goals are achieved through a four stage toolflow. The rest of the chapter 
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s1.pdf}
-  \caption{TODO Toolflow}
+  \caption{The ORCA Toolflow}
   \label{fig: C4/toolflow_horizontal_s1.pdf}
 \end{figure}
+
+At the first step in the ORCA toolflow, the user must describe the instrument using high level parameters. 
+These parameters should all be relevant to the astronomer and abstract away any implementation details that do not pertain to the scientific goals. 
+While it would be easy to expose many of the low level parameters at this top layer, this would force the domain expert to become a computer expert as well, exactly the scenario this tool is aiming to avoid. 
+
+The instrument description as represented in Figure \ref{fig: C4/toolflow_horizontal_s1.pdf} fits on a small sticky note. 
+The idea that the parameters should be so few that they fit on a single sticky note was the driving force behind the instrument definition. 
+An instrument designer who finds that he or she needs additional control beyond what is provided by the instrument description always has the flexibility to work with the dataflow model where many low level parameters are exposed. 
+
+
+
+\subsection{Supported Instruments}
+%TODO: revisit this, add beamformer
+Currently, the tool supports 4 instrument types: Spectrometer, High Resolution Spectrometer, Pulsar Processor, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
+Each instrument type has a set of parameters relevant to that instrument. 
+Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
+This translation is described further in the next section.
+
+\subsubsection{Spectrometer Definition}
+Defining a simple spectrometer requires very few parameters. 
+
+Bandwidth
+
+nant
+
+Number of channels
+
+Integration time
+
+
+\subsubsection{High Resolution Spectrometer Definition}
+Bandwidth
+
+nant
+
+Number of channels for each part
+
+Integration time
+
+\subsubsection{Pulsar Processor Definition}
+Bandwidth
+
+Number of channels for each part
+
+Integration time
+
+nant
+
+\subsubsection{FX Correlator Definition}
+Bandwidth
+
+nant
+
+number of channels
+
+
+
+%TODO: discuss this more thoroughly
+\subsection{Design space exploration}
+
+
 
 %Describe instrument using parameters an astronomer can understand
 %Small number of predefined instrument types
@@ -86,8 +147,6 @@ These goals are achieved through a four stage toolflow. The rest of the chapter 
 %Array size (n)
 %Etc
 %Generates a dataflow representation
-At the first step in the toolflow, the user must describe the instrument using high level parameters. 
-These parameters should all 
 
 %\begin{wrapfigure}[18]{l}{0.37\textwidth}
 %  \centering
@@ -150,10 +209,10 @@ This could happen in 2 ways, `one-to-one' and `all-to-all'.
   \centering
     \includegraphics[width=0.35\textwidth]{Images/C5/one-to-one.pdf}
   \caption{TODO}
-  \label{fig:one-to-one.pdf}
+  \label{fig:C4/one-to-one.pdf}
 \end{wrapfigure}
 
-A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:one-to-one.pdf}. 
+A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:C4/one-to-one.pdf}. 
 With this type of connection, the number of blocks of type $A$ must be equal to the number of blocks of type $B$.
 The F-engines in a FX correlator are a good example of this type of connection. 
 The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
@@ -166,14 +225,14 @@ In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate wi
   \centering
     \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
   \caption{TODO}
-  \label{fig:all-to-all.pdf}
+  \label{fig:C4/all-to-all.pdf}
 \end{wrapfigure}
       
 
 
 
 An `all-to-all' connection occurs when every block of type $A$ must send some data to ever block of type $B$. 
-Figure \ref{fig:all-to-all.pdf} shows what an all-to-all connection between 3 blocks of type $A$, and 3 blocks of type $B$ will look like. 
+Figure \ref{fig:C4/all-to-all.pdf} shows what an all-to-all connection between 3 blocks of type $A$, and 3 blocks of type $B$ will look like. 
 In this case, every block of type $A$ must send some data to every block of type $B$. 
 For example, the type of connection between the per-antenna FFTs and the per-channel X-engines in an FX correlator would be `all-to-all'. 
 Each X-engine needs a small amount of data from every F-engine to compute the cross-correlations from a single channel. 
@@ -190,7 +249,7 @@ In the `all-to-all' case, there is no reason for the number of sending nodes nee
     \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
     \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
   \caption{TODO}
-  \label{fig: one-to-all_vs_all-to-one}
+  \label{fig: C4/one-to-all_vs_all-to-one}
 \end{wrapfigure}
 
 
@@ -226,7 +285,7 @@ This does not preclude asymmetrical designs.
 Instead, asymmetry is supported by allowing blocks to define a list of blocktypes they must send data to or receive data from. 
 The connection between any two blocktypes still must be described as above.
 
-\subsection{Instrument Dataflows}
+\subsection{Translating Instrument Definitions to Dataflow Diagrams}
 % Describe data flow for each instrument we are interested in implementing
 
 \section{Mapping}
@@ -243,7 +302,7 @@ The connection between any two blocktypes still must be described as above.
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped.pdf}
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped_alt.pdf}
   \caption{Two potential mappings for the FX Correlator}
-  \label{fig: fft_vs_pfb_response}
+  \label{fig: C4/fx_mapped.pfb}
 \end{figure}
 
 %TODO: think hard about this, we're not actually going to do this and it's optional
@@ -365,7 +424,7 @@ Modifying the application run on the GPU simply requires a redefinition of these
 Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.
 
 In this paper, we describe a radio astronomy instrument that is easily reconfigured to suit a variety of applications.
-Figure \ref{fig: universal_arch} shows how this style of instrument design can be extended to a heterogeneous cluster running multiple processing algorithms at the same time.
+%Figure \ref{fig: universal_arch} shows how this style of instrument design can be extended to a heterogeneous cluster running multiple processing algorithms at the same time.
 All of these algorithms require the data to be broken up into subbands before it can be processed by the server which can be done on the same FPGA. 
 Using multicast packets, multiple servers can subscribe to the same subbands generated on by PASP and process them in different ways. 
 

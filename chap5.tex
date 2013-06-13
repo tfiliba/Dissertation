@@ -105,7 +105,7 @@ The total number of blocks of a certain type should be equal to the number of bl
   \centering
      \includegraphics[width=0.3\textwidth]{Images/C5/cluster_instruments.pdf}
   \caption{TODO}
-  \label{fig:cluster_instruments.pdf}
+  \label{fig:C5/cluster_instruments.pdf}
 \end{wrapfigure}
 
 The ILP does not design the network topology. 
@@ -116,13 +116,13 @@ Rather than have the ILP redesign the same topology over and over, we simply ass
 
 
 
-Figure \ref{fig:cluster_instruments.pdf} shows an example of this topology. 
+Figure \ref{fig:C5/cluster_instruments.pdf} shows an example of this topology. 
 Each board gets connected to the same switch and can communicate with any other board on the switch, regardless of the platform type. 
 
 \subsubsection{Bandwidth Limitations}
 But, there still are constraints on this communication and this must be taken into account in the ILP.
 While there might be a link available between each pair of boards, the bandwidth into and out of these boards is limited. 
-Consider Figure \ref{fig:cluster_instruments.pdf} again.
+Consider Figure \ref{fig:C5/cluster_instruments.pdf} again.
 Suppose every other board in the cluster needed to stream 10Gbps of data to the CPU board, but it is only connected to the switch via a single 10Gbps link. 
 There are additional constraints to ensure that the input and output bandwidths are not exceeded.
 
@@ -235,7 +235,7 @@ This section describes how the design of this ILP and the introduction of a few 
      \includegraphics[width=0.48\textwidth]{Images/C5/symmetrya.pdf}
      \includegraphics[width=0.48\textwidth]{Images/C5/symmetryb.pdf}
   \caption{TODO}
-  \label{fig:symmetry.pdf}
+  \label{fig:C5/symmetry.pdf}
 \end{figure}
 
 % F Margot. Symmetry in integer linear programming. 50 Years of Integer Programming 1958-2008, pages 647Ð686, 2010. 
@@ -262,7 +262,7 @@ Another solution relies on user aid to guide the mapping.
 The ILP may spend time going over solutions that may be obviously wrong to a human user.
 In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
 While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
-This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:Toolflow Goals}.
+This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCA Goals}.
 The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
 To maintain usability for domain experts, guided optimization will not be the solution used to solve this issue.
 

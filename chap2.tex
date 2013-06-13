@@ -51,7 +51,7 @@ Correlation doesn't aim to form a single beam, but instead is the first step tow
 
 
 \section{Spectroscopy}
-\label{sec:Spectroscopy}
+\label{Real Time Radio Astronomy Algorithms:Spectroscopy}
 A spectrometer is simply an instrument that produces an integrated, or averaged, frequency domain spectrum from a time domain signal. 
 A real time spectrometer works by constantly computing a spectrum over short windows of data (channelization), then each channel is summed for a predetermined amount of time to compute the average power in that channel (accumulation). 
 Figure x shows a block diagram for a simple spectrometer design. 
@@ -83,12 +83,13 @@ Since it would be infeasible to channelize a 200MHz into 128 million channels us
 
 
 \section{Pulsar Processing}
+\label{Real Time Radio Astronomy Algorithms:Pulsar Processing}
 A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
 A pulsar is a rotating neutron star that emits an electromagnetic beam. 
 When the beam sweeps past Earth, due to the rotation of the star, it is observed as a wideband pulse. 
 As the pulse travels through the interstellar medium (the matter filling interstellar space), the pulsar gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
 
-A spectrometer, as described in Section \ref{sec:Spectroscopy}, that accumulates the spectrum would smear the pulse, so there will need to be a few adjustments to the spectroscopy algorithm to make it suitable for processing transient events. 
+A spectrometer, as described in Section \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, that accumulates the spectrum would smear the pulse, so there will need to be a few adjustments to the spectroscopy algorithm to make it suitable for processing transient events. 
 In the case of pulsars, the algorithm starts with a high-resolution spectrometer without an accumulator. 
 Instead, the algorithm becomes specialized to detect this type of quickly occurring event.
 
@@ -123,6 +124,7 @@ The project will try to detect gravitational waves by observing an array of puls
 %Beyond astronomy, pulsars could also serve as 
 
 \section{Beamforming}
+\label{Real Time Radio Astronomy Algorithms:Beamforming}
 Beamforming is one technique for combining data from an array of antennas.
 The beamformer combines the data from multiple antennas into a single beam pointed at a single point in the sky.
 This is achieved by delaying the signal from each antenna by a different amount and then summing the delayed signals. 
@@ -176,6 +178,7 @@ So, as the number of beams increases, it can be advantageous to use this algorit
 %%Add together multiple (delayed) signals to improve SNR
 
 \section{Correlation}
+\label{Real Time Radio Astronomy Algorithms:Correlation}
 Aperture synthesis is another technique to combine that data from many antennas.
 %TODO: why?
 The goal is to form an image of the sky, using 2 steps, correlation followed by imaging.
