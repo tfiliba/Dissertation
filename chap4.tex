@@ -21,7 +21,7 @@ Rather than designing a completely different instrument for every different spec
 %Need to understand how to choose the right platform(s) for each implementation
 %With constant changes in technology and algorithm implementations an automatic approach is required
 
-In this chapter I introduce a toolflow called ORCA or Optimal Rearrangement of Cluster-based Astronomy signal processing pipelines
+In this chapter, I introduce a toolflow called ORCA or Optimal Rearrangement of Cluster-based Astronomy signal processing pipelines.
 
 
 \section{ORCA Goals} \label{High Level Toolflow:ORCA Goals}
@@ -62,7 +62,7 @@ And in the end, regardless of who is using this tool, an optimal mapping of the 
   \label{fig: C4/toolflow_horizontal.pdf}
 \end{figure}
 
-These goals are achieved through ORCA, a four stage tool that allows the user to go from a high level description of an instrument to an optimized cluster design. Each stage of the ORCA toolflow is represented in Figure \ref{fig: C4/toolflow_horizontal.pdf}. The first stage is instrument definition, which is described in Section \ref{High Level Toolflow:Instrument Definition}. This stage is designed based on the needs of the domain expert. It should allow the radio astronomer to create a predefined instrument using a handful of parameters. The instrument definition is converted into a dataflow model, as described in Section \ref{High Level Toolflow:Dataflow Model}. The dataflow model is aimed at the computer expect, since it allows for a more detailed and flexible definition of the algorithm than the previous stage and provides the means to include optimized blocks.  The dataflow model represents an abstract definition of the algorithm without taking into account the eventual hardware target; the next stage, appropriately named mapping, maps the dataflow model to specific hardware  In the mapping stage, each block defined by the dataflow model gets mapped to a specific piece of hardware. This stage takes into account hardware and network limitations to produce a cost optimal mapping of the original dataflow. Finally, once each block has been mapped to a piece of hardware, the code can be stitched together into a working instrument. The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
+These goals are achieved through a four stage tool that allows the user to go from a high level description of an instrument to an optimized cluster design. Each stage of the ORCA toolflow is represented in Figure \ref{fig: C4/toolflow_horizontal.pdf}. The first stage is instrument definition, which is described in Section \ref{High Level Toolflow:Instrument Definition}. This stage is designed based on the needs of the domain expert. It should allow the radio astronomer to create a predefined instrument using a handful of parameters. The instrument definition is converted into a dataflow model, as described in Section \ref{High Level Toolflow:Dataflow Model}. The dataflow model is aimed at the computer expect, since it allows for a more detailed and flexible definition of the algorithm than the previous stage and provides the means to include optimized blocks.  The dataflow model represents an abstract definition of the algorithm without taking into account the eventual hardware target; the next stage, appropriately named mapping, maps the dataflow model to specific hardware  In the mapping stage, each block defined by the dataflow model gets mapped to a specific piece of hardware. This stage takes into account hardware and network limitations to produce a cost optimal mapping of the original dataflow. Finally, once each block has been mapped to a piece of hardware, the code can be stitched together into a working instrument. The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
 
 
 
@@ -82,12 +82,20 @@ At the first step in the ORCA toolflow, the user must describe the instrument us
 These parameters should all be relevant to the astronomer and abstract away any implementation details that do not pertain to the scientific goals. 
 While it would be easy to expose many of the low level parameters at this top layer, this would force the domain expert to become a computer expert as well, exactly the scenario this tool is aiming to avoid. 
 
+%\begin{wrapfigure}{L}{0.37\textwidth}
+%  \centering
+%     \includegraphics[width=0.2\textwidth]{Images/C4/instrument_description.pdf}
+%  \caption{Example instrument description}
+%  \label{fig:C4/instrument_description.pdf}
+%\end{wrapfigure}
+
 The instrument description as represented in Figure \ref{fig: C4/toolflow_horizontal_s1.pdf} fits on a small sticky note. 
 The idea that the parameters should be so few that they fit on a single sticky note was the driving force behind the instrument definition. 
 An instrument designer who finds that he or she needs additional control beyond what is provided by the instrument description always has the flexibility to work with the dataflow model where many low level parameters are exposed. 
 
 
 
+%TODO: add filter parameters, ntaps, window (?)
 \subsection{Supported Instruments}
 %TODO: revisit this, add beamformer
 Currently, the tool supports 4 instrument types: Spectrometer, High Resolution Spectrometer, Pulsar Processor, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
@@ -97,25 +105,25 @@ This translation is described further in the next section.
 
 \subsubsection{Spectrometer Definition}
 Defining a simple spectrometer requires very few parameters. 
+First, as with most instruments, the astronomer must define the sky bandwidth, defined in MHz.
+Then, the desired spectral resolution is defined in MHz per channel, or analogously, the number of channels that should be used to break up the bandwidth.
+Finally, the integration time needs to be defined.
 
-Bandwidth
-
-nant
-
-Number of channels
-
-Integration time
-
+An additional parameter, number of antennas, can also be defined. 
+This effectively describes the number of independent spectrometers that need to be created.
+While this parameter does not affect the end to end processing for each antenna, knowing how many spectrometers are needed allows for more efficient use of the hardware.
+The impact on the design is described further in Sections \ref{High Level Toolflow:Dataflow Model} and \ref{High Level Toolflow:Mapping} and the efficiency afforded by this parameter is explored in Chapter \ref{Analysis}
 
 \subsubsection{High Resolution Spectrometer Definition}
-Bandwidth
+The main difference between a spectrometer and a high resolution spectrometer is the need for two stages of channelization rather than just one. 
+The sky bandwidth, integration time, and number of antennas are defined in the same way as the regular spectrometer. 
 
-nant
+The spectral resolution is defined differently, because both the coarse and fine resolutions need to be defined. 
+First, the coarse resolution defines how many channels the whole sky bandwidth should be broken up into.
+Then, the fine resolution defines how many channels each coarse channel is broken into.
+Both can be described in MHz per channel or by just giving the number of channels.
 
-Number of channels for each part
-
-Integration time
-
+%TODO: Ask Jonathon about this
 \subsubsection{Pulsar Processor Definition}
 Bandwidth
 
@@ -132,10 +140,17 @@ nant
 
 number of channels
 
+integration time
+
 
 
 %TODO: discuss this more thoroughly
 \subsection{Design space exploration}
+In addition to defining a single instrument, an astronomer can use this tool to 
+
+coarse vs fine tradeoff, ringing, algorithm
+
+search a space of possible instruments
 
 
 
@@ -148,12 +163,7 @@ number of channels
 %Etc
 %Generates a dataflow representation
 
-%\begin{wrapfigure}[18]{l}{0.37\textwidth}
-%  \centering
-%     \includegraphics[width=0.2\textwidth]{Images/C4/instrument_description.pdf}
-%  \caption{Example instrument description}
-%  \label{fig:C4/instrument_description.pdf}
-%\end{wrapfigure}
+
 
 
 \section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}
@@ -165,14 +175,7 @@ number of channels
   \label{fig: C4/toolflow_horizontal_s2.pdf}
 \end{figure}
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
-  \caption{Example FX Correlator Dataflow Model}
-  \label{fig: C4/fx_dataflow.pdf}
-\end{figure}
-
-\subsection{Overview}
+%\subsection{Overview}
 
 %Dataflow representation of instrument
 %Define input/output connections
@@ -205,7 +208,7 @@ Blocks of type $A$ must send their output to blocks of type $B$.
 Now, we need to understand how blocks of type $A$ send data to blocks of type $B$.
 This could happen in 2 ways, `one-to-one' and `all-to-all'. 
 
-\begin{wrapfigure}[18]{l}{0.37\textwidth}
+\begin{wrapfigure}[18]{L}{0.37\textwidth}
   \centering
     \includegraphics[width=0.35\textwidth]{Images/C5/one-to-one.pdf}
   \caption{TODO}
@@ -221,7 +224,7 @@ In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate wi
 
 
 
-\begin{wrapfigure}[18]{r}{0.47\textwidth}
+\begin{wrapfigure}[18]{R}{0.47\textwidth}
   \centering
     \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
   \caption{TODO}
@@ -244,13 +247,13 @@ In the `all-to-all' case, there is no reason for the number of sending nodes nee
 
 
 %TODO: make this an a,b figure
-\begin{wrapfigure}{r}{0.47\textwidth}
+\begin{figure}
   \centering
     \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
     \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
   \caption{TODO}
   \label{fig: C4/one-to-all_vs_all-to-one}
-\end{wrapfigure}
+\end{figure}
 
 
 
@@ -287,23 +290,138 @@ The connection between any two blocktypes still must be described as above.
 
 \subsection{Translating Instrument Definitions to Dataflow Diagrams}
 % Describe data flow for each instrument we are interested in implementing
+Now that we have a method for describing a general dataflow, we will describe how each type of instrument definition described in the previous section is converted to a dataflow. 
 
-\section{Mapping}
+
+\subsubsection{Spectrometer}
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/spectrometer_dataflow.pdf}
+  \caption[General Spectrometer Dataflow Model]{General Spectrometer Dataflow Model.
+  \textit{
+  A general dataflow model for a spectrometer. 
+  This model can be applied to any spectrometer, as the spectrometer parameters do no affect how many computational blocks are required. 
+  The data is fed in by an ADC and filtered using an FIR to improve the response of the FFT.
+  The filtered data is then channelized by an FFT, accumulated in the block labeled $\Sigma$ and recorded to disk.
+  }}
+  \label{fig: C4/spectrometer_dataflow.pdf}
+\end{figure}
+
+The spectrometer instrument definition generates a very simple dataflow. 
+Figure \ref{fig: C4/spectrometer_dataflow.pdf} shows the general dataflow model for a spectrometer. 
+The ADC feeds data into a FIR filter. 
+Then the filtered signal is transformed into channels in the FFT and those channels are accumulated and saved to disk. Regardless of the parameters the astronomer chooses, the dataflow will be the same. 
+
+The parameters for each block come directly from the instrument definition. 
+The FIR parameters come from the number of FIR taps and window shape, the FFT is simply defined by the FFT length parameter and the accumulator also is parameterized by the FFT length as well as the integration time. 
+
+\subsubsection{High Resolution Spectrometer}
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/hires_spectrometer_dataflow.pdf}
+  \caption[Example High Resolution Spectrometer Dataflow Model]{Example High Resolution Spectrometer Dataflow Model
+  \textit{
+  This figure shows an example dataflow for a high resolution spectrometer with 4 coarse FFT channels.
+  Like the previous FFT, the data comes in through an ADC, is filtered and then channelized using a coarse FFT.
+  Then, to achieve a higher resolution, each coarse channel is divided into sub-channels using the 4 fine FFT blocks in the dataflow. 
+  }}
+
+  \label{fig: C4/hires_spectrometer_dataflow.pdf}
+\end{figure}
+
+The high resolution spectrometer dataflow does depend on the parameters specified in the instrument description. 
+An example dataflow is shown in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf}. 
+The first three blocks in the dataflow are exactly the same as the Spectrometer dataflow described in the previous section. 
+An ADC feeds data into a FIR filter followed by an FFT. 
+After the FFT, the algorithm is modified to accommodate the higher resolution required. 
+The first FFT divides the band into a number of coarse channels and then each coarse channel must be further divided into a number of fine channels. 
+The coarse FFT must feed its data to a separate fine FFT for each coarse channel, so the number of fine FFTs in the dataflow diagram will vary based on the number of coarse channels.
+The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spectrometer that divides the data into 4 coarse channels.
+At this point, each coarse channel is processed in an independent pipeline the finely channelized data is accumulated and recorded to disk. 
+
+%TODO Finish: graphic for F/X engine, name sub channelization step (S?)
+
+
+
+\subsubsection{FX Correlator}
+
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
+  \caption{Example FX Correlator Dataflow Model}
+  \label{fig: C4/fx_dataflow.pdf}
+\end{figure}
+
+The dataflow for an FX correlator will vary quite a bit based on the input parameters. Figure \ref{fig: C4/fx_dataflow.pdf} shows an example 3 antenna 4 channel 
+
+\section{Mapping}  \label{High Level Toolflow:Mapping}
 %TODO: Add tool name
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s3.pdf}
-  \caption{TODO Toolflow}
+  \caption[ORCA Toolflow]{ORCA Toolflow Mapping}
   \label{fig: C4/toolflow_horizontal_s3.pdf}
 \end{figure}
+
+Once the dataflow and the computational blocks are defined, ORCA must determine how to place each computational block into hardware. 
+In the mapping stage, ORCA determines what type of hardware should be used for each block, while minimizing the total cost of the hardware (in dollars, watts, or another used-defined metric).
+Figure \ref{fig: C4/toolflow_horizontal_s3.pdf} highlights the mapping phase of the toolflow. 
+
+At this point, the computational blocks and dataflow can no longer be viewed as abstract algorithms. 
+Each computational block must be paired with a performance model for each supported platform that shows the resource utilization and bandwidth requirements for that block. 
+Using the performance model, the tool is able to test a number of hardware mappings and ensure that none of the available hardware or bandwidth resources are overmapped.
+
+The optimal mapping is determined using an Integer Linear Program or ILP. 
+The resources, such as memory, logic and CPU time, and bandwidth constraints are translated directly into ILP constraints.
+The constraints are used to determine a valid mapping, for example total bandwidth mapped to a link must be less than total link bandwidth.
+The variables represent the design decisions, determining where each block should be implemented.
+And finally, the cost function simply totals up the costs associated with each piece of hardware used.
+
+
+A ILP was chosen because it has a number of positive features.
+Unlike a randomized algorithm such as simulated annealing, the results from a ILP are repeatable.
+While there might be multiple solutions with the same cost, each time the same ILP is run, it is guaranteed to find one of the solutions of optimal cost. 
+The ILP representation also makes it easy for the user to guide the algorithm. 
+Since the design choices are represented by variables, they can also be restricted by adding additional constraints to those variables.
+This representation also makes it easy to build out an existing cluster, by allowing a limited amount of zero-cost hardware.
+
+Unfortunately, the advantages of the ILP comes with a high cost, namely that the ILP is NP-Hard to solve optimally.
+%TODO: ref
+Current ILP benchmarks are able to solve problems with a hundred thousand variables in a few hours, but beyond that size the problems become infeasible.
+%TODO: add an ex solver
+To make matters worse, the ILP runtime is very sensitive to the solver being used and the problem structure.
+
+Because the runtime for the ORCA mapper needs to be within a few hours, we use a number of techniques to reduce the MILP runtime.
+%TODO: add more info here
+First, the easiest way to reduce the runtime without changing the ILP is to change the solver. 
+There is a huge amount of variance in runtimes between different solvers and simply switching out the backend solver might cause a previously infeasible problem to become solvable.
+If that doesn't work, then it becomes necessary to modify the ILP.
+One way to do this is by reducing the number of variables it needs to solve for.
+Many of the radio astronomy instruments are very symmetric, so it is reasonable to assume that the optimal mapping would be symmetric as well.
+The symmetry can be preserved by forcing every block of a certain type to be implemented in the same kind of hardware, drastically reducing the number of decisions that the ILP needs to make.
+The ILP can also be modified to ensure that there is a single, unique optimal solution.
+When designs are very symmetric, the ILP will often find an optimal solution quickly but, because it is not unique, the ILP must spend a lot of time convincing itself that the solution is, in fact, optimal.
+Additional constraints can be added to ensure that only one of those solutions is valid, greatly reducing the amount of time it takes to verify optimality.
+Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the performance models are used as well as how the MILP is specified and optimized to achieve a feasible runtime. 
+
+Figure \ref{fig: C4/fx_mapped.pdf} shows two example mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
+
 
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped.pdf}
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped_alt.pdf}
   \caption{Two potential mappings for the FX Correlator}
-  \label{fig: C4/fx_mapped.pfb}
+  \label{fig: C4/fx_mapped.pdf}
 \end{figure}
+
+
+
+
+
 
 %TODO: think hard about this, we're not actually going to do this and it's optional
 %This could be a good place to describe PASP, this is doable, we've shown it's possible
@@ -313,7 +431,7 @@ The connection between any two blocktypes still must be described as above.
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s4.pdf}
-  \caption{TODO Toolflow}
+  \caption{ORCA Toolflow}
   \label{fig: C4/toolflow_horizontal_s4.pdf}
 \end{figure}
 
@@ -387,6 +505,20 @@ The CUDA language, for example, is a C-like language that can be used to develop
 The high level parameters in this package allow us to use FPGAs while abstracting away implementation details specific to the FPGA.
 To give the user control over their data processing algorithm, an application specific GPU program can be written and easily interfaced with the existing receive software in the package.
 
+%TODO fix this
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C4/pasp_high_level_interface.png}
+  \caption{TODO}
+  \label{fig: C4/pasp_high_level_interface.png}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/pasp_low_level.png}
+  \caption{TODO}
+  \label{fig: C4/pasp_low_level.png}
+\end{figure}
 
 The instruments generated with this package use a heterogeneous design, allowing us to benefit from the strengths of FPGAs and GPUs. 
 The FPGA board is able to sample and process very high bandwidths that a single CPU or GPU would not be able to manage; 

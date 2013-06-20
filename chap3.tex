@@ -6,6 +6,14 @@
 \section{Radio Astronomy} \label{Related Work:Radio Astronomy}
 \subsection{Digital Signal Processing for Radio Astronomy}
 \subsection{DiFX}
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/difx_architecture.pdf}
+  \caption{TODO}
+  \label{fig: C3/difx_architecture.pdf}
+\end{figure}
+
 %TODO: add reference
 %A. T Deller, S. J Tingay, M Bailes, and C West. Difx: A software correlator for very long baseline interferometry using multiprocessor computing environments. Publications of the Astronomical Society of the Pacific, 119(853):318–336, Mar 2007.
 %If you have a cluster available…
@@ -24,6 +32,12 @@ To process 64 MHz of bandwidth and only 10 antennas, about 100 nodes are require
 %64 MHz, 10 antennas required ~100 nodes in 2007
 
 \subsection{LOFAR}
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/lofar_performance.pdf}
+  \caption{TODO Lofar Performance}
+  \label{fig: C3/lofar_performance.pdf}
+\end{figure}
 %R Van Nieuwpoort. Correlating Radio Astronomy Signals with Many-Core Hardware. International Journal of Parallel Programming, 2009
 %On a blue gene, real time but still costly power hungry solution 64 stations
 %TODO: add reference
@@ -35,6 +49,14 @@ The implementation got very high performance out of the cluster, 96\% of the pea
 
 
 \subsection{xGPU}
+%TODO: add another graph from paper
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C3/gpuxperformance.pdf}
+  \caption{TODO}
+  \label{fig: C3/gpuxperformance.pdf}
+\end{figure}
+
 %M Clark and P La Plante. Accelerating Radio Astronomy Cross-Correlation with Graphics Processing Units. Arxiv preprint arXiv:1107.4264, 2011.
 
 
@@ -43,6 +65,13 @@ The implementation got very high performance out of the cluster, 96\% of the pea
 The need for high bandwidth spectroscopy manifests in many different radio astronomy applications.
 Keeping up with increasing computation demands has often resulted in the specialized design of spectrometers.
 At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we have developed a software package to automatically generate spectrometers for a variety of applications.
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/casper_collaborators.png}
+  \caption{TODO}
+  \label{fig: C3/casper_collaborators.png}
+\end{figure}
 
 The CASPER FPGA libraries were developed to mitigate the need to redevelop common signal processing blocks for every new instrument \cite{Parsons:2009vc}. 
 Parameterized blocks such as FFTs and digital down-converters can easily be used to design many different instruments. 
@@ -59,6 +88,18 @@ Coupled with open source FPGA boards, such as the ROACH (Reconfigurable Open Arc
 %Digital downconverters/mixers
 %Scripts are used to configure parameterized blocks
 The goal of Collaboration for Astronomy Signal Processing and Electronics Research (CASPER) is to provide common libraries, tools, and hardware for radio astronomers developing instrumentation. 
+
+\subsubsection{CASPER Hardware}
+
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/roach.pdf}
+  \caption{TODO}
+  \label{fig: C3/roach.pdf}
+\end{figure}
+
+\subsubsection{CASPER Library}
 This is achieved by identifying commonly used DSP blocks in radio astronomy instruments and developing parameterized implementations of these common blocks, making them useful for a variety of instruments. 
 For example, the CASPER library provides FFTs, polyphase filter banks, accumulators, digital downconverters, digital mixers which can be linked together to make an instrument. 
 Figure \ref{fig:casper_fft_lib.pdf} shows the FFT library, which contains different types of FFT like blocks that can process multiple samples in parallel and blocks that only compute the FFT of a real signal.
@@ -139,7 +180,22 @@ These files can be accessed using normal file IO, making it simple to send contr
 
 %Aaron Parsons, et al.  A Scalable Correlator Architecture Based on Modular FPGA Hardware, Reuseable Gateware, and Data Packetization. Publications of the Astronomy Society of the Pacific, 120:1207–1221, September 2008.
 
+\subsubsection{SETI Spectrometer}
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/setispectrometerv55.pdf}
+  \caption{TODO}
+  \label{fig: C3/setispectrometerv55.pdf}
+\end{figure}
 
+
+\subsubsection{CASPER Correlator}
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/casper_correlator.png}
+  \caption{TODO}
+  \label{fig: C3/casper_correlator.png}
+\end{figure}
 
 \section{Tuning} \label{Related Work:Tuning}
 \subsection{Metropolis}

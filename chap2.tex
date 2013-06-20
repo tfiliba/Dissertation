@@ -82,12 +82,22 @@ Since it would be infeasible to channelize a 200MHz into 128 million channels us
 
 
 
+
+
 \section{Pulsar Processing}
 \label{Real Time Radio Astronomy Algorithms:Pulsar Processing}
 A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
 A pulsar is a rotating neutron star that emits an electromagnetic beam. 
 When the beam sweeps past Earth, due to the rotation of the star, it is observed as a wideband pulse. 
 As the pulse travels through the interstellar medium (the matter filling interstellar space), the pulsar gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
+
+%TODO: event horizon telescope
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C2/pulsar.png}
+  \caption{TODO}
+  \label{fig: C2/pulsar.png}
+\end{wrapfigure}
 
 A spectrometer, as described in Section \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, that accumulates the spectrum would smear the pulse, so there will need to be a few adjustments to the spectroscopy algorithm to make it suitable for processing transient events. 
 In the case of pulsars, the algorithm starts with a high-resolution spectrometer without an accumulator. 
@@ -120,6 +130,14 @@ This makes pulsars extremely useful for conducting relativity experiments.
 One such example is the North American Nanohertz Observatory for Gravitational Waves, or NANOGrav, Project, %TODO: add citation The international pulsar timing array project: using
 which uses pulsars in an attempt to make the first detection of gravitational waves. 
 The project will try to detect gravitational waves by observing an array of pulsars, measuring the effect of the waves passing between Earth and the pulsars as changes in observed pulse periods.
+
+%TODO: diamond planet
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C2/diamond_planet.png}
+  \caption{TODO}
+  \label{fig: C2/diamond_planet.png}
+\end{wrapfigure}
 
 %Beyond astronomy, pulsars could also serve as 
 
@@ -176,6 +194,14 @@ So, as the number of beams increases, it can be advantageous to use this algorit
 
 %TODO: Add 2 element beamformer
 %%Add together multiple (delayed) signals to improve SNR
+
+%TODO: event horizon telescope
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C2/eht.pdf}
+  \caption{TODO}
+  \label{fig: C2/eht.pdf}
+\end{wrapfigure}
 
 \section{Correlation}
 \label{Real Time Radio Astronomy Algorithms:Correlation}
