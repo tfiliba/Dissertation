@@ -47,8 +47,9 @@ As described in Section \ref{Related Work:Tuning}, ILP is a powerful technique
 %Guided optimization
 
 \section{Variables}
-The variables in the ILP are used to infer the optimal mapping for the system, and the cluster architecture. 
-Ultimately, the ILP needs to determine which boards should be used, and what part of the algorithm should get implemented on each board.
+The variables in the ILP are used to infer the optimal mapping for the system, 
+%and the cluster architecture.   TODO: explain this
+Ultimately, the ILP determines which platforms should be used, and what part of the algorithm should get implemented on each platform.
 This is achieved by having the ILP consider some platform, and assume it can instantiate at most $n_p$ copies of that platform.
 We will call a copy of the platform a board. 
 Each board must have some variables that determine which computation blocks get mapped to it. 
@@ -62,14 +63,14 @@ A solution to the ILP, with each of the $n_{i,b}$ variables filled in, gives a c
 %Constraints (resources)
 %I/O
 
-The constraints serve 2 purposes.
+The constraints serve two purposes.
 First, they ensure that no resource is overmapped, so that the amount of hardware the ILP generates will be sufficient to do the computation required.
 Second, they make sure that the correct design gets implemented.
 
 
 \subsection{Platform Resources}
-Any resource on some platform that gets used by mapping computation blocks to that platform must be accounted for in the linear program. 
-This is abstracted in the ILP using a single constraint for each resource.
+Any resource some board that gets used by mapping computation blocks to that board must be accounted for in the linear program. 
+This is abstracted in the ILP using by adding single constraint for each resource.
 
 \subsubsection{Resource Limitations}
 For some resource, $r$, we use our performance model of each block to assess how much of the resource is used up by each block type. 
@@ -114,7 +115,7 @@ The ILP does not design the network topology.
 While it would be possible to design the network using an ILP, %TODO: add ref
 this would add unnecessary complexity to the program (therefore increasing the runtime) with little gain.
 As described in Section \ref{Related Work:Radio Astronomy}, most radio astronomy applications require a full-crossbar interconnect at some point, because many computational blocks have an all-to-all or one-to-all communication pattern.
-Rather than have the ILP redesign the same topology over and over, we simply assume this interconnect exists and every board can communicate with every other board directly.
+Rather than have the ILP redesign the same topology over and over, we simply assume this interconnect exists and every board can communicate with every other board directly over a fixed-bandwidth link.
 
 
 
@@ -122,15 +123,16 @@ Figure \ref{fig:C5/cluster_instruments.pdf} shows an example of this topology.
 Each board gets connected to the same switch and can communicate with any other board on the switch, regardless of the platform type. 
 
 \subsubsection{Bandwidth Limitations}
-But, there still are constraints on this communication and this must be taken into account in the ILP.
+Even a fixed network topology, there still are communication constraints that must be taken into account in the ILP.
 While there might be a link available between each pair of boards, the bandwidth into and out of these boards is limited. 
 Consider Figure \ref{fig:C5/cluster_instruments.pdf} again.
-Suppose every other board in the cluster needed to stream 10Gbps of data to the CPU board, but it is only connected to the switch via a single 10Gbps link. 
+Suppose every other board in the cluster needed to stream 10 Gbps of data to the CPU board, but it is only connected to the switch via a single 10 Gbps link. 
+%TODO so what?
 There are additional constraints to ensure that the input and output bandwidths are not exceeded.
 
 
-In order to write these constrains, we must first determine how many blocks need to send or receive data. 
-We introduce a new variables $nr_{i,b}$ to represent the number of blocks of type $b$ on board $i$ that need to receive data from the cluster, and, similarly, $ns_{i,b}$ to represent the number of blocks of type $b$ on board $i$ that need to send data to the cluster. 
+In order to write these constrains, we must first determine how many blocks need to communicate with a block that is not located on the same board. 
+We introduce new variables $nr_{i,b}$ to represent the number of blocks of type $b$ on board $i$ that need to receive data from the cluster, and, similarly, $ns_{i,b}$ to represent the number of blocks of type $b$ on board $i$ that need to send data to the cluster. 
 Given the amount of data some computational block type takes as input and the number of those blocks on the board, we can multiply them together to determine the amount of input bandwidth that computational block type will require. 
 Summing over every block type determines the total amount of input bandwidth needed by all the computational blocks on the board, creating a constraint that the total required bandwidth must be less than or equal to the total available input bandwidth.
 The constraint on output bandwidth is calculated the same way, generating a pair of constraints for each board, one restricting the total amount of input bandwidth, and another restricting the total amount of output bandwidth. 
@@ -145,6 +147,7 @@ The constraint on output bandwidth is calculated the same way, generating a pair
 
 
 %TODO: this might be better explained in chapter 4, putting it here so the relevant info is available
+%TODO: explain better
 \subsubsection{Connection Constraints}
 First, we observe that the these variables must be bounded by $0$ and $n_{i,b}$, since there cannot be a negative number of blocks that need to communicate, and the number of blocks of type $b$ that need to communicate can't exceed the number of blocks physically on the board. 
 Next, we must take into account the structure of the algorithm to determine whether or not a given block needs to communicate with a separate board. 
@@ -205,12 +208,19 @@ As described in Section \ref{Related Work:Radio Astronomy}, many architectures h
 %Variables
 %Design choices
 
+%TODO: remake
+\begin{figure}[ht!]
+  \centering
+     \includegraphics[width=\textwidth]{Images/C5/mapped_dataflow.png}
+  \caption{TODO}
+  \label{fig:C5/mapped_dataflow.png}
+\end{figure}
 
 \section{Optimization}
-While Integer Linear Programming has a number of desirable properties, the lack of efficient algorithms to solve it can constitute a significant obstacle in designing an ILP with reasonable performance.
+While Integer Linear Programming has a number of desirable properties, the lack of an efficient algorithm to solve it  constitutes a significant obstacle in designing an ILP with reasonable performance.
 This section describes how the design of this ILP and the introduction of a few extra constraints serve to improve the performance and scalability of the program defined in this chapter. 
 
-\subsection{Scaling}
+\subsection{Improving Scaling}
 %physical cluster size ??
 
 
@@ -229,9 +239,18 @@ This section describes how the design of this ILP and the introduction of a few 
 %We can help the algorithm out for large designs
 %Reduce number of variables (combine blocks)
 
+\subsection{Guided Optimization}
+% Guided optimization
+%TODO: add to this... I think there's more to say here
+Another solution relies on user aid to guide the mapping.
+The ILP may spend time going over solutions that may be obviously wrong to a human user.
+In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
+While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
+This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCAS Goals}.
+The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
+To maintain usability for domain experts, guided optimization will not be the solution used to solve this issue.
 
-
-\subsection{Symmetry} %TODO add reference
+\subsection{Breaking Symmetry} %TODO add reference
 \begin{figure}[ht!]
   \centering
      \includegraphics[width=0.48\textwidth]{Images/C5/symmetrya.pdf}
@@ -241,7 +260,7 @@ This section describes how the design of this ILP and the introduction of a few 
 \end{figure}
 
 % F Margot. Symmetry in integer linear programming. 50 Years of Integer Programming 1958-2008, pages 647Ð686, 2010. 
-In this type of program, symmetry can often significantly increase the amount of time required to confirm the optimal solution. %TODO: what type of program?
+In this type of program, symmetry significantly increases the amount of time required to confirm an optimal solution. %TODO: what type of program?
 The boards that have the same platform type are interchangeable, so if board $i$ implements some design and board $j$ implements a different design in the optimal solution, there is another optimal solution where their designs are swapped.
 % TODO add example (?)
 % TODO add a graphic for this example
@@ -250,23 +269,16 @@ The ILP might observe that both blocks cannot fit on a single board and assigns 
 This obviously seems like an optimal solution, but the ILP may also need to check the case where the FFT is placed on ROACH\_0 and the FIR is on ROACH\_1, only to find that it has the same cost as the previous result.
 In this simple example there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
 
-Searching symmetric solutions can become a major time sink, because the ILP solver will find an optimal solution early on, but will require a long time to confirm that it is actually the optimal result, spending time going over many other solutions that are isomorphic to the first one. 
+%TODO: Figure descr
+
+Searching symmetric solutions can become a major time sink, because the ILP solver may find an optimal solution early on, but will require a long time to confirm that it is actually the optimal result, spending time going over many other solutions that are isomorphic to the first one. 
 
 
 % Early stopping (non-optimal result)The simplest solution is stopping the ILP solver before returns an optimal mapping. 
-This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, because solving that problem would be analogous to solving the ILP.
+This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, (determining that is analogous to solving the ILP).
 Early stopping works well when it's clear that symmetry is the cause of the long runtime and the amount of time it would take to get one of the isomorphic optimal solutions is short. 
 Even so, the lack of predictable and repeatable results makes early stopping an unappealing solution.
 
-% Guided optimization
-%TODO: add to this... I think there's more to say here
-Another solution relies on user aid to guide the mapping.
-The ILP may spend time going over solutions that may be obviously wrong to a human user.
-In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
-While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
-This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCA Goals}.
-The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
-To maintain usability for domain experts, guided optimization will not be the solution used to solve this issue.
 
 %TODO: subset mapping
 
