@@ -128,7 +128,7 @@ Some pulsars serve as a very accurate astronomical time keeper.
 There are millisecond pulsars with extremely stable periods, allowing any perturbations in the observed pulse period to be attributed to some external effect.
 This makes pulsars extremely useful for conducting relativity experiments. 
 One such example is the North American Nanohertz Observatory for Gravitational Waves, or NANOGrav, Project, %TODO: add citation The international pulsar timing array project: using
-which uses pulsars in an attempt to make the first detection of gravitational waves. 
+which uses pulsars in an attempt to make the first detection of gravitational waves \cite{2009astro2010S..64D}. 
 The project will try to detect gravitational waves by observing an array of pulsars, measuring the effect of the waves passing between Earth and the pulsars as changes in observed pulse periods.
 
 %TODO: diamond planet
@@ -139,6 +139,7 @@ The project will try to detect gravitational waves by observing an array of puls
   \label{fig: C2/diamond_planet.png}
 \end{wrapfigure}
 
+\cite{Bailes:2011iy}
 %Beyond astronomy, pulsars could also serve as 
 
 \section{Beamforming}
@@ -203,13 +204,18 @@ So, as the number of beams increases, it can be advantageous to use this algorit
   \label{fig: C2/eht.pdf}
 \end{wrapfigure}
 
+\cite{2012Sci...338..355D}
+
 \section{Correlation}
 \label{Real Time Radio Astronomy Algorithms:Correlation}
-Aperture synthesis is another technique to combine that data from many antennas.
-%TODO: why?
+Aperture synthesis is another technique to combine the data from many antennas.
+%TODO: why? 2 step process 
 The goal is to form an image of the sky, using 2 steps, correlation followed by imaging.
 In the correlation step, the cross-correlation of each pair of antennas is calculated. 
 Once the cross-correlation is calculated, it is possible to accumulate the data, greatly reducing the amount of data that needs to be processed in the imaging step.
+
+%TODO: sort out this reference
+\cite{Thompson:1986ww}
 
 The uv plane represents the Fourier transform of the 2-dimensional sky image. 
 The cross-correlation of an antenna pair represents a point in the uv plane, called a \emph{visibility}. 
@@ -245,6 +251,9 @@ For an telescope with $n$ antennas, this algorithm requires $O(n^2)$ cross-corre
 
 
 \subsection{FX Correlation}
+%TODO: explain why
+\cite{Bunton:2000tz}
+
 The cross-correlation theorem further extends the parallel between correlation and convolution, relating the Fourier transform of the cross-correlation of two signals to the Fourier transforms of the original signals. 
 \[ signal = other stuff\]
 

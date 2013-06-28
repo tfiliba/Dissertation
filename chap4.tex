@@ -7,6 +7,7 @@
 
 \chapter{High Level Toolflow}
 
+%TODO
 Introduction - resummarize problem solved by this work
 overview of the steps in the process
 include images from dissertation talk
@@ -27,7 +28,7 @@ In this chapter, I introduce a toolflow called ORCAS or Optimal Rearrangement of
 ORCAS extends the CASPER philosophy discussed in Section \ref{Related Work:Radio Astronomy} by providing an end-to-end toolflow that allows the user to go from a high level description of the instrument to a low level implementation automatically. 
 
 
-
+In order to be useful, this tool cannot rely on a single static set of blocks.
 
 Ideal instrument design
 
@@ -63,6 +64,7 @@ For a domain expert,  ORCAS allows the user to choose a predefined instrument ty
 %Implementation
 %Generate code for an instrument optimally mapped across a heterogeneous cluster
 %Retain improvements offered by low-level optimization
+
 The computer expert can use the tool to define a new instrument, by specifying the algorithm, and is able to provide optimization.
 %TODO: fix this, I don't like it
 For example, if an engineer wrote an optimized FFT algorithm, the tool will be able to incorporate that into the final optimized result.
@@ -215,6 +217,10 @@ integration time
 %Known signals
 %Test against arbitrary precision (exact) floating point implementation
 
+%Optimization already exists
+\cite{Govindaraju:2008vx} %replace with more recent fft alt
+\cite{Kestur:2010tn}
+
 
 \subsection{Connection Types}
 
@@ -359,6 +365,22 @@ The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spec
 
 \subsubsection{FX Correlator}
 
+The FX dataflow model is based on the algorithm architecture for the CASPER correlator described in Section \ref{Related Work:Radio Astronomy}. The processing model is described by replicating 2 basic pipelines, called an F-Engine and an X-Engine. An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank. 
+
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \centering
+    \includegraphics[width=0.48\textwidth]{Images/C4/fx_f_engine.pdf}
+  \caption{FX Correlator F-Engine Model}
+  \label{fig: C4/fx_f_engine.pdf}
+\end{wrapfigure}
+
+\begin{wrapfigure}{R}{0.50\textwidth}
+  \centering
+    \includegraphics[width=0.48\textwidth]{Images/C4/fx_x_engine.pdf}
+  \caption{FX Correlator X-Engine Model}
+  \label{fig: C4/fx_x_engine.pdf}
+\end{wrapfigure}
+
 
 \begin{figure}[ht!]
   \centering
@@ -367,7 +389,7 @@ The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spec
   \label{fig: C4/fx_dataflow.pdf}
 \end{figure}
 
-The dataflow for an FX correlator will vary quite a bit based on the input parameters. Figure \ref{fig: C4/fx_dataflow.pdf} shows an example 3 antenna 4 channel 
+The dataflow for an FX correlator will vary quite a bit based on the input parameters. Figure \ref{fig: C4/fx_dataflow.pdf} shows an example 3 antenna 4 channel. 
 
 \section{Mapping}  \label{High Level Toolflow:Mapping}
 %TODO: Add tool name
@@ -458,6 +480,10 @@ Figure \ref{fig: C4/fx_mapped.pdf} shows two example mappings for the FX Correla
 %Include an automatic test suite for each platform
 %Block communication is standardized so they can be connected in arbitrary ways
 \subsection{Packetized Astronomy Signal Processor}
+
+%TODO
+\cite{McMahon:2008tk}
+\cite{Filiba:2011wl}
 
 This instrument has a wide variety of potential applications due to the flexibility of the server software. 
 In this section, we describe a few specific applications than can make use of this package.

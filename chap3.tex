@@ -4,7 +4,7 @@
 %State: Can be written now \\
 %List of references already compiled into Papers archive \\
 \section{Radio Astronomy} \label{Related Work:Radio Astronomy}
-\subsection{Digital Signal Processing for Radio Astronomy}
+%\subsection{Digital Signal Processing for Radio Astronomy}
 \subsection{DiFX}
 
 \begin{figure}[ht!]
@@ -14,13 +14,11 @@
   \label{fig: C3/difx_architecture.pdf}
 \end{figure}
 
-%TODO: add reference
-%A. T Deller, S. J Tingay, M Bailes, and C West. Difx: A software correlator for very long baseline interferometry using multiprocessor computing environments. Publications of the Astronomical Society of the Pacific, 119(853):318–336, Mar 2007.
-%If you have a cluster available…
+%TODO: If you have a cluster available…
 %Why do cpu-only?
 %It’s easy
 %Compared to 27 antenna 2GHz EVLA in New Mexico
-The DiFX Correlator is a scalable software implementation of an FX Correlator. 
+The DiFX Correlator is a scalable software implementation of an FX Correlator  \cite{Deller:2007wy}.
 The correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
 DiFX was designed as a software correlator in order to maintain flexibility in the design, but that flexibility comes at a high hardware cost. 
 To process 64 MHz of bandwidth and only 10 antennas, about 100 nodes are required to cross correlate all the data. 
@@ -38,11 +36,9 @@ To process 64 MHz of bandwidth and only 10 antennas, about 100 nodes are require
   \caption{TODO Lofar Performance}
   \label{fig: C3/lofar_performance.pdf}
 \end{figure}
-%R Van Nieuwpoort. Correlating Radio Astronomy Signals with Many-Core Hardware. International Journal of Parallel Programming, 2009
 %On a blue gene, real time but still costly power hungry solution 64 stations
-%TODO: add reference
 %TODO: read this paper
-Like DiFX, the correlator for Low-Frequency Array for Radio Astronomy (or LOFAR) was also built using CPUs.
+Like DiFX, the correlator for Low-Frequency Array for Radio Astronomy (or LOFAR) was also built using CPUs \cite{vanNieuwpoort:2009p1253}.
 This project used a Blue Gene BG/P %TODO: check this
 to implement a 64 station correlator.
 The implementation got very high performance out of the cluster, 96\% of the peak, but required an entire cluster and required finely tuned code to achieve that performance. 
@@ -57,7 +53,9 @@ The implementation got very high performance out of the cluster, 96\% of the pea
   \label{fig: C3/gpuxperformance.pdf}
 \end{figure}
 
-%M Clark and P La Plante. Accelerating Radio Astronomy Cross-Correlation with Graphics Processing Units. Arxiv preprint arXiv:1107.4264, 2011.
+\cite{Clark:2011wi}
+
+\cite{2009PASP..121..857W}
 
 
 \subsection{CASPER}
@@ -73,13 +71,42 @@ At the Collaboration for Astronomy Signal Processing and Electronics Research (C
   \label{fig: C3/casper_collaborators.png}
 \end{figure}
 
-The CASPER FPGA libraries were developed to mitigate the need to redevelop common signal processing blocks for every new instrument \cite{Parsons:2009vc}. 
+The CASPER FPGA libraries were developed to mitigate the need to redevelop common signal processing blocks for every new instrument \cite{Parsons:2006cu}. 
 Parameterized blocks such as FFTs and digital down-converters can easily be used to design many different instruments. 
 Coupled with open source FPGA boards, such as the ROACH (Reconfigurable Open Architecture Computing Hardware), the CASPER libraries provide a useful toolbox for radio astronomy instrumentation development.
 
-%TODO: add reference
-%A Parsons, et al. PetaOp/Second FPGA Signal Processing for SETI and Radio Astronomy. Signals, Systems and Computers, 2006. ACSSC ’06. Fortieth Asilomar Conference on, pages 2031–2035, 2006.
 
+The goal of Collaboration for Astronomy Signal Processing and Electronics Research (CASPER) is to provide common libraries, tools, and hardware for radio astronomers developing instrumentation. 
+
+\subsubsection{CASPER Hardware}
+The CASPER group provides set of modular FPGA boards that are designed specifically to deal with the high bandwidth requirements of radio astronomy signal processing. 
+Since these boards are designed for the needs of the radio astronomy community as a whole rather than a single application, the group provides a small set of powerful boards. 
+The boards can be upgraded one by one, or all at once since they communicate over a common set of industry standard protocols and use a standard signal processing model. 
+The CASPER library and software, discussed below, also make it easy to upgrade the hardware since a CASPER design easily be recompiled to work with a different board and the software interface is standardized.
+%Standard signal processing model which is consistent between upgrades
+
+Each board implements two types of high speed interfaces to send and receive data.
+The Z-DOK+ connectors are primarily used to interface the boards to high speed ADCs and DACs.
+%TODO: finish this 
+%Boards work with a variety of ADCs/DACs etc.
+%Dual input 8 bit 1 Gsps (or 2 Gsps single input interleaved)
+%3 Gsps single input 8 bit ADC (interleave 2 for 6 Gsps)
+%Provides tested hardware for new instruments
+
+
+%All boards can talk to each other%Can’t clock FPGA at 3GHz but use parallel FFT 8-16 samples at a time%BEE2 lib w/Bob Broderson
+
+The ROACH board, shown in Figure \ref{fig: C3/roach.pdf}, with an iADC board connected via Z-DOK+ and an ethernet cable to get data off the board. 
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/roach.pdf}
+  \caption{TODO ROACH}
+  \label{fig: C3/roach.pdf}
+\end{figure}
+
+
+\subsubsection{CASPER Library}
 %CASPER = Collaboration for Astronomy Signal Processing and Electronics Research
 %Identifies commonly used DSP blocks for radio astronomy
 %FFTs (tunable bandwidth, number of channels, real or complex)
@@ -87,29 +114,17 @@ Coupled with open source FPGA boards, such as the ROACH (Reconfigurable Open Arc
 %Accumulators
 %Digital downconverters/mixers
 %Scripts are used to configure parameterized blocks
-The goal of Collaboration for Astronomy Signal Processing and Electronics Research (CASPER) is to provide common libraries, tools, and hardware for radio astronomers developing instrumentation. 
 
-\subsubsection{CASPER Hardware}
-
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=\textwidth]{Images/C3/roach.pdf}
-  \caption{TODO}
-  \label{fig: C3/roach.pdf}
-\end{figure}
-
-\subsubsection{CASPER Library}
 This is achieved by identifying commonly used DSP blocks in radio astronomy instruments and developing parameterized implementations of these common blocks, making them useful for a variety of instruments. 
 For example, the CASPER library provides FFTs, polyphase filter banks, accumulators, digital downconverters, digital mixers which can be linked together to make an instrument. 
 Figure \ref{fig:casper_fft_lib.pdf} shows the FFT library, which contains different types of FFT like blocks that can process multiple samples in parallel and blocks that only compute the FFT of a real signal.
 
-\begin{wrapfigure}{L}{0.50\textwidth}
+\begin{figure}
   \centering
-     \includegraphics[width=0.45\textwidth]{Images/C3/casper_fft_lib.pdf}
+     \includegraphics[width=\textwidth]{Images/C3/casper_fft_lib.pdf}
   \caption{TODO}
   \label{fig:casper_fft_lib.pdf}
-\end{wrapfigure}
+\end{figure}
 
 
 
@@ -118,27 +133,15 @@ In order to support a variety of instruments, the block can be reconfigured to s
 There are a number of other parameters provided like input bit width, which helps support a number of different ADCs or preprocessing algorithms, and FPGA-specific parameters like add latency, and multiply latency which have no effect on the result of the computation but change how the FFT gets mapped into hardware. 
 
 
-\begin{wrapfigure}{R}{0.50\textwidth}
+\begin{figure}
   \centering
      \includegraphics[width=0.45\textwidth]{Images/C3/casper_fft_lib_options.pdf}
   \caption{TODO}
   \label{fig:casper_fft_lib_options.pdf}
-\end{wrapfigure}
+\end{figure}
 
 
-%TODO: add yellow block/interface stuff
 
-\begin{wrapfigure}{R}{0.50\textwidth}
-  \centering
-     \includegraphics[width=0.45\textwidth]{Images/C3/yellow_blocks.pdf}
-  \caption{TODO}
-  \label{fig:yellow_blocks.pdf}
-\end{wrapfigure}
-
-%Modular Hardware
-%Low number of FPGA board designs
-%Can be upgraded piecemeal or all together
-%Standard signal processing model which is consistent between upgrades
 The library is implemented in Simulink, which allows for both simulation and, using Xilinx System Generator, compilation to FPGA code.
 In addition to software libraries, CASPER also develops general purpose FPGA boards designed for real time radio astronomy signal processing.
 These boards are designed to provide high bandwidth IO and dense computation.
@@ -149,25 +152,6 @@ Second, the boards are designed to communicate using common protocols, like 10Gb
 The use of 10GbE also makes communication to non-CASPER boards simple, allowing an FPGA to create UDP packets that eventually get processed on a CPU or GPU server, making these boards an ideal component of a heterogeneous cluster. 
 This makes it simple to design a cluster, and allows continuous upgrades as technology improves, as the signal processing model and communication model do not change between boards.
 
-\begin{wrapfigure}{R}{0.50\textwidth}
-  \centering
-     \includegraphics[width=0.45\textwidth]{Images/C3/roach.pdf}
-  \caption{TODO}
-  \label{fig:roach.pdf}
-\end{wrapfigure}
-
-%Toolflow for compilation, ref BEE2 compile path, borph, etc
-%TODO: add reference-BORPH
-To simplify the use of the FPGA further, the CASPER boards run linux directly on the board. 
-Using this linux environment, called the Berkeley Os for ReProgrammable Hardware or BORPH, programming the FPGA is as simple as running an executable on the command line. 
-Then, once the board has been programmed, BORPH can communicate with the chip using a interface where components on the FPGA like registers or memory appear as a file system in the operating system. 
-These files can be accessed using normal file IO, making it simple to send control signals or monitor the status of the chip.
-
-
-%Boards work with a variety of ADCs/DACs etc.
-%Dual input 8 bit 1 Gsps (or 2 Gsps single input interleaved)
-%3 Gsps single input 8 bit ADC (interleave 2 for 6 Gsps)
-%Provides tested hardware for new instruments
 
 \begin{figure}[ht!]
   \centering
@@ -177,16 +161,38 @@ These files can be accessed using normal file IO, making it simple to send contr
   \label{fig: C3/adder_tree}
 \end{figure}
 
+\subsubsection{CASPER Software}
 
-%Aaron Parsons, et al.  A Scalable Correlator Architecture Based on Modular FPGA Hardware, Reuseable Gateware, and Data Packetization. Publications of the Astronomy Society of the Pacific, 120:1207–1221, September 2008.
+%TODO: add yellow block/interface stuff
 
-\subsubsection{SETI Spectrometer}
+\begin{figure}
+  \centering
+     \includegraphics[width=0.75\textwidth]{Images/C3/yellow_blocks.pdf}
+  \caption{TODO}
+  \label{fig:yellow_blocks.pdf}
+\end{figure}
+
+
+%Toolflow for compilation, ref BEE2 compile path, borph, etc
+%TODO: add reference-BORPH
+To simplify the use of the FPGA further, the CASPER boards run linux directly on the board. 
+Using this linux environment, called the Berkeley Os for ReProgrammable Hardware or BORPH, programming the FPGA is as simple as running an executable on the command line. \cite{So:2007ve}
+Then, once the board has been programmed, BORPH can communicate with the chip using a interface where components on the FPGA like registers or memory appear as a file system in the operating system. 
+These files can be accessed using normal file IO, making it simple to send control signals or monitor the status of the chip.
+
+\cite{Cross:2009ta}
+
+\subsubsection{SERENDIP V.v}
+
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C3/setispectrometerv55.pdf}
   \caption{TODO}
   \label{fig: C3/setispectrometerv55.pdf}
 \end{figure}
+
+
+\cite{2010LPICo1538.5378S}
 
 
 \subsubsection{CASPER Correlator}
@@ -197,15 +203,21 @@ These files can be accessed using normal file IO, making it simple to send contr
   \label{fig: C3/casper_correlator.png}
 \end{figure}
 
+\cite{Parsons:2008dl}
+
+%Used to develop Parsons/Manley correlator%10GbE switch solves cabling problem%Still have N^2 X engines
+
 \section{Tuning} \label{Related Work:Tuning}
 \subsection{Metropolis}
-%TODO: add reference
-%Abhijit Davare. Automated mapping for heterogeneous multiprocessor embedded systems. PhD thesis, 2007.
 
-The Metropolis project focused on mapping algorithms onto embedded system. 
+The Metropolis project focused on mapping algorithms onto embedded system \cite{Davare:2007ue}. 
 The tool provides a framework for an abstract block based description of an embedded system. 
 This description makes it easy to stitch algorithms together without specifying the eventual hardware implementation, providing a simple path to simulation and algorithm development that is separate from the implemented design. 
 Then, the tool automatically maps the description onto an existing heterogeneous embedded system. 
+
+%TODO: review references
+\cite{Balarin:2003kc}
+\cite{Densmore:tm}
 
 %Mapping is focused on scheduling onto heterogeneous platforms
 %Strong focus on embedded systems
@@ -246,3 +258,14 @@ Once the performance target is met, it's better to have a tool that will other c
 
 \subsection{ILP for scheduling}
 An integer linear programming model for mapping applications on hybrid systems
+
+%TODO: sort these out
+\cite{Gibeling:2008vg}
+
+\cite{Theodoridis:2009gd}
+
+\cite{Tsoi:2010we}
+
+\cite{Jun:2008vv}
+
+\cite{Rakhshanfar:2011tg}
