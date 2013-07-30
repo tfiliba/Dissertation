@@ -47,7 +47,7 @@ As described in Section \ref{Related Work:Tuning}, ILP is a powerful technique
 %Guided optimization
 
 \section{Variables}
-The variables in the ILP are used to infer the optimal mapping for the system, 
+The variables in the ILP are represent the optimal mapping for the system.
 %and the cluster architecture.   TODO: explain this
 Ultimately, the ILP determines which platforms should be used, and what part of the algorithm should get implemented on each platform.
 This is achieved by having the ILP consider some platform, and assume it can instantiate at most $n_p$ copies of that platform.
@@ -243,7 +243,7 @@ This section describes how the design of this ILP and the introduction of a few 
 % Guided optimization
 %TODO: add to this... I think there's more to say here
 Another solution relies on user aid to guide the mapping.
-The ILP may spend time going over solutions that may be obviously wrong to a human user.
+The ILP may spend time going over solutions that are obviously wrong to a human user.
 In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
 While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
 This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCAS Goals}.

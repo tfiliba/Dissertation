@@ -27,12 +27,13 @@ But, despite this variety, the small number of algorithms detailed in this chapt
 Radio telescopes produce very high amounts of data (TODO: add estimates, how much data?). 
 The reason for this high influx of data is twofold. 
 First, to enable new science, new radio antenna observe increasingly higher bandwidths of data. 
-Second, to sate the need for larger collecting area, rather than designing a large single dish, many new telescopes are being designed as antenna arrays, where the data from multiple antennas is combined to act as a single large dish.
+%TODO edit this
+Second, to sate the need for larger collecting area, rather than designing a single large dish, many new telescopes are being designed as antenna arrays, where the data from multiple antennas is combined to act as a single large dish.
 While it may be cheaper and easier to get a larger collecting area using small dishes rather than a single large dish, this adds additional complexity processing the data coming off the telescope.
 Rather than processing a single stream of data, now the instrument must process and combine multiple streams to make the array seem like a single large dish.
 As the size of the arrays and bandwidths for single dishes simultaneously increase, the data produced cannot be feasibly recorded in real-time. 
 To cope with the progress in science and antenna technology, there is a constant need for new systems to process, rather than record, this data in real time.
-Each of these instruments begin processing the data immediately after it is digitized, and needs to reduce the data without loosing scientific information.
+Each of these instruments begin processing the data immediately after it is digitized, and need to reduce the data without loosing scientific information.
 Once the data is partially processed, and reduced to a manageable bandwidth, it can be stored and processed further offline.
 %, where there is no longer a need for low-latency, high-bandwidth hardware.
 
@@ -144,12 +145,12 @@ The project will try to detect gravitational waves by observing an array of puls
 
 \section{Beamforming}
 \label{Real Time Radio Astronomy Algorithms:Beamforming}
-Beamforming is one technique for combining data from an array of antennas.
+Beamforming is a technique for combining data from an array of antennas.
 The beamformer combines the data from multiple antennas into a single beam pointed at a single point in the sky.
 This is achieved by delaying the signal from each antenna by a different amount and then summing the delayed signals. 
 As illustrated in figure x, %TODO: 2 element beamformer 
 the signal from the intended source will not arrive at all the antennas at the same time. 
-The delay compensates for the disparity between the arrival times, and one the signals are summed it creates constructive interference in the direction of the source, and destructive interference in other directions. 
+The delay compensates for the disparity between the arrival times, and ocne the signals are summed it creates constructive interference in the direction of the source, and destructive interference in other directions. 
 These delays can be changed to point the beam at a different source or to track a single source moving across the sky.
 
 

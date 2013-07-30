@@ -5,61 +5,55 @@
 %describe the existence and continued development of ”blocks”
 %show the ability to design reconfigurable instruments by adding a layer of abstraction to the CASPER+xgpu work
 
+
+
+
 \chapter{High Level Toolflow}
 
 %TODO
 Introduction - resummarize problem solved by this work
 overview of the steps in the process
-include images from dissertation talk
 
 %TODO: reword
 Instrument design is often done by building the instrument from scratch.
-This work extends the CASPER philosophy, demonstrating that entire instruments can be generated with minimal user input.
-Rather than designing a completely different instrument for every different specification, this software package is parameterized so a change in specification only requires a recompile.
+This work extends the CASPER philosophy, demonstrating that entire heterogeneous instruments can be designed with minimal user input.
+Rather than designing a completely different instrument for every different specification, this software package is parameterized so a change in specification %TODO: change this - only requires a recompile.
 
 %A number of options are available but which is best?
 %Need to understand how to choose the right platform(s) for each implementation
 %With constant changes in technology and algorithm implementations an automatic approach is required
 
-In this chapter, I introduce a toolflow called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing .
+In this chapter, we introduce a toolflow called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
 
 %Describe what the tool flow should to, for whom, etc
 \section{ORCAS Goals} \label{High Level Toolflow:ORCAS Goals}
-ORCAS extends the CASPER philosophy discussed in Section \ref{Related Work:Radio Astronomy} by providing an end-to-end toolflow that allows the user to go from a high level description of the instrument to a low level implementation automatically. 
+ORCAS extends the CASPER philosophy discussed in Section \ref{Related Work:Radio Astronomy} by providing an end-to-end toolflow that allows the user to go from a high level description of the instrument to a low level mapping automatically. 
+While the CASPER toolflow has proven successful in the FPGA domain, it's not always clear that FPGAs are the most cost-effective implementation for a given instrument.
+The ORCAS captures the successful elements of the CASPER tools while extending its reach to the heterogeneous domain. 
+One of the most important elements of the CASPER tools is the library of DSP blocks. 
+The CASPER library blocks are constantly being updated, ensuring that the library can always be compiled on the latest technology.
+By incorporating existing libraries implemented for CPUs, such as FFTW,  of GPUs, like cuBLAS, xGPU, and CUFFT, ORCAS can also keep up with changing technology, without the need for constant updates to the tool itself.
+The flexibility of the libraries also allows us to buy technology at the last minute, ensuring we get the cheapest price available for an instrument that will provide the needed performance.
+
+In addition to the elements drawn from the CASPER library, ORCAS emphasizes a twofold approach to cost reduction in instrument design.
+The first cost savings is in the design time.
+The tool is designed to map designs to hardware within a few hours. 
+This fast mapping makes it possible to quickly assess performance on new or nonexistent technology and allows the designer to assess the impact of potential optimizations, making it easy to test a number of different design ideas without spending time testing different implementations.
+By incorporating tested libraries, there is much less debugging needed in the eventual implementations.
 
 
-In order to be useful, this tool cannot rely on a single static set of blocks.
+The second cost ORCAS is able to reduce is the cost of the instrument itself.
+While the implementation of a design has been greatly simplified by the availability of tools described in Section \ref{Related Work:Radio Astronomy}, none of those tools help determine which type of hardware is best. 
+The extensive library allows the tool to support whatever hardware is cheapest, allowing the choice of hardware to be completely determined based on cost.
+This cost could be defined in a number of ways, depending on which parameters the instrument designer needs to minimize. 
+Obviously the cost could refer to the monetary price of the hardware, but the tool can also be used to minimize the amount of power needed by the instrument, the physical size of the instrument, and other user defined costs.
 
-Ideal instrument design
-
-Buy technology at the last minute
-
-Ensure we get the best price for the performance we need
-
-Choose hardware based on cost (\$, watts, rack space)
-
-Low instrument development time
-
-Assess impacts of potential optimization without implementing anything
-
-Quickly assess performance on new or nonexistent technology
-
-Reduce debugging time on new platforms
-
-Support whatever hardware is currently most appropriate
-
-%TODO: Discuss cost here. What does it mean etc...
-While the x of a design has been greatly simplified by the availability of tools described in section, none of those tools help determine which type of hardware to use. %TODO add ref
-
-Cost to include anything of value (could be dollars, could be long term use etc)
-
-Tool supports dollars watts and user defined costs
 
 %Goals
 %Interface
 %Accessible to astronomers (domain experts)
 ORCAS is designed to be be accessible to both computer experts and radio astronomers, or other domain experts.
-For a domain expert,  ORCAS allows the user to choose a predefined instrument type without worrying how it will ultimately map to hardware.
+For a domain expert,  ORCAS allows the user to choose a predefined instrument type and select high level parameters without worrying how it will ultimately map to hardware. 
 %Accessible computer experts
 %Implementation
 %Generate code for an instrument optimally mapped across a heterogeneous cluster
@@ -70,11 +64,10 @@ The computer expert can use the tool to define a new instrument, by specifying t
 For example, if an engineer wrote an optimized FFT algorithm, the tool will be able to incorporate that into the final optimized result.
 In the end, regardless of who is using this tool, a cost-optimal mapping of the instrument gets produced. 
 
-%TODO: Add description
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal.pdf}
-  \caption{The ORCAS Toolflow}
+  \caption{The Four Stage ORCAS Toolflow}
   \label{fig: C4/toolflow_horizontal.pdf}
 \end{figure}
 
@@ -83,19 +76,24 @@ Each stage of the ORCAS toolflow is represented in Figure \ref{fig: C4/toolflow_
 The first stage is instrument definition, which is described in Section \ref{High Level Toolflow:Instrument Definition}. 
 This stage is designed to fit the needs of the domain expert. 
 It allows the radio astronomer to create a predefined instrument using a handful of parameters. 
-The instrument definition is converted into a dataflow model, as described in Section \ref{High Level Toolflow:Dataflow Model}. The second stage, the dataflow model is aimed at the computer expect, since it allows for a more detailed and flexible definition of the algorithm than the previous stage and provides the means to include optimized blocks.  The dataflow model represents an abstract definition of the algorithm without taking into account the eventual hardware target. The next stage, appropriately named mapping, maps the dataflow model to specific hardware. In the mapping stage, each block defined by the dataflow model gets mapped to a specific piece of hardware. This stage takes into account hardware and network limitations to produce a cost optimal mapping of the original dataflow. Finally, once each block has been mapped to a piece of hardware, the code can be stitched together into a working instrument. The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
-
-
+The instrument definition is converted into a dataflow model, as described in Section \ref{High Level Toolflow:Dataflow Model}. 
+The second stage, the dataflow model, is aimed at the computer expect, since it allows for a more detailed and flexible definition of the algorithm than the previous stage and provides the means to include optimized blocks.  
+The dataflow model represents an abstract definition of the algorithm without taking into account the eventual hardware target. 
+The next stage, appropriately named mapping, maps the dataflow model to specific hardware. 
+In the mapping stage, each block defined by the dataflow model gets mapped to a specific piece of hardware. 
+This stage takes into account hardware and network limitations to produce a cost optimal mapping of the original dataflow. 
+Mapping is discussed in Section \ref{High Level Toolflow:Mapping} and Chapter \ref{chap:Algorithm Partitioning} provides more details about the algorithm used to produce a mapped instrument and the performance of that algorithm.
+Finally, once each block has been mapped to a piece of hardware, the code can be stitched together into a working instrument, as presented in Section \ref{High Level Toolflow:Code Generation}. 
+The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
 
 
 
 \section{Instrument Definition} \label{High Level Toolflow:Instrument Definition}
 
-%TODO: Add tool name
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s1.pdf}
-  \caption{The ORCAS Toolflow}
+  \caption{ORCAS Toolflow Instrument Definition}
   \label{fig: C4/toolflow_horizontal_s1.pdf}
 \end{figure}
 
@@ -107,17 +105,30 @@ While it would be easy to expose many of the low level parameters at this top la
 The instrument description as represented in Figure \ref{fig: C4/toolflow_horizontal_s1.pdf} fits on a small sticky note. 
 The idea that the parameters should be so few that they fit on a single sticky note was the driving force behind the instrument definition. 
 An instrument designer who finds that he or she needs additional control beyond what is provided by the instrument description always has the flexibility to work with the dataflow model directly, where many low level parameters are exposed. 
-%TODO: why so few parameters?
 
 %TODO: exploration
 %TODO: discuss this more thoroughly
 \subsection{Design space exploration}
-In addition to defining a single instrument, an astronomer can use this tool to 
+In addition to defining a single instrument, an astronomer can use this tool to explore different implementations and asses the tradeoff in cost vs additional processing. 
+Rather than specifying single values for the instrument parameters, the astronomer can choose a range to search through and have it generate a design, and an associated cost, for each value. 
+This proves valuable when the specification of an instrument isn't fully defined.
+In the case of a high resolution spectrometer, the astronomer could adjust the number of coarse and fine channels, keeping the spectral resolution the same, to find the cheapest design that achieves that resolution.
+For polyphase filter banks, the number of taps in the FIR can be varied to assess the increase in cost associated with a better filter response.
+Even non-numerical parameters can be varied, such as the FIR window type, to see how it will affect the eventual design.
 
-coarse vs fine tradeoff, ringing, algorithm
 
-search a space of possible instruments
 
+
+
+%TODO: add filter parameters, ntaps, window (?)
+\subsection{Example Instrument Definitions}
+%TODO: 3 case studies
+This tool will be analyzed by looking at three case studies. 
+We created three instrument types: Spectrometer, High Resolution Spectrometer, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
+Each instrument type has a set of parameters relevant to that instrument. 
+Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
+This translation is described further in the next section.
+%TODO: edit this awkwardness
 
 
 %Describe instrument using parameters an astronomer can understand
@@ -129,57 +140,29 @@ search a space of possible instruments
 %Etc
 %Generates a dataflow representation
 
-%TODO: add filter parameters, ntaps, window (?)
-\subsection{Supported Instruments}
-%TODO: revisit this, add beamformer
-Currently, the tool supports 4 instrument types: Spectrometer, High Resolution Spectrometer, Pulsar Processor, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
-Each instrument type has a set of parameters relevant to that instrument. 
-Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
-This translation is described further in the next section.
-
 \subsubsection{Spectrometer Definition}
 Defining a simple spectrometer requires very few parameters. 
 First, as with most instruments, the astronomer must specify the sky bandwidth the instrument must process, defined in MHz.
 Then, the desired spectral resolution is defined in MHz per channel, or analogously, the number of channels that should be used to break up the bandwidth.
 Finally, the integration time needs to be defined.
 
-An additional parameter, number of antennas, can also be defined. 
-This effectively describes the number of independent spectrometers that need to be created.
+One optional parameter, number of antennas, can also be defined. 
+This describes the number of independent spectrometers that need to be created.
 While this parameter does not affect the end to end processing for each antenna, knowing how many spectrometers are needed allows for more efficient use of the hardware.
-The impact on the design is described further in Sections \ref{High Level Toolflow:Dataflow Model} and \ref{High Level Toolflow:Mapping} and the efficiency afforded by this parameter is explored in Chapter \ref{Analysis}
+The impact on the design is described further in Sections \ref{High Level Toolflow:Dataflow Model} and \ref{High Level Toolflow:Mapping} and the cost efficiency afforded by this parameter is explored in Chapter \ref{Analysis}
 
 \subsubsection{High Resolution Spectrometer Definition}
 The main difference between a spectrometer and a high resolution spectrometer is the need for two stages of channelization rather than just one. 
-The sky bandwidth, integration time, and number of antennas are defined in the same way as the previous spectrometer. 
+The sky bandwidth, integration time, and number of antennas are defined in the same way as the previous spectrometer type. 
 
 The spectral resolution is defined differently, because both the coarse and fine resolutions need to be defined. 
 The coarse resolution defines how many channels the whole sky bandwidth should be broken up into initially.
 The fine resolution defines how many channels each coarse channel is broken into.
-Both can be described in MHz per channel or by just giving the number of channels required to break up the band.
+Both can be described in MHz per channel.
 
-%TODO: Ask Jonathon about this
-\subsubsection{Pulsar Processor Definition}
-Bandwidth
-
-Number of channels for each part
-
-Integration time
-
-nant
 
 \subsubsection{FX Correlator Definition}
-Bandwidth
-
-nant
-
-number of channels
-
-integration time
-
-
-
-
-
+An FX Correlator is also defined by the amount of bandwidth it processes, number of channels, and integration time, but now the number of antennas is a necessary parameter.
 
 
 
@@ -188,18 +171,18 @@ integration time
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s2.pdf}
-  \caption{TODO Toolflow}
+  \caption{The ORCAS Toolflow: Dataflow Model}
   \label{fig: C4/toolflow_horizontal_s2.pdf}
 \end{figure}
 
-%\subsection{Overview}
-
+The second step of the toolflow translates the instrument definition into a dataflow model. 
 %Dataflow representation of instrument
 %Define input/output connections
 %Define input/output bandwidth
 %Generates a series of blocks configured to talk to each other
 
 \subsection{Computational Blocks}
+
 %Collection of blocks necessary to solve most problems
 %Can be parameterized
 %Include a method to assess performance on each (supported) platform
@@ -209,13 +192,7 @@ integration time
 %Uniform interconnect model
 %Optimization: remove interconnect overhead for cores running on the same hardware
 
-%Not certain this belongs here, possibly should go with the models?
-%Before mapping, need to determine which blocks can be mapped to which platforms
-%Synthesize/compile existing implementations to determine which platforms can support the spec
-%Sanity check bandwidth requirements
-%Test for acceptable noise tolerance in different implementations
-%Known signals
-%Test against arbitrary precision (exact) floating point implementation
+
 
 %Optimization already exists
 \cite{Govindaraju:2008vx} %replace with more recent fft alt
@@ -223,34 +200,30 @@ integration time
 
 
 \subsection{Connection Types}
-
-Suppose we know we have 2 types of blocks: $A$, and $B$. 
-Blocks of type $A$ must send their output to blocks of type $B$.
-Now, we need to understand how blocks of type $A$ send data to blocks of type $B$.
+%TODO: edit this a lot
+Suppose we know we have 2 types of blocks: $A$, and $B$ and blocks of type $A$ must send their data to blocks of type $B$.
+We need to definite the communication patterns between $A$ blocks and $B$ blocks.
 This could happen in 2 ways, `one-to-one' and `all-to-all'. 
 
 %TODO: fix references
 \begin{figure}
   \centering
-    \includegraphics[width=0.45\textwidth]{Images/C5/one-to-one.pdf}
-    \includegraphics[width=0.45\textwidth]{Images/C5/all-to-all.pdf}
+    \includegraphics[height=0.43\textheight]{Images/C5/one-to-one.pdf}
+    \includegraphics[height=0.43\textheight]{Images/C5/all-to-all.pdf}
   \caption{TODO}
   \label{fig:C4/one-to-one.pdf}
 \end{figure}
 
-A `one-to-one' connection is where every block of type $A$ communicates with exactly one block of type $B$, as shown in Figure \ref{fig:C4/one-to-one.pdf}. 
-With this type of connection, the number of blocks of type $A$ must be equal to the number of blocks of type $B$.
+A `one-to-one' connection is where every $A$ block communicates with exactly one $B$ block, as shown in Figure \ref{fig:C4/one-to-one.pdf}. 
+With this type of connection, the number of $A$ blocks must be equal to the number of $B$ blocks.
 The F-engines in a FX correlator are a good example of this type of connection. 
 The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
 Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
 In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
-      
 
-
-
-An `all-to-all' connection occurs when every block of type $A$ must send some data to ever block of type $B$. 
-Figure \ref{fig:C4/all-to-all.pdf} shows what an all-to-all connection between 3 blocks of type $A$, and 3 blocks of type $B$ will look like. 
-In this case, every block of type $A$ must send some data to every block of type $B$. 
+An `all-to-all' connection occurs when every $A$ block must send some data to ever $B$ block. 
+Figure \ref{fig:C4/all-to-all.pdf} shows what an all-to-all connection between three $A$ blocks and three $B$ blocks will look like. 
+In this case, every $A$ block must send some data to every $B$ block. 
 For example, the type of connection between the per-antenna FFTs and the per-channel X-engines in an FX correlator would be `all-to-all'. 
 Each X-engine needs a small amount of data from every F-engine to compute the cross-correlations from a single channel. 
 In the `all-to-all' case, there is no reason for the number of sending nodes needs to be the same as the number of receiving nodes. 
@@ -260,32 +233,28 @@ In the `all-to-all' case, there is no reason for the number of sending nodes nee
 
 
 
-%TODO: make this an a,b figure
 \begin{figure}
   \centering
-    \includegraphics[width=0.4\textwidth]{Images/C5/one-to-all.pdf}
-    \includegraphics[width=0.4\textwidth]{Images/C5/all-to-one.pdf}
+    \includegraphics[height=0.45\textheight]{Images/C5/one-to-all.pdf}
+    \includegraphics[height=0.45\textheight]{Images/C5/all-to-one.pdf}
   \caption{TODO}
   \label{fig: C4/one-to-all_vs_all-to-one}
 \end{figure}
 
 
 
-It might seem like there are two more possible types of connection, `one-to-all' and `all-to-one' .
-A data flow with a `one-to-all' connection, shown in Figure x %TODO: fix reference, image
-would have exactly one block of type $A$ that needs to send data to many blocks of type $B$. 
+It might seem like there are two more possible types of connection that need to be defined, `one-to-all' and `all-to-one' .
+A data flow with a `one-to-all' connection, shown on the left in Figure \ref{fig: C4/one-to-all_vs_all-to-one} would have exactly one $A$ block that needs to send data to many $B$ blocks. 
 This is exemplified in the dataflow for a high-resolution spectrometer.
 The coarse channelization is done in a single FFT block, which then needs to send the data to many other FFTs to do the fine channelization. 
-The `all-to-one' connection shown in Figure x %TODO: fix ref
-is there reverse of the `one-to-all' case. 
-In this type of connection, there are many blocks of type $A$ and they all need to send data to a single instance of a block of type $B$. 
+The `all-to-one' connection is also shown on the right in Figure \ref{fig: C4/one-to-all_vs_all-to-one}
+is the reverse of the `one-to-all' case. 
+In this type of connection, there are many $A$ blocks and they all need to send data to a single instance of a $B$ block. 
 An example of this arises when some processing is done in a distributed manner but the instrument needs to record the final result in a central place. 
-The $A$ blocks are responsible for the distributed processing, and then the $B$ block needs to collect the results and combine them.
-%TODO: discuss scatter-gather?
 
 It turns out, these are both special instances of the `all-to-all' connection. 
-The `one-to-all' connection is simply an `all-to-all' where the number of $A$ blocks is fixed at 1.
-Similarly, the `all-to-one' connection is also an `all-to-all' where the number of $B$ blocks is fixed at 1.
+The `one-to-all' connection is simply an `all-to-all' where the number of $A$ blocks is fixed at one.
+Similarly, the `all-to-one' connection is also an `all-to-all' where the number of $B$ blocks is fixed at one.
 Because of this, there is no need to include or support these cases as unique connection types. 
 
 
@@ -298,9 +267,9 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 
 %TODO: This isn't implemented in the ILP
 %TODO: Add correlator beamformer example. 
-This does not preclude asymmetrical designs. 
-Instead, asymmetry is supported by allowing blocks to define a list of blocktypes they must send data to or receive data from. 
-The connection between any two blocktypes still must be described as above.
+%This does not preclude asymmetrical designs. 
+%Instead, asymmetry is supported by allowing blocks to define a list of blocktypes they must send data to or receive data from. 
+%The connection between any two blocktypes still must be described as above.
 
 \subsection{Translating Instrument Definitions to Dataflow Diagrams}
 % Describe data flow for each instrument we are interested in implementing
@@ -359,50 +328,66 @@ At this point, each coarse channel is processed in an independent pipeline the f
 The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spectrometer that divides the data into 4 coarse channels.
 
 
-%TODO Finish: graphic for F/X engine, name sub channelization step (S?)
-
-%Multiple antennas?
-
 \subsubsection{FX Correlator}
 
-The FX dataflow model is based on the algorithm architecture for the CASPER correlator described in Section \ref{Related Work:Radio Astronomy}. The processing model is described by replicating 2 basic pipelines, called an F-Engine and an X-Engine. An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank. 
+The FX dataflow model is based on the algorithm used by the CASPER correlator described in Section \ref{Related Work:Radio Astronomy}. The processing model is described by replicating 2 basic pipelines, called an F-Engine and an X-Engine. The number of times each pipeline needs to be replicated depends on the number of antennas and number of channels this correlator requires.
 
-\begin{wrapfigure}{L}{0.50\textwidth}
+\begin{figure}[h!]
   \centering
     \includegraphics[width=0.48\textwidth]{Images/C4/fx_f_engine.pdf}
   \caption{FX Correlator F-Engine Model}
   \label{fig: C4/fx_f_engine.pdf}
-\end{wrapfigure}
+\end{figure}
 
-\begin{wrapfigure}{R}{0.50\textwidth}
+An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. 
+It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank. 
+The number of F-Engines in the correlator dataflow will vary with the number of antennas.
+
+\begin{figure}[h!]
   \centering
     \includegraphics[width=0.48\textwidth]{Images/C4/fx_x_engine.pdf}
   \caption{FX Correlator X-Engine Model}
   \label{fig: C4/fx_x_engine.pdf}
-\end{wrapfigure}
+\end{figure}
 
+The second pipeline, the X-Engine processes the channelized data. 
+Each X-Engine takes a single channel of data from every antenna in the array, cross-correlates the data, accumulates it and stores it to disk. 
+Figure \ref{fig: C4/fx_x_engine.pdf} shows the pipeline for a single X-Engine. 
+Since each X-Engine only operates on a single channel, the total number of X-Engines in the correlator must be the same as the number of channels in the FFT.
 
-\begin{figure}[ht!]
+\begin{figure}[h!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
   \caption{Example FX Correlator Dataflow Model}
   \label{fig: C4/fx_dataflow.pdf}
 \end{figure}
 
-The dataflow for an FX correlator will vary quite a bit based on the input parameters. Figure \ref{fig: C4/fx_dataflow.pdf} shows an example 3 antenna 4 channel. 
+The dataflow for an FX correlator will vary quite a bit based on the input parameters. 
+Figure \ref{fig: C4/fx_dataflow.pdf} shows an example there antenna four channel FX correlator. 
+The left half of the figure has three F-engines, for each of the three antennas.
+The right half has four X-engines, one for each channel.
+And in the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the FFT blocks are connected in an all-to-all configuration.
 
 \section{Mapping}  \label{High Level Toolflow:Mapping}
 %TODO: Add tool name
-\begin{figure}[ht!]
+\begin{figure}[h!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s3.pdf}
-  \caption[ORCAS Toolflow]{ORCAS Toolflow Mapping}
+  \caption{ORCAS Toolflow: Mapping}
   \label{fig: C4/toolflow_horizontal_s3.pdf}
 \end{figure}
 
 Once the dataflow and the computational blocks are defined, ORCAS must determine how to place each computational block into hardware. 
 In the mapping stage, ORCAS determines what type of hardware should be used for each block, while minimizing the total cost of the hardware (in dollars, watts, or another used-defined metric).
 Figure \ref{fig: C4/toolflow_horizontal_s3.pdf} highlights the mapping phase of the toolflow. 
+
+%Not certain this belongs here, possibly should go with the models?
+%Before mapping, need to determine which blocks can be mapped to which platforms
+%Synthesize/compile existing implementations to determine which platforms can support the spec
+%Sanity check bandwidth requirements
+%Test for acceptable noise tolerance in different implementations
+%Known signals
+%Test against arbitrary precision (exact) floating point implementation
 
 At this point, the computational blocks and dataflow can no longer be viewed as abstract algorithms. 
 Each computational block must be paired with a performance model for each supported platform that shows the resource utilization and bandwidth requirements for that block. 
@@ -444,10 +429,14 @@ Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the perfo
 
 \subsection{Mapped Dataflow Representation}
 
-Figure \ref{fig: C4/fx_mapped.pdf} shows two example mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
+Once the mapping is complete, the dataflow model is updated to describe what type of hardware will be used to implement each computational block.
+Figure \ref{fig: C4/fx_mapped.pdf} shows two or many possible mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
+In the top dataflow, each F-engine and X-engine require so many resources that they must be implemented on separate boards.
+Each F-engines is implemented on an FPGA-based ROACH board and the X-engines are implemented in GPUs.
+The bottom dataflow shows a less resource-hungry correlator, allowing all the F-engines and two X-engines to share a single board for computation.
 
 
-\begin{figure}[ht!]
+\begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped.pdf}
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped_alt.pdf}
@@ -455,38 +444,96 @@ Figure \ref{fig: C4/fx_mapped.pdf} shows two example mappings for the FX Correla
   \label{fig: C4/fx_mapped.pdf}
 \end{figure}
 
+In all designs, any link between two blocks that are not mapped to the same board must pass through a switch. 
+In the example, all the links between FFTs and cross-correlation blocks must run through the switch.
+This is represented in the diagram by a single connection from each ROACH and GPU board to the switch.
 
 
+\section{Code Generation} \label{High Level Toolflow:Code Generation}
+The last step in the process is the implementation the instrument. 
+This step is optional, only being used when the mapped dataflow is being used to design an instrument rather than assess cost. 
+Since the toolflow relies on established libraries, implementation only consists of stitching together existing routines.
 
-
-
-%TODO: think hard about this, we're not actually going to do this and it's optional
-%This could be a good place to describe PASP, this is doable, we've shown it's possible
-%Don't actually want to implement the entire thing but show feasibility
-\section{Code Generation}
-%TODO: edit description
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s4.pdf}
-  \caption{ORCAS Toolflow}
+  \caption{The ORCAS Toolflow: Code Generation}
   \label{fig: C4/toolflow_horizontal_s4.pdf}
 \end{figure}
 
-%Use casper blocks, libraries, etc to do this
-%Show that it's possible to stitch them together
 
-%Use a mapped dataflow to stitch together blocks
-%To generate code the blocks must have an implementation for the target platform (not necessary for mapping)
-%Include an automatic test suite for each platform
-%Block communication is standardized so they can be connected in arbitrary ways
+In addition to this, common design patterns can be stitched together into parameterized implementations. 
+This style of instrument design greatly accelerates time to science for many projects.
+Separating the implementation of the instrument from the hardware specification has created a design that works well for a variety of computational resources and applications.
+As resources improve, the instrument can improve along with them, providing the opportunity to do new science that wasn't possible on older technology.
+We have shown this is possible by implementing the Packetized Astronomy Signal Processor or PASP using the CASPER toolflow. \cite{Filiba:2011wl}
+
 \subsection{Packetized Astronomy Signal Processor}
 
 %TODO
-\cite{McMahon:2008tk}
-\cite{Filiba:2011wl}
+%\cite{McMahon:2008tk}
 
-This instrument has a wide variety of potential applications due to the flexibility of the server software. 
-In this section, we describe a few specific applications than can make use of this package.
+Many radio astronomy instruments channelize the antenna data as soon as it is digitized. 
+PASP implements a parameterized, FPGA-based channelizer, shown in Figure \ref{fig: pasp_fpga_arch}.
+The FPGA interfaces to an ADC board that simultaneously digitizes 2 signals. 
+The samples are sent into a polyphase filter bank (PFB), consisting of an FIR filter and an FFT, which breaks up the entire bandwidth sampled by the ADC into smaller subbands.
+After dividing up the subbands, each band is rescaled. 
+This step allows us to compensate for the shape of the analog filter feeding data into the ADC. 
+After rescaling, the FPGA forms packets where each packet contains data from a single subband.
+The packets are sent out over CX4 ports to a 10 gigabit Ethernet switch.
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/pasp_fpga_arch.png}
+  \caption{PASP Dataflow}
+  \label{fig: pasp_fpga_arch}
+\end{figure}
+
+
+
+PASP is designed for flexibility. 
+Building on the CASPER goal to automate the design of commonly used signal processing elements such as FFTs and digital downconverters, PASP automatically designs an entire FPGA instrument using only a few parameters.
+The user can input the desired number of subbands, CPU/GPU cluster size, and packet size and a new design is automatically generated in Simulink.  
+Figure \ref{fig: C4/pasp_high_level_interface.png}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/pasp_high_level_interface.png}
+  \caption{PASP Interface}
+  \label{fig: C4/pasp_high_level_interface.png}
+\end{figure}
+
+The interface to PASP is a simple menu that consists of four parameters.
+From the menu, \emph{Number of IPs} determines the number of IP addresses the instrument will need to send data to, defined by the size of the cluster it must communicate with.
+\emph{Samples per Packet} defines the packet size, adjustable to ensure that the packet rate is low enough for the server to handle.
+And \emph{Number of Channels} defines the FFT length.
+The last parameter \emph{Reorder in QDR}, allows the packet buffering to be handled by off chip QDR memory.
+This is only a parameter and not the default because it is only supported by certain boards.
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/pasp_low_level.png}
+  \caption{PASP Low Level Implementation}
+  \label{fig: C4/pasp_low_level.png}
+\end{figure}
+
+Changing any parameter causes the entire low-level design to be redrawn. 
+Figure \ref{fig: C4/pasp_low_level.png} shows the low level implementation of the instrument.
+Although this diagram is complex. it is generated automatically by PASP and the user never needs to look at this design to implement a working instrument.
+
+PASP has a wide variety of potential applications due to the flexibility of the server software. 
+In the next sections, we describe a few specific applications than can make use of this package.
+
+\subsubsection{Pulsar Processing}
+This design also has applications in pulsar science. 
+The fast channelization on the FPGA with no data reduction makes it an ideal pulsar spectrometer, since no information is lost before sending the data to the servers.
+GPUs provide a good platform for pulsar processing algorithms such as coherent dedispersion \cite{Ransom:2009wz}, which can easily be used as the processing function for the server software distributed in our package. 
+Similar to SETI instruments, pulsar instruments designed using this package can also keep up with improvements in technology with a simple recompile.
+
+%TODO: add info about deployed instruments
+This design has been used in pulsar processors that have been deployed at the Parkes Observatory, Nançay Decimetric Radio Telescope, and Effelsberg Radio Telescope.
+
+\subsubsection{Heterogeneous Radio SETI Spectrometer}
 
 In the search for extraterrestrial intelligence (SETI), the ability to keep up with changes in technology allows searching instrumentation to stay on the leading edge of sensitivity. 
 SETI aims to process the maximum bandwidth possible with very high resolution spectroscopy.
@@ -494,92 +541,28 @@ This instrument allows SETI projects to easily keep up with improvements on the 
 An increase in detector bandwidth, improving the breadth of the search, can be processed simply recompiling the FPGA design and distributing the extra subbands to new servers. 
 As computation improves, the instrument can be reconfigured to send more bandwidth to each computer, reducing the required cluster size, or improve the resolution of the instrument by doing a larger FFT on the server.
 
-This design also has applications in pulsar science. 
-The fast channelization on the FPGA with no data reduction makes it an ideal pulsar spectrometer, since no information is lost before sending the data to the servers.
-GPUs provide a good platform for pulsar processing algorithms such as coherent dedispersion \cite{Ransom:2009wz}, which can easily be used as the processing function for the server software distributed in our package. 
-Similar to SETI instruments, pulsar instruments designed using this package can also keep up with improvements in technology with a simple recompile.
-
-Figure \ref{fig: pasp_fpga_arch} gives an overview of the dataflow through the FPGA.
-The FPGA interfaces to a single ADC board that simultaneously digitizes 2 signals. 
-Each signal can be sampled at a maximum rate of 1Msps.
-The samples are sent into a polyphase filter bank (PFB), consisting of an FIR filter and an FFT, which breaks up the entire bandwidth sampled by the ADC into smaller subbands.
-After dividing up the subbands, each band is rescaled. 
-This step allows us to compensate for the shape of the analog filter feeding data into the ADC. 
-After rescaling, the FPGA forms packets where each packet contains data from a single subband. %TODO fix
-The packets are sent out over CX4 ports to a 10 gigabit Ethernet switch.
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/pasp_fpga_arch.png}
-  \caption{PASP Dataflow}
-  \label{fig: pasp_fpga_arch}
-\end{figure}
-
-PASP uses a PFB to split up the subbands. Figure \ref{fig: fft_vs_pfb_response} shows a comparison between the FFT and PFB response. 
-The FFT response (on the left) has a lot of spectral leakage while the PFB (on the right) has a much sharper filter shape and a better frequency response. 
-The superior frequency response led us to use a PFB rather than an FFT to extract subbands, despite the additional FPGA resources required by the FIR filter before the FFT.
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.48\textwidth]{Images/C4/fft_response.png}
-    \includegraphics[width=0.48\textwidth]{Images/C4/pfb_response.png}
-  \caption{A comparison of FFT and PFB response}
-  \label{fig: fft_vs_pfb_response}
-\end{figure}
-
-PASP is designed for flexibility. 
-Building on the CASPER goal to automate the design of commonly used signal processing elements such as FFTs and digital downconverters, PASP automatically designs an entire FPGA instrument using only a few parameters.
-The user can input the desired number of subbands, CPU/GPU cluster size, and packet size and a new design is automatically generated in Simulink.  
-
-\subsection{Heterogeneous Radio SETI Spectrometer}
-
-\begin{figure}[ht!]
+\begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/serendip_vv_to_hrss.png}
   \caption{TODO}
   \label{fig: C4/serendip_vv_to_hrss.png}
 \end{figure}
 
+The design of HRSS is based on the Serendip V.v design presented in Section \ref{Related Work:Radio Astronomy}.
+Figure \ref{fig: C4/serendip_vv_to_hrss.png} shows how in HRSS the IBOB and BEE2 are replaced with a single chip FPGA board such as an IBOB or ROACH, and the fine channelization, thresholding and post processing are done on a GPU.
 
-We have developed a software package to automatically generate spectrometers with minimal user input.
-
-We have automated this design, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
-This spectrometer combines FPGAs and GPUs, doing coarse channelization on the FPGA and sending each subband to the GPUs for further processing.
+Unlike Serendip V.v, HRSS is a software package to automatically generate spectrometers with minimal user input.
+We have automated the design of the spectrometer, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
+This spectrometer combines FPGAs running PASP with GPUs, doing coarse channelization on the FPGA and sending each subband to the GPUs for further processing.
 The server software is designed for flexibility, allowing astronomers to easily modify the processing algorithm run on the GPU and customize the instrument to fit their science goals.
 
-The software package includes an FPGA design and server software to do spectroscopy, as well as server benchmarks used to determine an optimal instrument configuration.
-%The benchmarks measure maximum amount of data the servers can process, determining the optimal configuration for the instrument.
-Both the FPGA and server software are parameterized, allowing for rapid deployment of a working spectrometer that is configured to take full advantage of available computing resources.
+The software package is comprised of two parts, the PASP design that runs on the FPGA and the server software.
+Like PASP, the server software is parameterized, supporting a variety of spectral resolutions and integration times.
+This software receives data over an Ethernet port and transfers it from the CPU to the GPU. 
+The GPU runs an FFT and then sends the data back to the CPU to be recorded.
+The GPU software, like the GPU benchmark, uses the CUFFT library to run FFT. 
+This allows for rapid deployment of a working spectrometer that is configured to take full advantage of available computing resources.
 %Our general purpose approach allows for the rapid development of new instruments.
-We implement the instrument on a heterogeneous cluster consisting of both FPGAs and GPUs to take advantage of the benefits provided by both platforms.
-FPGAs provide high bandwidth processing but can be cumbersome to program.
-GPUs can't handle the same bandwidths as FPGAs but they are easier to program. 
-The CUDA language, for example, is a C-like language that can be used to develop software for many GPUs.
-The high level parameters in this package allow us to use FPGAs while abstracting away implementation details specific to the FPGA.
-To give the user control over their data processing algorithm, an application specific GPU program can be written and easily interfaced with the existing receive software in the package.
-
-%TODO fix this
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.49\textwidth]{Images/C4/pasp_high_level_interface.png}
-  \caption{TODO}
-  \label{fig: C4/pasp_high_level_interface.png}
-\end{figure}
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/pasp_low_level.png}
-  \caption{TODO}
-  \label{fig: C4/pasp_low_level.png}
-\end{figure}
-
-The instruments generated with this package use a heterogeneous design, allowing us to benefit from the strengths of FPGAs and GPUs. 
-The FPGA board is able to sample and process very high bandwidths that a single CPU or GPU would not be able to manage; 
-once the FPGA has split up the band the GPU provides a platform that is easier than an FPGA to program but still provides high compute power. 
-A design called the Packetized Astronomy Signal Processor, or PASP, is run on the FPGA.
-PASP splits up the large band into smaller bands that can be processed using off the shelf servers.
-The subbands are put into packets on the FPGA and sent over a 10 gigabit Ethernet switch to a cluster of servers.
-The servers receive the data from the switch and process it using spectroscopy software provided in the software package or special purpose application software written by the user and linked into the provided packet processing infrastructure.
 
 Figure \ref{fig:spec_highlevel} shows a high level view of a spectrometer that could be designed with this package. 
 In this example, a ROACH board divides the input band into 64 subbands and sends them out to a 16 server cluster.
@@ -590,16 +573,9 @@ Each server in the cluster receives and processes 4 subbands.
 \begin{figure}[ht!]
   \centering
      \includegraphics[width=1\textwidth]{Images/C4/spec_highlevel.png}
-  \caption{Example high level instrument architecture}
+  \caption{Example high level spectrometer architecture}
   \label{fig:spec_highlevel}
 \end{figure}
-
-\subsubsection{Server Software}
-Our package includes spectroscopy software that interfaces with the PASP design.
-This software receives data over an Ethernet port and transfers it from the CPU to the GPU. 
-The GPU runs an FFT and then sends the data back to the CPU to be recorded.
-The GPU software, like the GPU benchmark, uses the CUFFT library to run FFT. 
-The FFT size depends on the desired resolution for a specific application and an efficient batch size can be determined by running the FFT benchmark to find the best batch size for the given FFT size.
 
 The server software was designed so other applications could easily be implemented on the GPU without altering or rewriting the receive code that interprets the packet headers and transfers data to the GPU.
 Once the data is on the GPU, the software calls a process function and passes it a pointer to the GPU data.
@@ -608,15 +584,10 @@ In the spectroscopy software included in the package, the initialization functio
 Modifying the application run on the GPU simply requires a redefinition of these three functions.
 Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.
 
-In this paper, we describe a radio astronomy instrument that is easily reconfigured to suit a variety of applications.
-%Figure \ref{fig: universal_arch} shows how this style of instrument design can be extended to a heterogeneous cluster running multiple processing algorithms at the same time.
-All of these algorithms require the data to be broken up into subbands before it can be processed by the server which can be done on the same FPGA. 
-Using multicast packets, multiple servers can subscribe to the same subbands generated on by PASP and process them in different ways. 
 
 
-This style of instrument design greatly accelerates time to science for many projects.
-Separating the implementation of the instrument from the hardware specification has created a design that works well for a variety of computational resources and applications.
-As resources improve, the instrument can improve along with them, providing the opportunity to do new science that wasn't possible before.
+
+
 
 
 
