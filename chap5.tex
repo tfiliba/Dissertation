@@ -196,13 +196,90 @@ A more exact version of this calculation would also take into account the smalle
 As described in Section \ref{Related Work:Radio Astronomy}, many architectures have this type of connection but there very few cases where the $A$ and $B$ blocks connected this way reside on the same board. 
 
 \section{Performance Modeling}                    
-                
+
+Discussion of benchmarks (show size vs resources) FFT, PFB,
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C6/pfb_bench.png}
+  \caption{TODO}
+  \label{fig: C6/pfb_bench.png}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=0.49\textwidth]{Images/C6/fft_bench.png}
+    \includegraphics[width=0.49\textwidth]{Images/C6/fft_gpu_bench.png}
+  \caption{TODO}
+  \label{fig: C6/fft_bench.png}
+\end{figure}
+
+refer to casper fft model paper
+
+refer to xgpu paper
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C6/gpuxperformance.pdf}
+  \caption{TODO}
+  \label{fig: C6/gpuxperformance.pdf}
+\end{figure}
+
+%TODO: put this somewhere
+PASP has proven useful in many applications by itself, but the goal of automatically generating a spectrometer for any cluster requires more than just a reconfigurable FPGA design. 
+It is difficult to determine what size the subbands or the cluster should be without knowing how much data the target servers can receive and process.
+Our benchmarking tools are designed to quickly determine how much bandwidth a server is capable of handling so the PASP parameters can be set appropriately.
+
+We have developed a general purpose benchmark to test the networking capability of a server. 
+This test uses an FPGA design to generate 10 gigabit Ethernet packets and transmits them to the server under test.
+The FPGA design has a runtime programable packet size and packet rate. 
+The packet size is set to the largest size allowed by the server and the packet rate is initially set low and ramped up while the receive software running on the server checks for dropped packets.
+By searching for the highest bandwidth with no dropped packets, we find the maximum allowable data rate where the server should reliably receive all the data.
+
+%The processing capabilities must also be tested. 
+While specific processing algorithms may vary between scientific applications, an FFT benchmark provides insight into possible processing requirements for a variety of radio astronomy applications.
+We developed an FFT benchmark using CUFFT, the CUDA FFT library, which supports FFT of arbitrary sizes and allows them to be run in batches on the GPU. 
+Our benchmark tests a variety of FFT sizes and batch sizes.
+In general, we have found that running larger FFTs and batching many FFTs together is necessary to fully take advantage of the computing resources on GPU.
+Running this benchmark allows us to determine the maximum bandwidth that can be processed with the available resources.
+
+Using these benchmarks, we can see how much compute power is provided by the server and determine the parameters that need to be entered into PASP.
+The benchmarks also allow us to identify potential bottlenecks by comparing the maximum bandwidth the server can receive to the maximum bandwidth the server can process.
+If the system is upgraded to reduce bottlenecks, it is easy to retest the server and recompile a PASP design that takes advantage of the new resources.                
+
 \section{Cost Modeling}
 %Costs
 %Power
 %Money
 %Development time
 %Rack space
+
+\begin{table}
+\begin{tabular}{| l | l | l | l | l | l |}
+\hline  
+\textbf{Platform} & Specification & Cost & Idle power & Average power & Maximum power \\
+\hline  
+ROACH & Virtex 5 SX95T & \$6,700 & 55 W & 65 W & 75 W \\
+ROACH 2 & Virtex 6 SX475T & \$10,500 & 60 W & 70 W & 80 W \\
+ROACH 3 & Virtex 7 VX980T & & 60 W & 70 W & 80 W \\
+NRAO Server & GTX 580 & \$3,500 & 225 W & 400 W & 475 W \\
+\hline  
+\end{tabular}
+\end{table} 
+
+%TODO: Discuss this
+Can also take into account donated hardware \\
+
+\begin{table}
+\begin{tabular}{| l | l | l | l | l |}
+\hline  
+GPU & Cost & Idle power & Average power & Maximum power \\
+\hline  
+GTX 580& \$500 & 125 W & 150 W & 175 W \\
+GTX 680 & \$500 & & & \\
+GTX 690& \$1,000 & & & \\
+\hline  
+\end{tabular}
+\end{table} 
 
 \section{Final Mapping}
 %Variables
@@ -336,37 +413,9 @@ By modifying the ILP, the performance is greatly improved without sacrificing op
 \section{Mapped Dataflow}
 
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.5\textwidth]{Images/C5/universal_arch.png}
-  \caption{A potential architecture for multiple scientific instruments simultaneously processing data from the same telescope}
-  \label{fig: C5/universal_arch.png}
-\end{figure}
+
 
 
 \section{Performance}
 %TODO: this will have to be written after ch 6 is complete, to make sure we are benchmarking the correct thing. in the meantime we'll write in introduction 
 
-%TODO: put this somewhere
-\pagebreak
-\subsection{Server Benchmarking}
-PASP has proven useful in many applications by itself, but the goal of automatically generating a spectrometer for any cluster requires more than just a reconfigurable FPGA design. 
-It is difficult to determine what size the subbands or the cluster should be without knowing how much data the target servers can receive and process.
-Our benchmarking tools are designed to quickly determine how much bandwidth a server is capable of handling so the PASP parameters can be set appropriately.
-
-We have developed a general purpose benchmark to test the networking capability of a server. 
-This test uses an FPGA design to generate 10 gigabit Ethernet packets and transmits them to the server under test.
-The FPGA design has a runtime programable packet size and packet rate. 
-The packet size is set to the largest size allowed by the server and the packet rate is initially set low and ramped up while the receive software running on the server checks for dropped packets.
-By searching for the highest bandwidth with no dropped packets, we find the maximum allowable data rate where the server should reliably receive all the data.
-
-%The processing capabilities must also be tested. 
-While specific processing algorithms may vary between scientific applications, an FFT benchmark provides insight into possible processing requirements for a variety of radio astronomy applications.
-We developed an FFT benchmark using CUFFT, the CUDA FFT library, which supports FFT of arbitrary sizes and allows them to be run in batches on the GPU. 
-Our benchmark tests a variety of FFT sizes and batch sizes.
-In general, we have found that running larger FFTs and batching many FFTs together is necessary to fully take advantage of the computing resources on GPU.
-Running this benchmark allows us to determine the maximum bandwidth that can be processed with the available resources.
-
-Using these benchmarks, we can see how much compute power is provided by the server and determine the parameters that need to be entered into PASP.
-The benchmarks also allow us to identify potential bottlenecks by comparing the maximum bandwidth the server can receive to the maximum bandwidth the server can process.
-If the system is upgraded to reduce bottlenecks, it is easy to retest the server and recompile a PASP design that takes advantage of the new resources.

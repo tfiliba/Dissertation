@@ -429,13 +429,6 @@ Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the perfo
 
 \subsection{Mapped Dataflow Representation}
 
-Once the mapping is complete, the dataflow model is updated to describe what type of hardware will be used to implement each computational block.
-Figure \ref{fig: C4/fx_mapped.pdf} shows two or many possible mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
-In the top dataflow, each F-engine and X-engine require so many resources that they must be implemented on separate boards.
-Each F-engines is implemented on an FPGA-based ROACH board and the X-engines are implemented in GPUs.
-The bottom dataflow shows a less resource-hungry correlator, allowing all the F-engines and two X-engines to share a single board for computation.
-
-
 \begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped.pdf}
@@ -443,6 +436,12 @@ The bottom dataflow shows a less resource-hungry correlator, allowing all the F-
   \caption{Two potential mappings for the FX Correlator}
   \label{fig: C4/fx_mapped.pdf}
 \end{figure}
+
+Once the mapping is complete, the dataflow model is updated to describe what type of hardware will be used to implement each computational block.
+Figure \ref{fig: C4/fx_mapped.pdf} shows two or many possible mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
+In the top dataflow, each F-engine and X-engine require so many resources that they must be implemented on separate boards.
+Each F-engines is implemented on an FPGA-based ROACH board and the X-engines are implemented in GPUs.
+The bottom dataflow shows a less resource-hungry correlator, allowing all the F-engines and two X-engines to share a single board for computation.
 
 In all designs, any link between two blocks that are not mapped to the same board must pass through a switch. 
 In the example, all the links between FFTs and cross-correlation blocks must run through the switch.

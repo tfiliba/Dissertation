@@ -1,0 +1,1374 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Bailes:2011iy}{article}{}
+  \name{author}{18}{}{%
+    {{}%
+     {Bailes}{B.}%
+     {M~M}{M.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bates}{B.}%
+     {S~D~SD}{S.~D.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bhalerao}{B.}%
+     {V~V}{V.~V.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bhat}{B.}%
+     {N~D R~ND}{N.~D. R.~N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Burgay}{B.}%
+     {M~M}{M.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Burke-Spolaor}{B.-S.}%
+     {S~S}{S.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {D'Amico}{D.}%
+     {N~N}{N.~N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Johnston}{J.}%
+     {S~S}{S.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Keith}{K.}%
+     {M~J~MJ}{M.~J.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kramer}{K.}%
+     {M~M}{M.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kulkarni}{K.}%
+     {S~R~SR}{S.~R.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Levin}{L.}%
+     {L~L}{L.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lyne}{L.}%
+     {A~G~AG}{A.~G.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Milia}{M.}%
+     {S~S}{S.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Possenti}{P.}%
+     {A~A}{A.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Spitler}{S.}%
+     {L~L}{L.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stappers}{S.}%
+     {B~B}{B.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Straten}{S.}%
+     {W~W}{W.~W.}%
+     {van}{v.}%
+     {}{}}%
+  }
+  \strng{namehash}{BMM+1}
+  \strng{fullhash}{BMMBSDSBVVBNDRNBMMBSSSDNNJSSKMJMKMMKSRSLLLLAGAMSSPAASLLSBBSWWv1}
+  \field{sortinit}{B}
+  \field{number}{6050}
+  \field{pages}{1717\bibrangedash 1720}
+  \field{title}{{Transformation of a star into a planet in a millisecond pulsar
+  binary.}}
+  \field{volume}{333}
+  \field{journaltitle}{Science}
+  \field{month}{09}
+  \field{year}{2011}
+\endentry
+
+\entry{Balarin:2003kc}{article}{}
+  \name{author}{6}{}{%
+    {{}%
+     {Balarin}{B.}%
+     {F.}{F.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Watanabe}{W.}%
+     {Y.}{Y.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Hsieh}{H.}%
+     {H.}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lavagno}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Passerone}{P.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sangiovanni-Vincentelli}{S.-V.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BF+1}
+  \strng{fullhash}{BFWYHHLLPCSVA1}
+  \field{sortinit}{B}
+  \field{number}{4}
+  \field{pages}{45\bibrangedash 52}
+  \field{title}{{Metropolis: an integrated electronic system design
+  environment}}
+  \field{volume}{36}
+  \field{journaltitle}{Computer}
+  \field{year}{2003}
+\endentry
+
+\entry{Bunton:2000tz}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Bunton}{B.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BJ1}
+  \strng{fullhash}{BJ1}
+  \field{sortinit}{B}
+  \field{title}{{ALMA Memo 342-An Improved FX Correlator}}
+  \field{journaltitle}{CSIRO, Telecommunications and Industrial Physics,
+  Australia}
+  \field{year}{2000}
+\endentry
+
+\entry{Clark:2011wi}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Clark}{C.}%
+     {M~A}{M.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {La~Plante}{L.~P.}%
+     {Pc}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Greenhill}{G.}%
+     {L~J}{L.~J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CMALPPGLJ1}
+  \strng{fullhash}{CMALPPGLJ1}
+  \field{sortinit}{C}
+  \field{number}{2}
+  \field{title}{{Accelerating radio astronomy cross-correlation with graphics
+  processing units}}
+  \field{volume}{27}
+  \field{journaltitle}{International Journal of High Performance Computing
+  Applications}
+  \field{month}{05}
+  \field{year}{2013}
+\endentry
+
+\entry{Cross:2009ta}{report}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Cross}{C.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Crida}{C.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bennett}{B.}%
+     {T}{T}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Welz}{W.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CS+1}
+  \strng{fullhash}{CSCRBTWM1}
+  \field{sortinit}{C}
+  \field{title}{{Guidelines for Communication with Devices}}
+  \field{type}{techreport}
+  \field{month}{05}
+  \field{year}{2009}
+\endentry
+
+\entry{Davare:2007ue}{thesis}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Davare}{D.}%
+     {Abhijit}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DA1}
+  \strng{fullhash}{DA1}
+  \field{sortinit}{D}
+  \field{title}{{Automated Mapping for Heterogeneous Multiprocessor Embedded
+  Systems }}
+  \list{institution}{1}{%
+    {University of California, Berkeley}%
+  }
+  \field{type}{phdthesis}
+  \field{year}{2007}
+\endentry
+
+\entry{Deller:2007wy}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Deller}{D.}%
+     {A~T}{A.~T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tingay}{T.}%
+     {S~J}{S.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bailes}{B.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {West}{W.}%
+     {C}{C}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DAT+1}
+  \strng{fullhash}{DATTSJBMWC1}
+  \field{sortinit}{D}
+  \field{number}{853}
+  \field{pages}{318\bibrangedash 336}
+  \field{title}{{DiFX: A Software Correlator for Very Long Baseline
+  Interferometry Using Multiprocessor Computing Environments}}
+  \field{volume}{119}
+  \field{journaltitle}{Publ Astron Soc Pac}
+  \field{month}{03}
+  \field{year}{2007}
+\endentry
+
+\entry{2009astro2010S..64D}{article}{}
+  \name{author}{29}{}{%
+    {{}%
+     {Demorest}{D.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lazio}{L.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lommen}{L.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Archibald}{A.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Arzoumanian}{A.}%
+     {Z}{Z}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Backer}{B.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cordes}{C.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Demorest}{D.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ferdman}{F.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Freire}{F.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gonzalez}{G.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Jenet}{J.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kaspi}{K.}%
+     {V}{V}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kondratiev}{K.}%
+     {V}{V}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lazio}{L.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lommen}{L.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lorimer}{L.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lynch}{L.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {McLaughlin}{M.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nice}{N.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ransom}{R.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Shannon}{S.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Siemens}{S.}%
+     {X}{X}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stairs}{S.}%
+     {I}{I}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stinebring}{S.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Reitze}{R.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Shoemaker}{S.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Whitcomb}{W.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Weiss}{W.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DP+1}
+  \strng{fullhash}{DPLJLAAAAZBDCJDPFRFPGMJRKVKVLJLALDLRMMNDRSSRSXSISDRDSDWSWR1}
+  \field{sortinit}{D}
+  \field{pages}{64}
+  \field{title}{{Gravitational Wave Astronomy Using Pulsars: Massive Black Hole
+  Mergers {\&} the Early Universe}}
+  \field{volume}{2010}
+  \field{journaltitle}{Astro2010: The Astronomy and Astrophysics Decadal
+  Survey}
+  \field{year}{2009}
+\endentry
+
+\entry{Densmore:tm}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Densmore}{D.}%
+     {Douglas Michael~Author}{D.~M.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Meyerowitz}{M.}%
+     {Trevor Conrad~Author}{T.~C.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davare}{D.}%
+     {Abhijit~Author}{A.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Zhu}{Z.}%
+     {Qi~Author}{Q.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Yang}{Y.}%
+     {Guang~Author}{G.~A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DDMA+1}
+  \strng{fullhash}{DDMAMTCADAAZQAYGA1}
+  \field{sortinit}{D}
+  \field{title}{{Metro II Execution Semantics for Mapping}}
+\endentry
+
+\entry{2012Sci...338..355D}{article}{}
+  \name{author}{33}{}{%
+    {{}%
+     {Doeleman}{D.}%
+     {Sheperd~S}{S.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fish}{F.}%
+     {Vincent~L}{V.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schenck}{S.}%
+     {David~E}{D.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Beaudoin}{B.}%
+     {Christopher}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Blundell}{B.}%
+     {Ray}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bower}{B.}%
+     {Geoffrey~C}{G.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Broderick}{B.}%
+     {Avery~E}{A.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chamberlin}{C.}%
+     {Richard}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Freund}{F.}%
+     {Robert}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Friberg}{F.}%
+     {Per}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gurwell}{G.}%
+     {Mark~A}{M.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ho}{H.}%
+     {Paul T~P}{P.~T.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Honma}{H.}%
+     {Mareki}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Inoue}{I.}%
+     {Makoto}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Krichbaum}{K.}%
+     {Thomas~P}{T.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lamb}{L.}%
+     {James}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Loeb}{L.}%
+     {Abraham}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lonsdale}{L.}%
+     {Colin}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Marrone}{M.}%
+     {Daniel~P}{D.~P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Moran}{M.}%
+     {James~M}{J.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Oyama}{O.}%
+     {Tomoaki}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Plambeck}{P.}%
+     {Richard}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Primiani}{P.}%
+     {Rurik~A}{R.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rogers}{R.}%
+     {Alan E~E}{A.~E.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smythe}{S.}%
+     {Daniel~L}{D.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {SooHoo}{S.}%
+     {Jason}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Strittmatter}{S.}%
+     {Peter}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tilanus}{T.}%
+     {Remo P~J}{R.~P.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Titus}{T.}%
+     {Michael}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Weintroub}{W.}%
+     {Jonathan}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wright}{W.}%
+     {Melvyn}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Young}{Y.}%
+     {Ken~H}{K.~H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ziurys}{Z.}%
+     {Lucy~M}{L.~M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{DSS+1}
+  \strng{fullhash}{DSSFVLSDEBCBRBGCBAECRFRFPGMAHPTPHMIMKTPLJLALCMDPMJMOTPRPRARAEESDLSJSPTRPJTMWJWMYKHZLM1}
+  \field{sortinit}{D}
+  \field{number}{6}
+  \field{pages}{355}
+  \field{title}{{Jet-Launching Structure Resolved Near the Supermassive Black
+  Hole in M87}}
+  \field{volume}{338}
+  \field{journaltitle}{Science}
+  \field{annotation}{%
+  Comments: 12 pages, 3 figures, accepted version%
+  }
+  \field{month}{10}
+  \field{year}{2012}
+\endentry
+
+\entry{Filiba:2011wl}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Filiba}{F.}%
+     {T}{T}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{FTWD1}
+  \strng{fullhash}{FTWD1}
+  \field{sortinit}{F}
+  \field{pages}{1\bibrangedash 4}
+  \field{title}{{Automatic generation of heterogeneous spectrometers for radio
+  astronomy}}
+  \field{journaltitle}{General Assembly and Scientific Symposium, 2011 XXXth
+  URSI}
+  \field{year}{2011}
+\endentry
+
+\entry{Gibeling:2008vg}{thesis}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Gibeling}{G.}%
+     {Greg}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GG1}
+  \strng{fullhash}{GG1}
+  \field{sortinit}{G}
+  \field{title}{{RDLC2: The RAMP Model, Compiler {\&} Description Language}}
+  \list{institution}{1}{%
+    {University of California, Berkeley}%
+  }
+  \field{type}{mathesis}
+  \field{year}{2008}
+\endentry
+
+\entry{Govindaraju:2008vx}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Govindaraju}{G.}%
+     {N.K.}{N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lloyd}{L.}%
+     {B}{B}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Dotsenko}{D.}%
+     {Y}{Y}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smith}{S.}%
+     {B}{B}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Manferdelli}{M.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GN+1}
+  \strng{fullhash}{GNLBDYSBMJ1}
+  \field{sortinit}{G}
+  \field{pages}{1\bibrangedash 12}
+  \field{title}{{High performance discrete Fourier transforms on graphics
+  processors}}
+  \field{journaltitle}{High Performance Computing, Networking, Storage and
+  Analysis, 2008. SC 2008. International Conference for}
+  \field{year}{2008}
+\endentry
+
+\entry{Jun:2008vv}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Jun}{J.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Yoo}{Y.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chung}{C.}%
+     {EY}{E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{JMYSCE1}
+  \strng{fullhash}{JMYSCE1}
+  \field{sortinit}{J}
+  \field{pages}{583\bibrangedash 588}
+  \field{title}{{Mixed integer linear programming-based optimal topology
+  synthesis of cascaded crossbar switches}}
+  \field{journaltitle}{Proceedings of the 2008 Asia and South Pacific Design
+  Automation Conference}
+  \field{year}{2008}
+\endentry
+
+\entry{Kestur:2010tn}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Kestur}{K.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {JD}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Williams}{W.}%
+     {O}{O}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KSDJWO1}
+  \strng{fullhash}{KSDJWO1}
+  \field{sortinit}{K}
+  \field{pages}{288\bibrangedash 293}
+  \field{title}{{BLAS Comparison on FPGA, CPU and GPU}}
+  \field{journaltitle}{2010 IEEE Annual Symposium on VLSI}
+  \field{year}{2010}
+\endentry
+
+\entry{Kondo:2010uk}{article}{}
+  \name{author}{5}{}{%
+    {{}%
+     {Kondo}{K.}%
+     {Hirofumi}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Heien}{H.}%
+     {Eric}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Okita}{O.}%
+     {Masao}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {Dan}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Hagihara}{H.}%
+     {Kenichi}{K.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KH+1}
+  \strng{fullhash}{KHHEOMWDHK1}
+  \field{sortinit}{K}
+  \field{title}{{A Multi-GPU Spectrometer System for Real-Time Wide Bandwidth
+  Radio Signal Analysis}}
+  \field{journaltitle}{ISPA '10: Proceedings of the International Symposium on
+  Parallel and Distributed Processing with Applications}
+  \field{month}{09}
+  \field{year}{2010}
+\endentry
+
+\entry{Margot:2010tl}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Margot}{M.}%
+     {F}{F}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MF1}
+  \strng{fullhash}{MF1}
+  \field{sortinit}{M}
+  \field{pages}{647\bibrangedash 686}
+  \field{title}{{Symmetry in integer linear programming}}
+  \field{journaltitle}{50 Years of Integer Programming 1958-2008}
+  \field{year}{2010}
+\endentry
+
+\entry{Parsons:2006cu}{article}{}
+  \name{author}{20}{}{%
+    {{}%
+     {Parsons}{P.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Backer}{B.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chang}{C.}%
+     {Chen}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chapman}{C.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chen}{C.}%
+     {H}{H}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Crescini}{C.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Jesus}{J.}%
+     {C}{C}%
+     {de}{d.}%
+     {}{}}%
+    {{}%
+     {Dick}{D.}%
+     {C}{C}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Droz}{D.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {MacMahon}{M.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Meder}{M.}%
+     {K}{K}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mock}{M.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nagpal}{N.}%
+     {V}{V}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nikolic}{N.}%
+     {B}{B}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Parsa}{P.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Richards}{R.}%
+     {B}{B}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Siemion}{S.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wawrzynek}{W.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {WRIGHT}{W.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{PA+1}
+  \strng{fullhash}{PABDCCCDCHCPJCdDCDPMDMKMJNVNBPARBSAWJWDWM1}
+  \field{sortinit}{P}
+  \field{pages}{2031\bibrangedash 2035}
+  \field{title}{{PetaOp/Second FPGA Signal Processing for SETI and Radio
+  Astronomy}}
+  \field{journaltitle}{Signals, Systems and Computers, 2006. ACSSC '06.
+  Fortieth Asilomar Conference on}
+  \field{year}{2006}
+\endentry
+
+\entry{Parsons:2008dl}{article}{}
+  \name{author}{12}{}{%
+    {{}%
+     {Parsons}{P.}%
+     {Aaron}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Backer}{B.}%
+     {Donald}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Siemion}{S.}%
+     {Andrew}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chen}{C.}%
+     {Henry}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {Dan}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Droz}{D.}%
+     {Pierre}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Filiba}{F.}%
+     {Terry}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Manley}{M.}%
+     {Jason}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {McMahon}{M.}%
+     {Peter}{P.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Parsa}{P.}%
+     {Arash}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {MacMahon}{M.}%
+     {David}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wright}{W.}%
+     {Melvyn}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{PA+2}
+  \strng{fullhash}{PABDSACHWDDPFTMJMPPAMDWM1}
+  \field{sortinit}{P}
+  \field{number}{873}
+  \field{pages}{1207\bibrangedash 1221}
+  \field{title}{{A Scalable Correlator Architecture Based on Modular FPGA
+  Hardware, Reuseable Gateware, and Data Packetization}}
+  \field{volume}{120}
+  \field{journaltitle}{Publ Astron Soc Pac}
+  \field{month}{09}
+  \field{year}{2008}
+\endentry
+
+\entry{Rakhshanfar:2011tg}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Rakhshanfar}{R.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Anderson}{A.}%
+     {JH}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RAAJ1}
+  \strng{fullhash}{RAAJ1}
+  \field{sortinit}{R}
+  \field{pages}{831\bibrangedash 836}
+  \field{title}{{An integer programming placement approach to FPGA clock power
+  reduction}}
+  \field{journaltitle}{Proceedings of the 16th Asia and South Pacific Design
+  Automation Conference}
+  \field{year}{2011}
+\endentry
+
+\entry{Ransom:2009wz}{article}{}
+  \name{author}{7}{}{%
+    {{}%
+     {Ransom}{R.}%
+     {Scott~M}{S.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Demorest}{D.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ford}{F.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {McCullough}{M.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ray}{R.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {DuPlain}{D.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Brandt}{B.}%
+     {P}{P}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RSM+1}
+  \strng{fullhash}{RSMDPFJMRRJDRBP1}
+  \field{sortinit}{R}
+  \field{title}{{GUPPI: Green Bank Ultimate Pulsar Processing Instrument}}
+  \field{volume}{214}
+  \field{journaltitle}{American Astronomical Society Meeting Abstracts {\#}214}
+  \field{month}{12}
+  \field{year}{2009}
+\endentry
+
+\entry{2010LPICo1538.5378S}{article}{}
+  \name{author}{13}{}{%
+    {{}%
+     {Siemion}{S.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Chen}{C.}%
+     {H}{H}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cobb}{C.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Cordes}{C.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Filiba}{F.}%
+     {T}{T}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fries}{F.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Howard}{H.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Korpela}{K.}%
+     {E}{E}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lebofsky}{L.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mallard}{M.}%
+     {W}{W}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Spitler}{S.}%
+     {L}{L}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wagner}{W.}%
+     {M}{M}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SA+1}
+  \strng{fullhash}{SAWDCHCJCJFTFAHAKELMMWSLWM1}
+  \field{sortinit}{S}
+  \field{pages}{5378}
+  \field{title}{{Current and Nascent SETI Instruments in the Radio and Optical:
+  SERENDIP V.v, OSPOSH and HRSS}}
+  \field{volume}{1538}
+  \field{journaltitle}{Astrobiology Science Conference 2010: Evolution and
+  Life: Surviving Catastrophes and Extremes on Earth and Beyond}
+  \field{month}{04}
+  \field{year}{2010}
+\endentry
+
+\entry{So:2007ve}{thesis}{}
+  \name{author}{1}{}{%
+    {{}%
+     {So}{S.}%
+     {Hayden Kwok-Hay}{H.~K.-H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SHKH1}
+  \strng{fullhash}{SHKH1}
+  \field{sortinit}{S}
+  \field{title}{{BORPH: An Operating System for FPGA-based Reconfigurable
+  Computers}}
+  \list{institution}{1}{%
+    {ProQuest}%
+  }
+  \field{type}{phdthesis}
+  \field{year}{2007}
+\endentry
+
+\entry{Theodoridis:2009gd}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Theodoridis}{T.}%
+     {G}{G}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Vassiliadis}{V.}%
+     {N}{N}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nikolaidis}{N.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{TGVNNS1}
+  \strng{fullhash}{TGVNNS1}
+  \field{sortinit}{T}
+  \field{number}{1}
+  \field{pages}{33}
+  \field{title}{{An integer linear programming model for mapping applications
+  on hybrid systems}}
+  \field{volume}{3}
+  \field{journaltitle}{IET Computers {\&} Digital Techniques}
+  \field{year}{2009}
+\endentry
+
+\entry{Thompson:1986ww}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Thompson}{T.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Moran}{M.}%
+     {J}{J}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Swenson}{S.}%
+     {G}{G}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{TAMJSG1}
+  \strng{fullhash}{TAMJSG1}
+  \field{sortinit}{T}
+  \field{title}{{Interferometry and synthesis in radio astronomy}}
+  \field{journaltitle}{New York}
+  \field{year}{1986}
+\endentry
+
+\entry{Tsoi:2010we}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Tsoi}{T.}%
+     {KH}{K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Luk}{L.}%
+     {W}{W}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{TKLW1}
+  \strng{fullhash}{TKLW1}
+  \field{sortinit}{T}
+  \field{pages}{115\bibrangedash 124}
+  \field{title}{{Axel: A heterogeneous cluster with FPGAs and GPUs}}
+  \field{journaltitle}{Proceedings of the 18th annual ACM/SIGDA international
+  symposium on Field programmable gate arrays}
+  \field{year}{2010}
+\endentry
+
+\entry{vanNieuwpoort:2009p1253}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Van~Nieuwpoort}{V.~N.}%
+     {R}{R}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Romein}{R.}%
+     {John~W}{J.~W.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{VNRRJW1}
+  \strng{fullhash}{VNRRJW1}
+  \field{sortinit}{V}
+  \field{title}{{Correlating Radio Astronomy Signals with Many-Core Hardware}}
+  \field{journaltitle}{International Journal of Parallel Programming}
+  \field{year}{2009}
+\endentry
+
+\entry{2009PASP..121..857W}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Wayth}{W.}%
+     {Randall~B}{R.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Greenhill}{G.}%
+     {Lincoln~J}{L.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Briggs}{B.}%
+     {Frank~H}{F.~H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{WRBGLJBFH1}
+  \strng{fullhash}{WRBGLJBFH1}
+  \field{sortinit}{W}
+  \field{pages}{857\bibrangedash 865}
+  \field{title}{{A GPU-based Real-time Software Correlation System for the
+  Murchison Widefield Array Prototype}}
+  \field{volume}{121}
+  \field{journaltitle}{Publ Astron Soc Pac}
+  \field{month}{08}
+  \field{year}{2009}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

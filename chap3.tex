@@ -13,44 +13,37 @@ Keeping up with increasing computation demands has often resulted in the special
 %TODO: Intro
 \subsection{Distributed FX Correlator (DiFX)}
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=\textwidth]{Images/C3/vlba.pdf}
-  \caption{Telescope Locations in the Very Long Baseline Array}
-  \label{fig: C3/vlba.pdf}
-\end{figure}
-
-The Very Long Baseline Interferometery or VLBI technique uses an array of antennas that are extremely far apart to achieve very high angular resolution. 
-
-
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=\textwidth]{Images/C3/difx_architecture.pdf}
-  \caption[DiFX Correlator Architecture]{DiFX Correlator Architecture (reprinted from \citeauthor{Deller:2007wy} \cite{Deller:2007wy})}
-  \label{fig: C3/difx_architecture.pdf}
-\end{figure}
-
 %DiFX (Distributed FX Correlator) is a scalable software implementation
 The DiFX Correlator is a scalable software implementation of an FX Correlator  \cite{Deller:2007wy}.
-DiFX was designed as a software correlator that targets CPUs in order to maintain flexibility in the design, but that flexibility comes at a high hardware cost. 
-%Requires a large cluster to do a lot of computation
-%64 MHz, 10 antennas required ~100 nodes in 2007
-Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
-%TODO: define expensive
-%TODO: define the nodes more precisely
+DiFX was designed as a software correlator that targets CPUs in order to maintain flexibility in the design.
+The DiFX correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
 
 %TODO: If you have a cluster available…
 %Why do cpu-only?
 %It’s easy
 %Compared to 27 antenna 2GHz EVLA in New Mexico
 
-The correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
+ 
+%Describe the VLA
+
 
 %TODO: expand on VLBI
 %TODO: doesn't need to be real time (using recorded data)
 
 %Designed for VLBI (Very Long Baseline Interferometry)
+
+
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/difx_scaling.pdf}
+  \caption[DiFX Correlator Benchmarks]{DiFX Correlator Benchmarks (reprinted from \citeauthor{Deller:2007wy} \cite{Deller:2007wy})}
+  \label{fig: C3/difx_scaling.pdf}
+\end{figure}
+
+Unfortunately, the flexibility of the software implementation comes at a high cost.
+Figure \ref{fig: C3/difx_scaling.pdf} shows the resources required
+Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
 
 \subsection{LOFAR}
 \begin{figure}[ht!]
@@ -84,7 +77,7 @@ xGPU is a CUDA package that implements the cross-correlation
 
 \subsection{CASPER}
 
-At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we are developing  common libraries and hardware that can be used by radio astronomers developing instrumentation. The mission statement, available on the website, concisely summarizes the goals of the group:
+At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we are developing  common libraries and hardware that can be used by radio astronomers developing instrumentation. The mission statement, available on the group website casper.berkeley.edu, concisely summarizes the goals of the group:
 
 \begin{quotation}
 The primary goal of CASPER is to streamline and simplify the design flow of radio astronomy instrumentation by promoting design reuse through the development of platform-independent, open-source hardware and software.
@@ -114,6 +107,7 @@ The follow sections describe each of these and how they have been used to create
 
 The CASPER group provides set of modular FPGA boards and ADCs that are designed specifically to deal with the high bandwidth requirements of real time radio astronomy signal processing. 
 Since each FPGA boards meets the needs of the radio astronomy community as a whole rather than a single application, the group releases a small number of boards and typically only releases a new board to take advantage of improving technology. 
+By releasing a handful of boards, the CASPER group ensures that users get proven and tested hardware for their new instruments.
 The CASPER library and software, discussed below, also make it easy to upgrade the hardware since a CASPER design easily be recompiled to work with a different board and the software interface and the signal processing model are standardized.
 And, since the boards communicate over a common set of industry standard protocols, they can be upgraded one by one, or all at once. 
 
@@ -135,25 +129,22 @@ ADC1X2200-10 & 2.2 Gsps & 1 & 10 bits \\
 ADC1x10000-4 & 10 Gsps & 1 & 4 bits \\
 \hline  
 \end{tabular}
-\caption{CASPER ADC Comparison}
+\caption{CASPER ADC Boards}
 \label{tab: C3/adcs}
 \end{table} 
 
 
 
-%TODO: Provides tested hardware for new instruments
 
 Each board can also send or receive data using ethernet. 
-The boards are designed to communicate using common protocols, like 10GbE, so a board can be upgraded without modifying how it communicates with the rest of the cluster. 
+The boards are designed to communicate using common protocols, like 10 Gigabit Ethernet, so a board can be upgraded without modifying how it communicates with the rest of the cluster. 
 The use of an industry standard protocol also makes communication to non-CASPER boards simple, allowing an FPGA to create UDP packets that eventually get received by a CPU or GPU-based server, making the CASPER boards an ideal component in a heterogeneous cluster. 
 This makes it simple to design a cluster, and allows continuous upgrades as technology improves, as the signal processing model and communication model do not change between boards.
 
 
-%All boards can talk to each other
 %Can’t clock FPGA at 3GHz but use parallel FFT 8-16 samples at a time
 %BEE2 lib w/Bob Broderson
 
-%TODO: add roach 2, bee2, ibob
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C3/roach.pdf}
@@ -161,36 +152,57 @@ This makes it simple to design a cluster, and allows continuous upgrades as tech
   \label{fig: C3/roach.pdf}
 \end{figure}
 
-The ROACH board, shown in Figure \ref{fig: C3/roach.pdf}, with an iADC board connected via Z-DOK+ and an ethernet cable to get data off the board. 
-%TODO: expand
+Currently, CASPER has designed the IBOB, or Interconnect Break-out Board, ROACH and ROACH2 boards. 
+The IBOB was originally designed as an interface to digitize antenna data and send it to a server, but the powerful Virtex-II Pro make it very useful for channelizing data as well.
+The ROACH board is shown in Figure \ref{fig: C3/roach.pdf} with an iADC board connected via Z-DOK+ and an ethernet cable to get data off the board,
+This board is pin-compatible with two large FPGA chips, the Virtex 5 SX95T and LX100T, with the SX95T being preferred for its large number of DSP-48s.
+The ROACH has 2 Z-DOK+ connectors and supports up to 4 10-gigabit Ethernet links.
+The ROACH2 is an upgrade to the ROACH board to take advantage of the newer Xilinx chips.
+The Virtex 5 chips have been upgraded to the Virtex 6 SX475T, and this board supports up to 8 10-gigabit Ethernet links.
 
 
 
 \subsubsection{CASPER Library}
 
-%TODO: edit this
-CASPER develops a DSP library that can be compiled into an FPGA bitstream.
+In addition to hardware, CASPER develops a DSP library that can be compiled into an FPGA bitstream.
 The library is implemented in Simulink, which allows for both simulation and, using Xilinx System Generator, compilation to FPGA code.
-The Simulink designs can be retargeted to different boards without changed the original implementation.
-%TODO: discuss simulink, visual programming, etc
+The Simulink implementation is a key part of the success of this project.
+Using a visual programming language makes it easy to snap together blocks without getting into the low level details of FPGA programming.
+
+
+
 
 %  Platform independent DSP library
-%  Blocks can be used on any CASPER board (BEE2 or iBOB,
-%ROACH coming soon...)
-%  Currently restricted to Xilinx chips but can be ported to other platforms
-%  Large set of parameterizable DSP building blocks
-%  FFTs (tunable bandwidth, number of channels, real or complex) ?  PFBs
-%  Accumulators
-%  All library blocks are built from Xilinx primitive blocks
+
 %  Matlab scripts (“mask scripts”) are used to configure parameterized blocks
 
-%CASPER = Collaboration for Astronomy Signal Processing and Electronics Research
-%Identifies commonly used DSP blocks for radio astronomy
-%FFTs (tunable bandwidth, number of channels, real or complex)
-%Polyphase filter banks
-%Accumulators
-%Digital downconverters/mixers
-%Scripts are used to configure parameterized blocks
+\begin{figure}[!h]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/adder_tree_diagram.pdf}
+  \caption{Adder Tree Simulink Simulink Diagram}
+  \label{fig: C3/adder_tree_diagram}
+\end{figure}
+
+
+
+The library blocks are built out of Xilinx System Generator primitive blocks. 
+These primitives make it possible to retarget Simulink designs to different Xilinx FPGAs without changed the original implementation.
+Figure \ref{fig: C3/adder_tree_diagram} shows a simple example of one of the library blocks, an adder tree.
+The adder tree is used to implement pipeplined, parallel addition using a binary tree.
+The top left is the library with the adder tree block, and the bottom right is the implementation of the adder tree block with there inputs.
+
+\begin{figure}[!h]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/adder_tree_code.pdf}
+  \caption{Adder Tree Simulink Mask Script}
+  \label{fig: C3/adder_tree_code.pdf}
+\end{figure}
+
+
+In order to configure the number of inputs, Matlab scripts are used to redraw the implementations. 
+Figure \ref{fig: C3/adder_tree_code.pdf} shows a snippet of code from the script used to redraw the adder tree block.
+Every parameterized CASPER block uses at least one of these scripts to redraw the underlying implementation when the parameters are modified.
+ 
 
 \begin{figure}
   \centering
@@ -226,28 +238,17 @@ There are a number of other parameters provided like input bit width, which help
   \label{fig: fft_vs_pfb_response}
 \end{figure}
 
-PASP uses a PFB to split up the subbands. Figure \ref{fig: fft_vs_pfb_response} shows a comparison between the FFT and PFB response. 
+The CASPER library also provides an FIR filter than can be coupled with the FFT to create a polyphase filter bank or PFB.
+Figure \ref{fig: fft_vs_pfb_response} shows a comparison between the FFT and PFB response. 
 The FFT response (on the left) has a lot of spectral leakage while the PFB (on the right) has a much sharper filter shape and a better frequency response. 
-The superior frequency response led us to use a PFB rather than an FFT to extract subbands, despite the additional FPGA resources required by the FIR filter before the FFT.
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.49\textwidth]{Images/C3/adder_tree_diagram.pdf}
-    \includegraphics[width=0.49\textwidth]{Images/C3/adder_tree_code.pdf}
-  \caption{Adder Tree Simulink Diagram and Code}
-  \label{fig: C3/adder_tree}
-\end{figure}
-
-
-These parameters in the options menu are implemented using a number of matlab scripts to automatically design the block. 
-%TODO: expand on this
+Despite the additional FPGA resources required by the FIR filter before the FFT, many instruments implement a PFB rather than an FFT because of the superior frequency response.
 
 
 %TODO: maybe break this down into separate blocks
 \begin{figure}
   \centering
      \includegraphics[width=0.75\textwidth]{Images/C3/yellow_blocks.pdf}
-  \caption{TODO}
+  \caption{CASPER Library IO Blocks}
   \label{fig:C3/yellow_blocks.pdf}
 \end{figure}
 
@@ -256,23 +257,24 @@ Figure \ref{fig:C3/yellow_blocks.pdf} provides some examples of what those libra
 Each block provides input and output ports that correspond to the data it can send or receive. 
 For example, the adc block has an output ports labeled \emph{o0,o1,\ldots,o7} that represent the data the FPGA receives from the iADC board.
 In addition to this, simulation ports are provided to allow the user to proved test signals mimicking the outside world.
-In the case of the adc, the user could provide a sine wave into the \emph{sim\_in} port to observe how a sine wave would be processed by the system.
+In the case of the ADC, the user could provide a sine wave into the \emph{sim\_in} port to observe how a sine wave would be processed by the system.
 During compilation, the CASPER XPS toolflow automatically processes the blocks and ensures the wires are connected to the correct pins.
-
-%TODO: discuss debugging with yellow blocks
 
 
 \subsubsection{CASPER Software}
 
-%Toolflow for compilation, ref BEE2 compile path, borph, etc
 To simplify the use of the FPGA further, the CASPER boards run a modified version of Linux directly on the board. 
 Using this Linux environment, called the Berkeley Os for ReProgrammable Hardware or BORPH, programming the FPGA is as simple as running an executable on the command line \cite{So:2007ve}.
-Then, once the board has been programmed, BORPH can communicate with the chip using an interface where components on the FPGA like registers or memory appear as a file system in the operating system. 
-These files can be accessed using normal file I/O, making it simple to send control signals or monitor the status of the chip.
+Once the board has been programmed, BORPH can communicate with the chip using an interface where some components on the FPGA like registers or memory appear as files in the operating system. 
+These files can be accessed using normal file I/O, making it simple to send control signals or monitor the status of the chip, greatly simplifying debugging and command and control.
 
-\cite{Cross:2009ta}
 
 \subsubsection{SERENDIP V.v}
+
+SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extra terrestrial intelligence by analyzing radio signals.
+SERENDIP V.v is a high resolution SETI spectrometer that was deployed at Arecibo Observatory in 2009 as part of this project.
+The installed instrument was built using an iADC, iBOB and BEE2 board.
+THe instrument breaks up a single 200MHz stream into 128 million frequency channels, achieving a resolution of about 1Hz.
 
 \begin{figure}[ht!]
   \centering
@@ -281,9 +283,20 @@ These files can be accessed using normal file I/O, making it simple to send cont
   \label{fig: C3/setispectrometerv55.pdf}
 \end{figure}
 
+Figure \ref{fig: C3/setispectrometerv55.pdf} shows the dataflow for the spectrometer.
+The ADC data is fed into an IBOB where it is processed by a decimating downconverter. %TODO: why?
+
+
+%4k point PFB
+%  32k by 4k corner turn
+%  32k point FFT
+%  Each element (PFB, corner turn, FFT, and thresholder) is on a separate BEE2 chip
+%  Output to PC is low bandwidth due to thresholding
+%  Upcoming ROACH architecture will support 2 polarizations, 400 MHz
+
+
 %Used for the SETI ALFA Survey, JPL Sky Survey, and Argentina SETI
 %  200 MHz Bandwidth currently, future plans to upgrade to 300MHz
-%  128 Million frequency channels
 %  Build using an iADC, iBOB and BEE2
 %  Can process one polarization from a single beam
 
@@ -294,6 +307,11 @@ These files can be accessed using normal file I/O, making it simple to send cont
   \label{fig: C3/alfa_feed.png}
 \end{figure}
 
+The SERENDIP V.v instrument processes data from the Arecibo L-band Feed Array.
+The array has 7 dual-polarization beams, shown in Figure \ref{fig: C3/alfa_feed.png}.
+The spectrometer
+
+
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=0.48\textwidth]{Images/C3/serendip_vv_top.png}
@@ -302,12 +320,9 @@ These files can be accessed using normal file I/O, making it simple to send cont
   \label{fig: C3/serendipvv}
 \end{figure}
 
-%4k point PFB
-%  32k by 4k corner turn
-%  32k point FFT
-%  Each element (PFB, corner turn, FFT, and thresholder) is on a separate BEE2 chip
-%  Output to PC is low bandwidth due to thresholding
-%  Upcoming ROACH architecture will support 2 polarizations, 400 MHz
+Figure \ref{fig: C3/serendipvv} shows the installed instrument at Arecibo Observatory. 
+
+
 
 %SuccessfullydeployedatAreciboObservatoryinJune2009
 %  ImplementedonanIBOBandBEE2board

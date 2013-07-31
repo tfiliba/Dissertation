@@ -1,0 +1,72 @@
+This is BibTeX, Version 0.99d (TeX Live 2012)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: thesis.aux
+The style file: biblatex.bst
+A level-1 auxiliary file: abstract.aux
+A level-1 auxiliary file: chap1.aux
+A level-1 auxiliary file: chap2.aux
+A level-1 auxiliary file: chap3.aux
+A level-1 auxiliary file: chap4.aux
+A level-1 auxiliary file: chap5.aux
+A level-1 auxiliary file: chap6.aux
+A level-1 auxiliary file: chap7.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: thesis-blx.bib
+Database file #2: references.bib
+Warning--string name "n/a" is undefined
+--line 150 of file references.bib
+Biblatex version: 1.7
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+You've used 29 entries,
+            6019 wiz_defined-function locations,
+            1305 strings with 15447 characters,
+and the built_in function-call counts, 109563 in all, are:
+= -- 3636
+> -- 4117
+< -- 845
++ -- 1543
+- -- 1857
+* -- 10960
+:= -- 7189
+add.period$ -- 0
+call.type$ -- 29
+change.case$ -- 339
+chr.to.int$ -- 94
+cite$ -- 56
+duplicate$ -- 12921
+empty$ -- 10751
+format.name$ -- 3462
+if$ -- 23316
+int.to.chr$ -- 0
+int.to.str$ -- 60
+missing$ -- 0
+newline$ -- 1345
+num.names$ -- 1234
+pop$ -- 9514
+preamble$ -- 1
+purify$ -- 547
+quote$ -- 0
+skip$ -- 5811
+stack$ -- 0
+substring$ -- 1417
+swap$ -- 4389
+text.length$ -- 1024
+text.prefix$ -- 122
+top$ -- 1
+type$ -- 1086
+warning$ -- 0
+while$ -- 582
+width$ -- 0
+write$ -- 1315
+(There was 1 warning)
