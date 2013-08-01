@@ -121,14 +121,8 @@ Even non-numerical parameters can be varied, such as the FIR window type, to see
 
 
 %TODO: add filter parameters, ntaps, window (?)
-\subsection{Example Instrument Definitions}
-%TODO: 3 case studies
-This tool will be analyzed by looking at three case studies. 
-We created three instrument types: Spectrometer, High Resolution Spectrometer, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
-Each instrument type has a set of parameters relevant to that instrument. 
-Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
-This translation is described further in the next section.
-%TODO: edit this awkwardness
+
+
 
 
 %Describe instrument using parameters an astronomer can understand
@@ -140,29 +134,12 @@ This translation is described further in the next section.
 %Etc
 %Generates a dataflow representation
 
-\subsubsection{Spectrometer Definition}
-Defining a simple spectrometer requires very few parameters. 
-First, as with most instruments, the astronomer must specify the sky bandwidth the instrument must process, defined in MHz.
-Then, the desired spectral resolution is defined in MHz per channel, or analogously, the number of channels that should be used to break up the bandwidth.
-Finally, the integration time needs to be defined.
-
-One optional parameter, number of antennas, can also be defined. 
-This describes the number of independent spectrometers that need to be created.
-While this parameter does not affect the end to end processing for each antenna, knowing how many spectrometers are needed allows for more efficient use of the hardware.
-The impact on the design is described further in Sections \ref{High Level Toolflow:Dataflow Model} and \ref{High Level Toolflow:Mapping} and the cost efficiency afforded by this parameter is explored in Chapter \ref{Analysis}
-
-\subsubsection{High Resolution Spectrometer Definition}
-The main difference between a spectrometer and a high resolution spectrometer is the need for two stages of channelization rather than just one. 
-The sky bandwidth, integration time, and number of antennas are defined in the same way as the previous spectrometer type. 
-
-The spectral resolution is defined differently, because both the coarse and fine resolutions need to be defined. 
-The coarse resolution defines how many channels the whole sky bandwidth should be broken up into initially.
-The fine resolution defines how many channels each coarse channel is broken into.
-Both can be described in MHz per channel.
 
 
-\subsubsection{FX Correlator Definition}
-An FX Correlator is also defined by the amount of bandwidth it processes, number of channels, and integration time, but now the number of antennas is a necessary parameter.
+
+
+
+
 
 
 
@@ -271,102 +248,15 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 %Instead, asymmetry is supported by allowing blocks to define a list of blocktypes they must send data to or receive data from. 
 %The connection between any two blocktypes still must be described as above.
 
-\subsection{Translating Instrument Definitions to Dataflow Diagrams}
+%\subsection{Translating Instrument Definitions to Dataflow Diagrams}
 % Describe data flow for each instrument we are interested in implementing
-Now that we have a method for describing a general dataflow, we will describe how each type of instrument definition described in the previous section is converted to a dataflow. 
-
-
-\subsubsection{Spectrometer}
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/spectrometer_dataflow.pdf}
-  \caption[General Spectrometer Dataflow Model]{General Spectrometer Dataflow Model.
-  \textit{
-  A general dataflow model for a single antenna spectrometer. 
-  This model can be applied to any spectrometer, as the spectrometer parameters do not affect how many computational blocks are required or the interconnect layout. 
-  %TODO: This is questionable, ask dan
-  The data is fed in by an ADC and filtered using an FIR to improve the response of the FFT.
-  The filtered data is then channelized by an FFT, accumulated in the block labeled $\Sigma$ and recorded to disk.
-  }}
-  \label{fig: C4/spectrometer_dataflow.pdf}
-\end{figure}
-
-The spectrometer instrument definition generates a very simple dataflow. 
-Figure \ref{fig: C4/spectrometer_dataflow.pdf} shows the general dataflow model for a spectrometer. 
-The ADC feeds data into a FIR filter. 
-Then the filtered signal is transformed into channels in the FFT and those channels are accumulated and saved to disk. Regardless of the parameters the astronomer chooses, the dataflow will be the same. 
-
-The parameters for each block come directly from the instrument definition. 
-The FIR parameters come from the number of FIR taps and window shape, the FFT is simply defined by the FFT length parameter and the accumulator also is parameterized by the FFT length as well as the integration time. 
-
+%Now that we have a method for describing a general dataflow, we will describe how each type of instrument definition described in the previous section is converted to a dataflow. 
 %Multiple antennas?
 
-\subsubsection{High Resolution Spectrometer}
-
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/hires_spectrometer_dataflow.pdf}
-  \caption[Example High Resolution Spectrometer Dataflow Model]{Example High Resolution Spectrometer Dataflow Model
-  \textit{
-  This figure shows an example dataflow for a high resolution spectrometer with 4 coarse FFT channels.
-  Like the previous spectrometer, the data comes in through an ADC, is filtered and then channelized using a coarse FFT.
-  Then, to achieve a higher resolution, each coarse channel is divided into sub-channels using the 4 fine FFT blocks in the dataflow. 
-  }}
-
-  \label{fig: C4/hires_spectrometer_dataflow.pdf}
-\end{figure}
-
-The high resolution spectrometer dataflow does depend on the parameters specified in the instrument description. 
-An example dataflow is shown in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf}. 
-The first three blocks in the dataflow are exactly the same as the Spectrometer dataflow described in the previous section. 
-An ADC feeds data into a FIR filter followed by an FFT. 
-After the FFT, the algorithm is modified to accommodate the higher resolution required. 
-The first FFT divides the band into a number of coarse channels and then each coarse channel must be further divided into a number of fine channels. 
-The coarse FFT must feed its data to a separate fine FFT for each coarse channel, so the number of fine FFTs in the dataflow diagram will vary based on the number of coarse channels.
-At this point, each coarse channel is processed in an independent pipeline the finely channelized data is accumulated and recorded to disk. 
-The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spectrometer that divides the data into 4 coarse channels.
 
 
-\subsubsection{FX Correlator}
 
-The FX dataflow model is based on the algorithm used by the CASPER correlator described in Section \ref{Related Work:Radio Astronomy}. The processing model is described by replicating 2 basic pipelines, called an F-Engine and an X-Engine. The number of times each pipeline needs to be replicated depends on the number of antennas and number of channels this correlator requires.
 
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=0.48\textwidth]{Images/C4/fx_f_engine.pdf}
-  \caption{FX Correlator F-Engine Model}
-  \label{fig: C4/fx_f_engine.pdf}
-\end{figure}
-
-An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. 
-It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank. 
-The number of F-Engines in the correlator dataflow will vary with the number of antennas.
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=0.48\textwidth]{Images/C4/fx_x_engine.pdf}
-  \caption{FX Correlator X-Engine Model}
-  \label{fig: C4/fx_x_engine.pdf}
-\end{figure}
-
-The second pipeline, the X-Engine processes the channelized data. 
-Each X-Engine takes a single channel of data from every antenna in the array, cross-correlates the data, accumulates it and stores it to disk. 
-Figure \ref{fig: C4/fx_x_engine.pdf} shows the pipeline for a single X-Engine. 
-Since each X-Engine only operates on a single channel, the total number of X-Engines in the correlator must be the same as the number of channels in the FFT.
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
-  \caption{Example FX Correlator Dataflow Model}
-  \label{fig: C4/fx_dataflow.pdf}
-\end{figure}
-
-The dataflow for an FX correlator will vary quite a bit based on the input parameters. 
-Figure \ref{fig: C4/fx_dataflow.pdf} shows an example there antenna four channel FX correlator. 
-The left half of the figure has three F-engines, for each of the three antennas.
-The right half has four X-engines, one for each channel.
-And in the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the FFT blocks are connected in an all-to-all configuration.
 
 \section{Mapping}  \label{High Level Toolflow:Mapping}
 %TODO: Add tool name
@@ -467,121 +357,6 @@ Separating the implementation of the instrument from the hardware specification 
 As resources improve, the instrument can improve along with them, providing the opportunity to do new science that wasn't possible on older technology.
 We have shown this is possible by implementing the Packetized Astronomy Signal Processor or PASP using the CASPER toolflow. \cite{Filiba:2011wl}
 
-\subsection{Packetized Astronomy Signal Processor}
-
-%TODO
-%\cite{McMahon:2008tk}
-
-Many radio astronomy instruments channelize the antenna data as soon as it is digitized. 
-PASP implements a parameterized, FPGA-based channelizer, shown in Figure \ref{fig: pasp_fpga_arch}.
-The FPGA interfaces to an ADC board that simultaneously digitizes 2 signals. 
-The samples are sent into a polyphase filter bank (PFB), consisting of an FIR filter and an FFT, which breaks up the entire bandwidth sampled by the ADC into smaller subbands.
-After dividing up the subbands, each band is rescaled. 
-This step allows us to compensate for the shape of the analog filter feeding data into the ADC. 
-After rescaling, the FPGA forms packets where each packet contains data from a single subband.
-The packets are sent out over CX4 ports to a 10 gigabit Ethernet switch.
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/pasp_fpga_arch.png}
-  \caption{PASP Dataflow}
-  \label{fig: pasp_fpga_arch}
-\end{figure}
-
-
-
-PASP is designed for flexibility. 
-Building on the CASPER goal to automate the design of commonly used signal processing elements such as FFTs and digital downconverters, PASP automatically designs an entire FPGA instrument using only a few parameters.
-The user can input the desired number of subbands, CPU/GPU cluster size, and packet size and a new design is automatically generated in Simulink.  
-Figure \ref{fig: C4/pasp_high_level_interface.png}
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/pasp_high_level_interface.png}
-  \caption{PASP Interface}
-  \label{fig: C4/pasp_high_level_interface.png}
-\end{figure}
-
-The interface to PASP is a simple menu that consists of four parameters.
-From the menu, \emph{Number of IPs} determines the number of IP addresses the instrument will need to send data to, defined by the size of the cluster it must communicate with.
-\emph{Samples per Packet} defines the packet size, adjustable to ensure that the packet rate is low enough for the server to handle.
-And \emph{Number of Channels} defines the FFT length.
-The last parameter \emph{Reorder in QDR}, allows the packet buffering to be handled by off chip QDR memory.
-This is only a parameter and not the default because it is only supported by certain boards.
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/pasp_low_level.png}
-  \caption{PASP Low Level Implementation}
-  \label{fig: C4/pasp_low_level.png}
-\end{figure}
-
-Changing any parameter causes the entire low-level design to be redrawn. 
-Figure \ref{fig: C4/pasp_low_level.png} shows the low level implementation of the instrument.
-Although this diagram is complex. it is generated automatically by PASP and the user never needs to look at this design to implement a working instrument.
-
-PASP has a wide variety of potential applications due to the flexibility of the server software. 
-In the next sections, we describe a few specific applications than can make use of this package.
-
-\subsubsection{Pulsar Processing}
-This design also has applications in pulsar science. 
-The fast channelization on the FPGA with no data reduction makes it an ideal pulsar spectrometer, since no information is lost before sending the data to the servers.
-GPUs provide a good platform for pulsar processing algorithms such as coherent dedispersion \cite{Ransom:2009wz}, which can easily be used as the processing function for the server software distributed in our package. 
-Similar to SETI instruments, pulsar instruments designed using this package can also keep up with improvements in technology with a simple recompile.
-
-%TODO: add info about deployed instruments
-This design has been used in pulsar processors that have been deployed at the Parkes Observatory, Nançay Decimetric Radio Telescope, and Effelsberg Radio Telescope.
-
-\subsubsection{Heterogeneous Radio SETI Spectrometer}
-
-In the search for extraterrestrial intelligence (SETI), the ability to keep up with changes in technology allows searching instrumentation to stay on the leading edge of sensitivity. 
-SETI aims to process the maximum bandwidth possible with very high resolution spectroscopy.
-This instrument allows SETI projects to easily keep up with improvements on the telescope and increasing computational power.
-An increase in detector bandwidth, improving the breadth of the search, can be processed simply recompiling the FPGA design and distributing the extra subbands to new servers. 
-As computation improves, the instrument can be reconfigured to send more bandwidth to each computer, reducing the required cluster size, or improve the resolution of the instrument by doing a larger FFT on the server.
-
-\begin{figure}[h!]
-  \centering
-    \includegraphics[width=\textwidth]{Images/C4/serendip_vv_to_hrss.png}
-  \caption{TODO}
-  \label{fig: C4/serendip_vv_to_hrss.png}
-\end{figure}
-
-The design of HRSS is based on the Serendip V.v design presented in Section \ref{Related Work:Radio Astronomy}.
-Figure \ref{fig: C4/serendip_vv_to_hrss.png} shows how in HRSS the IBOB and BEE2 are replaced with a single chip FPGA board such as an IBOB or ROACH, and the fine channelization, thresholding and post processing are done on a GPU.
-
-Unlike Serendip V.v, HRSS is a software package to automatically generate spectrometers with minimal user input.
-We have automated the design of the spectrometer, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
-This spectrometer combines FPGAs running PASP with GPUs, doing coarse channelization on the FPGA and sending each subband to the GPUs for further processing.
-The server software is designed for flexibility, allowing astronomers to easily modify the processing algorithm run on the GPU and customize the instrument to fit their science goals.
-
-The software package is comprised of two parts, the PASP design that runs on the FPGA and the server software.
-Like PASP, the server software is parameterized, supporting a variety of spectral resolutions and integration times.
-This software receives data over an Ethernet port and transfers it from the CPU to the GPU. 
-The GPU runs an FFT and then sends the data back to the CPU to be recorded.
-The GPU software, like the GPU benchmark, uses the CUFFT library to run FFT. 
-This allows for rapid deployment of a working spectrometer that is configured to take full advantage of available computing resources.
-%Our general purpose approach allows for the rapid development of new instruments.
-
-Figure \ref{fig:spec_highlevel} shows a high level view of a spectrometer that could be designed with this package. 
-In this example, a ROACH board divides the input band into 64 subbands and sends them out to a 16 server cluster.
-An ADC is used to digitize data from the telescope and connects to the ROACH board via Z-DOK connectors. 
-The digitized data is split into 64 subbands and sent through a 10 gigabit Ethernet switch.
-Each server in the cluster receives and processes 4 subbands.
-
-\begin{figure}[ht!]
-  \centering
-     \includegraphics[width=1\textwidth]{Images/C4/spec_highlevel.png}
-  \caption{Example high level spectrometer architecture}
-  \label{fig:spec_highlevel}
-\end{figure}
-
-The server software was designed so other applications could easily be implemented on the GPU without altering or rewriting the receive code that interprets the packet headers and transfers data to the GPU.
-Once the data is on the GPU, the software calls a process function and passes it a pointer to the GPU data.
-An initialization function is called before the data processing begins to do any setup needed by the processing function, and an corresponding destroy function cleans up once the processing is complete.
-In the spectroscopy software included in the package, the initialization function creates the FFT plan, the processing function calls CUFFT, and the destroy function deletes the FFT plan.
-Modifying the application run on the GPU simply requires a redefinition of these three functions.
-Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.
 
 
 

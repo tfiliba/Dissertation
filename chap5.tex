@@ -104,12 +104,12 @@ The total number of blocks of a certain type should be equal to the number of bl
 
 \subsection{Network Resources}
 
-\begin{wrapfigure}{R}{0.35\textwidth}
+\begin{figure}[ht!]
   \centering
      \includegraphics[width=0.3\textwidth]{Images/C5/cluster_instruments.pdf}
-  \caption{TODO}
+  \caption{Full-Crossbar Interconnect}
   \label{fig:C5/cluster_instruments.pdf}
-\end{wrapfigure}
+\end{figure}
 
 The ILP does not design the network topology. 
 While it would be possible to design the network using an ILP, %TODO: add ref
@@ -197,12 +197,12 @@ As described in Section \ref{Related Work:Radio Astronomy}, many architectures h
 
 \section{Performance Modeling}                    
 
-Discussion of benchmarks (show size vs resources) FFT, PFB,
+Discussion of benchmarks (show size vs resources) FFT, FIR,
 
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=0.49\textwidth]{Images/C6/pfb_bench.png}
-  \caption{TODO}
+  \caption{PFB FIR benchmark data on the Virtex V SX95T}
   \label{fig: C6/pfb_bench.png}
 \end{figure}
 
@@ -210,7 +210,7 @@ Discussion of benchmarks (show size vs resources) FFT, PFB,
   \centering
     \includegraphics[width=0.49\textwidth]{Images/C6/fft_bench.png}
     \includegraphics[width=0.49\textwidth]{Images/C6/fft_gpu_bench.png}
-  \caption{TODO}
+  \caption{FFT benchmark data on the Virtex V SX95T and GTX 580}
   \label{fig: C6/fft_bench.png}
 \end{figure}
 
@@ -220,7 +220,7 @@ refer to xgpu paper
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C6/gpuxperformance.pdf}
-  \caption{TODO}
+  \caption{xGPU benchmarks on}%TODO: check board for this
   \label{fig: C6/gpuxperformance.pdf}
 \end{figure}
 
