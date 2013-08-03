@@ -6,7 +6,7 @@
 %show the ability to design reconfigurable instruments by adding a layer of abstraction to the CASPER+xgpu work
 
 
-
+%TODO: explicitly discuss implementation, code, package, where to get it, etc
 
 \chapter{High Level Toolflow}
 
@@ -23,7 +23,7 @@ Rather than designing a completely different instrument for every different spec
 %Need to understand how to choose the right platform(s) for each implementation
 %With constant changes in technology and algorithm implementations an automatic approach is required
 
-In this chapter, we introduce a toolflow called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
+In this chapter, I introduce a toolflow I developed called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
 
 %Describe what the tool flow should to, for whom, etc
 \section{ORCAS Goals} \label{High Level Toolflow:ORCAS Goals}
@@ -109,7 +109,7 @@ An instrument designer who finds that he or she needs additional control beyond 
 %TODO: exploration
 %TODO: discuss this more thoroughly
 \subsection{Design space exploration}
-In addition to defining a single instrument, an astronomer can use this tool to explore different implementations and asses the tradeoff in cost vs additional processing. 
+In addition to defining a single instrument, an astronomer can use this tool to explore different implementations and assess the tradeoff in cost vs additional processing. 
 Rather than specifying single values for the instrument parameters, the astronomer can choose a range to search through and have it generate a design, and an associated cost, for each value. 
 This proves valuable when the specification of an instrument isn't fully defined.
 In the case of a high resolution spectrometer, the astronomer could adjust the number of coarse and fine channels, keeping the spectral resolution the same, to find the cheapest design that achieves that resolution.
@@ -285,7 +285,7 @@ Using the performance model, the tool is able to test a number of hardware mappi
 
 The optimal mapping is determined using an Integer Linear Program or ILP. 
 The resources, such as memory, logic and CPU time, and bandwidth constraints are translated directly into ILP constraints.
-Theseconstraints are used to determine a valid mapping, for example total bandwidth mapped to a link must be less than total link bandwidth.
+These constraints are used to determine a valid mapping, for example total bandwidth mapped to a link must be less than total link bandwidth.
 The variables represent the design decisions, determining where each block should be implemented.
 And finally, the cost function simply totals up the costs associated with each piece of hardware used.
 

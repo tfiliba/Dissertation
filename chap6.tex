@@ -1,7 +1,7 @@
 \chapter{Analysis} \label{Analysis}
 
 %TODO: edit this awkwardness
-This tool will be analyzed by looking at three case studies. 
+The ORCAS tool is be analyzed by looking at three case studies. 
 We created three instrument types: Spectrometer, High Resolution Spectrometer, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
 Each instrument type has a set of parameters relevant to that instrument. 
 Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
@@ -41,6 +41,7 @@ Include appropriate FFT or PFB benchmarks
 
 \subsubsection{Spectrometer}
 
+%TODO: add detection step
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/spectrometer_dataflow.pdf}
@@ -78,6 +79,7 @@ Both can be described in MHz per channel.
 
 \subsubsection{High Resolution Spectrometer Dataflow}
 
+%TODO: add detection step
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/hires_spectrometer_dataflow.pdf}
@@ -132,9 +134,11 @@ The FX dataflow model is based on the algorithm used by the CASPER correlator de
 \end{figure}
 
 An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. 
+%TODO: explain or reference PFB (should be explained in C2 or 3?)
 It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank. 
 The number of F-Engines in the correlator dataflow will vary with the number of antennas.
 
+%TODO: add detection step
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.48\textwidth]{Images/C4/fx_x_engine.pdf}
@@ -147,6 +151,7 @@ Each X-Engine takes a single channel of data from every antenna in the array, cr
 Figure \ref{fig: C4/fx_x_engine.pdf} shows the pipeline for a single X-Engine. 
 Since each X-Engine only operates on a single channel, the total number of X-Engines in the correlator must be the same as the number of channels in the FFT.
 
+%TODO: add detection step
 \begin{figure}[h!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}

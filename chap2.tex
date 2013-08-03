@@ -19,14 +19,14 @@
 
 
 Radio astronomy simply refers to the type of science that can be done by observing astronomical objects at radio wavelengths, rather than a specific scientific goal. 
-There is a huge variety of different experiments, such as searching for gravity waves, traces of the first stars (TODO: ref PAPER/LEDA), or aliens (TODO: ref SETI).
+There is a huge variety of different experiments, such as studying the formation and structure of galaxies stars and black holes and searching for gravity waves, traces of the first stars (TODO: ref PAPER/LEDA), or aliens (TODO: ref SETI).
 But, despite this variety, the small number of algorithms detailed in this chapter serve as the first step in processing the data for many such projects.
 
 
 
 Radio telescopes produce very high amounts of data (TODO: add estimates, how much data?). 
 The reason for this high influx of data is twofold. 
-First, to enable new science, new radio antenna observe increasingly higher bandwidths of data. 
+First, to enable new science, new radio antenna observe increasingly higher bandwidths. 
 %TODO edit this
 Second, to sate the need for larger collecting area, rather than designing a single large dish, many new telescopes are being designed as antenna arrays, where the data from multiple antennas is combined to act as a single large dish.
 While it may be cheaper and easier to get a larger collecting area using small dishes rather than a single large dish, this adds additional complexity processing the data coming off the telescope.
@@ -40,7 +40,7 @@ Once the data is partially processed, and reduced to a manageable bandwidth, it 
 
 %\section{Real Time Algorithms}
 %TODO add complexity analysis
-There is a small number of real time algorithms commonly used to reduce the data. 
+There are a small number of real time algorithms commonly used to reduce the data. 
 In this work, we specifically focus on spectroscopy, pulsar processing, beamforming and correlation. 
 Spectroscopy and pulsar processing are both spectral methods of analyzing data from a single beam.
 They both can be used on antenna arrays but would either need to treat the array as separate dishes rather than one large dish, or the data from the dishes would need to be combined into a single beam, which can be done using the third algorithm on the list, beamforming. 
@@ -50,7 +50,7 @@ Correlation doesn't aim to form a single beam, but instead is the first step tow
 
 
 
-
+%TODO: Discuss full stokes/dual pol spectrometer
 \section{Spectroscopy}
 \label{Real Time Radio Astronomy Algorithms:Spectroscopy}
 A spectrometer is simply an instrument that produces an integrated, or averaged, frequency domain spectrum from a time domain signal. 
@@ -66,7 +66,8 @@ To cope with this, the channelization is done in two steps as shown in figure (T
 In the first step, the signal is divided into coarse channels using a filter bank. 
 At this point the channels are much wider than intended and can't be accumulated yet. 
 After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. 
-This step breaks up the wide channel into a number of smaller channels . At this point the data can be accumulated, since it has the desired resolution.
+This step breaks up the wide channel into a number of smaller channels. 
+At this point the data can be accumulated, since it has the desired resolution.
 
 \subsection{Applications}
 
@@ -89,7 +90,7 @@ Since it would be infeasible to channelize a 200MHz into 128 million channels us
 \label{Real Time Radio Astronomy Algorithms:Pulsar Processing}
 A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
 A pulsar is a rotating neutron star that emits an electromagnetic beam. 
-When the beam sweeps past Earth, due to the rotation of the star, it is observed as a wideband pulse. 
+When the beam sweeps past Earth, due to the rotation of the star, it is observed as a pulse of wideband noise. 
 As the pulse travels through the interstellar medium (the matter filling interstellar space), the pulsar gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
 
 %TODO: event horizon telescope
@@ -125,12 +126,12 @@ At this point, the data has been significantly reduced and can be recorded.
 %
 %TODO: add science info
 \subsection{Applications}
-Some pulsars serve as a very accurate astronomical time keeper.
+Some pulsars serve as very accurate astronomical time keepers.
 There are millisecond pulsars with extremely stable periods, allowing any perturbations in the observed pulse period to be attributed to some external effect.
 This makes pulsars extremely useful for conducting relativity experiments. 
 One such example is the North American Nanohertz Observatory for Gravitational Waves, or NANOGrav, Project, %TODO: add citation The international pulsar timing array project: using
 which uses pulsars in an attempt to make the first detection of gravitational waves \cite{2009astro2010S..64D}. 
-The project will try to detect gravitational waves by observing an array of pulsars, measuring the effect of the waves passing between Earth and the pulsars as changes in observed pulse periods.
+The project will try to detect gravitational waves by observing an array of pulsars, measuring the effect of the waves passing between Earth and the pulsars as changes in observed pulse arrival times.
 
 %TODO: diamond planet
 \begin{wrapfigure}{L}{0.50\textwidth}
@@ -155,7 +156,8 @@ These delays can be changed to point the beam at a different source or to track 
 
 
 \subsection{BF Beamforming}
-Since the signal is discrete, and the amount of delay might not be an integer multiple of the sample period $s$, the delay $d$ is applied to the signal, $f[n]$, in 2 steps. 
+%TODO: revisit this sentence
+Since the digitized signal from a radio telescopes receiver is discrete, and the amount of delay might not be an integer multiple of the sample period $s$, the delay $d$ is applied to the signal, $f[n]$, in 2 steps. 
 The delay in clock cycles is represented as $d/s$ and broken up into it's integer and fractional parts. 
 First, the integer part is applied as a coarse delay, $n_f = \lfloor d/s \rfloor$. 
 This can simply be implemented by buffering the signal.
@@ -172,9 +174,9 @@ We describe this as BF beamforming because the delay operation (B), happens befo
 %TODO add info on scaling here
 
 \subsection{FB Beamforming}
-In the case where many beams are required, each beam needs a different FIR filter for every antenna, and a separate FT. 
-This is called FB beamforming because the FT operations (F) occur before the delay (B). 
-Using linearity of the fourier transform and the convolution theorem, the computation can be rearranged as follows:
+In the case where many beams are required, each beam needs a different FIR filter for every antenna, and a separate Fourier transform. 
+This is called FB beamforming because the fourier transform operations (F) occur before the delay (B). 
+Using linearity of the Fourier transform and the convolution theorem, the computation can be rearranged as follows:
 
 %TODO fix this
 %\begin{align*}
