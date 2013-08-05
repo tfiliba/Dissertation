@@ -1,0 +1,8 @@
+Optimal
+cost = 5500.0
+is_used_'GPU'_0 = 1.0
+is_used_'IBOB'_0 = 1.0
+num'ADC'_on_'IBOB'_0 = 1.0
+num'FFT'_on_'GPU'_0 = 1.0
+num'PFB'_on_'GPU'_0 = 1.0
+num'VAcc'_on_'GPU'_0 = 1.0

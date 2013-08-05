@@ -1,0 +1,7 @@
+Optimal
+cost = 6700.0
+is_used_'ROACH'_0 = 1.0
+num'ADC'_on_'ROACH'_0 = 1.0
+num'FFT'_on_'ROACH'_0 = 1.0
+num'PFB'_on_'ROACH'_0 = 1.0
+num'VAcc'_on_'ROACH'_0 = 1.0

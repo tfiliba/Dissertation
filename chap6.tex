@@ -1,74 +1,94 @@
-\chapter{Analysis} \label{Analysis}
+\chapter{Analysis} \label{chap:Analysis}
 
 %TODO: edit this awkwardness
-The ORCAS tool is be analyzed by looking at three case studies. 
+The ORCAS tool is analyzed by looking at three case studies. 
 We created three instrument types: Spectrometer, High Resolution Spectrometer, and FX Correlator, as defined in Sections \ref{Real Time Radio Astronomy Algorithms:Spectroscopy}, \ref{Real Time Radio Astronomy Algorithms:Pulsar Processing}, and \ref{Real Time Radio Astronomy Algorithms:Correlation}. 
-Each instrument type has a set of parameters relevant to that instrument. 
-Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
-This translation is described further in the next section.
+Each case study was chosen to illustrate a different aspect of the toolflow.
+The spectrometer gives an example of the end to end toolflow using a simple dataflow, the high resolution spectrometer allows us to explore tradeoffs in the design space and the FX correlator shows how the tool behaves when designing very large instruments.
 
+
+%Simple spectrometer placement
+
+%TODO: Include appropriate FFT or PFB benchmarks
 
 %Summary: describe how we get real numbers to put into previous part
 %Goal: define and obtain real numbers from the previous part
 %\section{Benchmarks}
 
-
 %\subsection{Cost}
-
-
-
-
 
 %Summary: case studies describing partitioning of realistic-scale instruments
 %Goal: show successful application of tool to design of realistic instruments
 %provide analysis comparing this to hand-designed instruments 
 \section{Spectrometer Case Study}
+The spectrometer is a simple instrument, making it easy to follow the end to end toolflow.
+We design a 50 MHz and an 800 MHz spectrometer that breaks the band into 1024 channels.
+%TODO: what is a reasonable integration time here
 
-\subsubsection{Spectrometer Definition}
+
+\subsection{Spectrometer Definition}
 Defining a simple spectrometer requires very few parameters. 
-First, as with most instruments, the astronomer must specify the sky bandwidth the instrument must process, defined in MHz.
+First, as with most instruments, the astronomer must specify the sky bandwidth the instrument must process, defined in MHz and the number of bits in each ADC sample.
 Then, the desired spectral resolution is defined in MHz per channel, or analogously, the number of channels that should be used to break up the bandwidth.
 Finally, the integration time needs to be defined.
 
 One optional parameter, number of antennas, can also be defined. 
 This describes the number of independent spectrometers that need to be created.
 While this parameter does not affect the end to end processing for each antenna, knowing how many spectrometers are needed allows for more efficient use of the hardware.
-The impact on the design is described further in Sections \ref{High Level Toolflow:Dataflow Model} and \ref{High Level Toolflow:Mapping} and the cost efficiency afforded by this parameter is explored in Chapter \ref{Analysis}
 
-Simple spectrometer placement
+The 800 MHz spectrometer is created simply by defining the parameters and instantiating a Spectrometer object as follows:
 
-Include appropriate FFT or PFB benchmarks
+\lstinputlisting[language=Python,
+    %caption=My Class,
+    label={spec_defn.py},
+    breaklines=true,
+  ]{code/C6/spec_defn.py}
 
-\subsubsection{Spectrometer}
+\subsection{Spectrometer Dataflow}
 
 %TODO: add detection step
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/spectrometer_dataflow.pdf}
-  \caption[General Spectrometer Dataflow Model]{General Spectrometer Dataflow Model.
-  \textit{
-  A general dataflow model for a single antenna spectrometer. 
-  This model can be applied to any spectrometer, as the spectrometer parameters do not affect how many computational blocks are required or the interconnect layout. 
-  %TODO: This is questionable, ask dan
-  The data is fed in by an ADC and filtered using an FIR to improve the response of the FFT.
-  The filtered data is then channelized by an FFT, accumulated in the block labeled $\Sigma$ and recorded to disk.
-  }}
+  \caption{General Spectrometer Dataflow Model}
   \label{fig: C4/spectrometer_dataflow.pdf}
 \end{figure}
 
 The spectrometer instrument definition generates a very simple dataflow. 
-Figure \ref{fig: C4/spectrometer_dataflow.pdf} shows the general dataflow model for a spectrometer. 
+Figure \ref{fig: C4/spectrometer_dataflow.pdf} shows the general dataflow model for a single antenna spectrometer. 
+This model can be applied to any spectrometer, as the spectrometer parameters do not affect how many computational blocks are required or the interconnect layout. 
 The ADC feeds data into a FIR filter. 
 Then the filtered signal is transformed into channels in the FFT and those channels are accumulated and saved to disk. Regardless of the parameters the astronomer chooses, the dataflow will be the same. 
 
 The parameters for each block come directly from the instrument definition. 
 The FIR parameters come from the number of FIR taps and window shape, the FFT is simply defined by the FFT length parameter and the accumulator also is parameterized by the FFT length as well as the integration time. 
 
-\subsection{Cost}
-\subsection{Power}
+\lstinputlisting[language=Python,
+    %caption=My Class,
+    label={spec_dflow.py},
+    breaklines=true,
+  ]{code/C6/spec_dflow.py}
+
+\subsection{Spectrometer Mapping}
+
+\lstinputlisting[
+    %caption=My Class,
+    label={spec_dflow.py},
+    breaklines=true,
+  ]{code/C6/spec_800_result.txt}
+  
+
+\lstinputlisting[
+    %caption=My Class,
+    label={spec_dflow.py},
+    breaklines=true,
+  ]{code/C6/spec_050_result.txt}
+  
+%\subsection{Cost}
+%\subsection{Power}
 
 \section{High Resolution Spectrometer Case Study}
-\subsubsection{High Resolution Spectrometer Definition}
+\subsection{High Resolution Spectrometer Definition}
 The main difference between a spectrometer and a high resolution spectrometer is the need for two stages of channelization rather than just one. 
 The sky bandwidth, integration time, and number of antennas are defined in the same way as the previous spectrometer type. 
 
@@ -77,7 +97,7 @@ The coarse resolution defines how many channels the whole sky bandwidth should b
 The fine resolution defines how many channels each coarse channel is broken into.
 Both can be described in MHz per channel.
 
-\subsubsection{High Resolution Spectrometer Dataflow}
+\subsection{High Resolution Spectrometer Dataflow}
 
 %TODO: add detection step
 \begin{figure}[ht!]
@@ -119,10 +139,10 @@ Same benchmarks as before, just discuss large bw, multi stage fft
 \subsection{Algorithmic Exploration}
 
 \section{FX Correlator Case Study}
-\subsubsection{FX Correlator Definition}
+\subsection{FX Correlator Definition}
 An FX Correlator is also defined by the amount of bandwidth it processes, number of channels, and integration time, but now the number of antennas is a necessary parameter.
 
-\subsubsection{FX Correlator Dataflow}
+\subsection{FX Correlator Dataflow}
 
 The FX dataflow model is based on the algorithm used by the CASPER correlator described in Section \ref{Related Work:Radio Astronomy}. The processing model is described by replicating 2 basic pipelines, called an F-Engine and an X-Engine. The number of times each pipeline needs to be replicated depends on the number of antennas and number of channels this correlator requires.
 

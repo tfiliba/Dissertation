@@ -9,21 +9,26 @@
 %TODO: explicitly discuss implementation, code, package, where to get it, etc
 
 \chapter{High Level Toolflow}
+\label{chap:High Level Toolflow}
+
+
+Instrument design is often done by building the instrument from scratch.
+This work extends the CASPER philosophy, demonstrating that entire heterogeneous instruments can be designed with minimal user input.
+Rather than designing a completely different instrument for every different specification, this software package is parameterized so a changes can  %TODO: change this - only requires a recompile.
 
 %TODO
+In this chapter, I introduce a toolflow I developed called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
+
 Introduction - resummarize problem solved by this work
 overview of the steps in the process
 
-%TODO: reword
-Instrument design is often done by building the instrument from scratch.
-This work extends the CASPER philosophy, demonstrating that entire heterogeneous instruments can be designed with minimal user input.
-Rather than designing a completely different instrument for every different specification, this software package is parameterized so a change in specification %TODO: change this - only requires a recompile.
+
 
 %A number of options are available but which is best?
 %Need to understand how to choose the right platform(s) for each implementation
 %With constant changes in technology and algorithm implementations an automatic approach is required
 
-In this chapter, I introduce a toolflow I developed called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
+
 
 %Describe what the tool flow should to, for whom, etc
 \section{ORCAS Goals} \label{High Level Toolflow:ORCAS Goals}
@@ -92,9 +97,9 @@ The rest of the chapter will describe each stage of the toolflow in more detail 
 
 \begin{figure}[ht!]
   \centering
-    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s1.pdf}
+    \includegraphics[width=0.5\textwidth]{Images/C4/instrument_description.pdf}
   \caption{ORCAS Toolflow Instrument Definition}
-  \label{fig: C4/toolflow_horizontal_s1.pdf}
+  \label{fig: C4/instrument_description.pdf}
 \end{figure}
 
 In the first step in the ORCAS toolflow, the user must describe the instrument using high level parameters. 
@@ -102,9 +107,10 @@ These parameters should all be relevant to the astronomer and abstract away any 
 While it would be easy to expose many of the low level parameters at this top layer, this would force the domain expert to become a computer expert as well, exactly the scenario this tool is aiming to avoid. 
 
 
-The instrument description as represented in Figure \ref{fig: C4/toolflow_horizontal_s1.pdf} fits on a small sticky note. 
+The instrument description as represented in Figure \ref{fig: C4/instrument_description.pdf} fits on a small sticky note. 
 The idea that the parameters should be so few that they fit on a single sticky note was the driving force behind the instrument definition. 
 An instrument designer who finds that he or she needs additional control beyond what is provided by the instrument description always has the flexibility to work with the dataflow model directly, where many low level parameters are exposed. 
+Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
 
 %TODO: exploration
 %TODO: discuss this more thoroughly
@@ -147,9 +153,9 @@ Even non-numerical parameters can be varied, such as the FIR window type, to see
 %TODO: Add tool name
 \begin{figure}[ht!]
   \centering
-    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s2.pdf}
+    \includegraphics[width=0.75\textwidth]{Images/C4/dataflow_model.pdf}
   \caption{The ORCAS Toolflow: Dataflow Model}
-  \label{fig: C4/toolflow_horizontal_s2.pdf}
+  \label{fig: C4/dataflow_model.pdf}
 \end{figure}
 
 The second step of the toolflow translates the instrument definition into a dataflow model. 
@@ -159,7 +165,7 @@ The second step of the toolflow translates the instrument definition into a data
 %Generates a series of blocks configured to talk to each other
 
 \subsection{Computational Blocks}
-
+Building blocks
 %Collection of blocks necessary to solve most problems
 %Can be parameterized
 %Include a method to assess performance on each (supported) platform
@@ -199,7 +205,7 @@ Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
 In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
 
 An `all-to-all' connection occurs when every $A$ block must send some data to ever $B$ block. 
-Figure \ref{fig:C4/all-to-all.pdf} shows what an all-to-all connection between three $A$ blocks and three $B$ blocks will look like. 
+Figure \ref{fig:C4/one-to-one.pdf} shows what an all-to-all connection between three $A$ blocks and three $B$ blocks will look like. 
 In this case, every $A$ block must send some data to every $B$ block. 
 For example, the type of connection between the per-antenna FFTs and the per-channel X-engines in an FX correlator would be `all-to-all'. 
 Each X-engine needs a small amount of data from every F-engine to compute the cross-correlations from a single channel. 
@@ -260,16 +266,23 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 
 \section{Mapping}  \label{High Level Toolflow:Mapping}
 %TODO: Add tool name
-\begin{figure}[h!]
+%\begin{figure}[h!]
+%  \centering
+%    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s3.pdf}
+%  \caption{ORCAS Toolflow: Mapping}
+%  \label{fig: C4/toolflow_horizontal_s3.pdf}
+%\end{figure}
+
+\begin{figure}[ht!]
   \centering
-    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s3.pdf}
-  \caption{ORCAS Toolflow: Mapping}
-  \label{fig: C4/toolflow_horizontal_s3.pdf}
+    \includegraphics[width=0.75\textwidth]{Images/C4/mapped_dataflow.pdf}
+  \caption{The ORCAS Toolflow: Mapped Dataflow Representation}
+  \label{fig: C4/mapped_dataflow.pdf}
 \end{figure}
 
 Once the dataflow and the computational blocks are defined, ORCAS must determine how to place each computational block into hardware. 
 In the mapping stage, ORCAS determines what type of hardware should be used for each block, while minimizing the total cost of the hardware (in dollars, watts, or another used-defined metric).
-Figure \ref{fig: C4/toolflow_horizontal_s3.pdf} highlights the mapping phase of the toolflow. 
+The icon in Figure \ref{fig: C4/mapped_dataflow.pdf} represents the mapping phase of the toolflow. 
 
 %Not certain this belongs here, possibly should go with the models?
 %Before mapping, need to determine which blocks can be mapped to which platforms
@@ -319,7 +332,7 @@ Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the perfo
 
 \subsection{Mapped Dataflow Representation}
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped.pdf}
     \includegraphics[width=\textwidth]{Images/C4/fx_mapped_alt.pdf}
@@ -343,12 +356,12 @@ The last step in the process is the implementation the instrument.
 This step is optional, only being used when the mapped dataflow is being used to design an instrument rather than assess cost. 
 Since the toolflow relies on established libraries, implementation only consists of stitching together existing routines.
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s4.pdf}
-  \caption{The ORCAS Toolflow: Code Generation}
-  \label{fig: C4/toolflow_horizontal_s4.pdf}
-\end{figure}
+%\begin{figure}[ht!]
+%  \centering
+%    \includegraphics[width=1\textwidth]{Images/C4/toolflow_horizontal_s4.pdf}
+%  \caption{The ORCAS Toolflow: Code Generation}
+%  \label{fig: C4/toolflow_horizontal_s4.pdf}
+%\end{figure}
 
 
 In addition to this, common design patterns can be stitched together into parameterized implementations. 

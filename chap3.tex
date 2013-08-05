@@ -1,4 +1,4 @@
-\chapter{Related Work} \label{Related Work:Radio Astronomy}
+\chapter{Related Work} \label{chap:Related Work}
 %Summary: 2 major sections, 1 about past radio instrumentation, 1 about automatic mapping\\
 %Goal: Explain why we can mesh them together successfully in this case\\
 %State: Can be written now \\
@@ -42,7 +42,7 @@ The DiFX correlator was originally developed to do VLBI (Very Long Baseline inte
 %\end{figure}
 
 Unfortunately, the flexibility of the software implementation comes at a high cost.
-Figure \ref{fig: C3/difx_scaling.pdf} shows the resources required
+%Figure \ref{fig: C3/difx_scaling.pdf} shows the resources required
 Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
 
 \subsection{LOFAR}
@@ -470,6 +470,16 @@ In the spectroscopy software included in the package, the initialization functio
 Modifying the application run on the GPU simply requires a redefinition of these three functions.
 Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.
 
+%The high level parameters in this package allow us to use FPGAs while abstracting away implementation details specific to the FPGA.
+%To give the user control over their data processing algorithm, an application specific GPU program can be written and easily interfaced with the existing receive software in the package.
+
+%The instruments generated with this package use a heterogeneous design, allowing us to benefit from the strengths of FPGAs and GPUs. 
+%The FPGA board is able to sample and process very high bandwidths that a single CPU or GPU would not be able to manage; 
+%once the FPGA has split up the band the GPU provides a platform that is easier than an FPGA to program but still provides high compute power. 
+%A design called the Packetized Astronomy Signal Processor, or PASP, is run on the FPGA.
+%PASP splits up the large band into smaller bands that can be processed using off the shelf servers.
+%The subbands are put into packets on the FPGA and sent over a 10 gigabit Ethernet switch to a cluster of servers.
+%The servers receive the data from the switch and process it using spectroscopy software provided in the software package or special purpose application software written by the user and linked into the provided packet processing infrastructure.
 
 \section{Tuning} \label{Related Work:Tuning}
 \subsection{Metropolis}
