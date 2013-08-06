@@ -202,7 +202,8 @@ Discussion of benchmarks (show size vs resources) FFT, FIR,
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=0.49\textwidth]{Images/C6/pfb_bench.png}
-  \caption{PFB FIR benchmark data on the Virtex V SX95T}
+     \includegraphics[width=0.49\textwidth]{Images/C6/pfb_gpu_bench.png}
+  \caption{PFB FIR benchmark data on the Virtex V SX95T and GTX 580}
   \label{fig: C6/pfb_bench.png}
 \end{figure}
 
@@ -296,6 +297,9 @@ GTX 690& \$1,000 & & & \\
 \section{Optimization}
 While Integer Linear Programming has a number of desirable properties, the lack of an efficient algorithm to solve it  constitutes a significant obstacle in designing an ILP with reasonable performance.
 This section describes how the design of this ILP and the introduction of a few extra constraints serve to improve the performance and scalability of the program defined in this chapter. 
+
+\subsection{ILP Solver Selection}
+
 
 \subsection{Improving Scaling}
 %physical cluster size ??
@@ -410,13 +414,13 @@ By modifying the ILP, the performance is greatly improved without sacrificing op
 %            prob+=lex_order[currentplatform,currentboard-1]>=lex_order[currentplatform,currentboard]
 %           
 
-\section{Mapped Dataflow}
+%\section{Mapped Dataflow}
 
 
 
 
 
-\section{Performance}
+%\section{Performance}
 %TODO: this will have to be written after ch 6 is complete, to make sure we are benchmarking the correct thing. in the meantime we'll write in introduction 
 
 %TODO: Dan - discuss what worked and what didn't

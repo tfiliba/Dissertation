@@ -215,38 +215,6 @@
   \field{year}{2013}
 \endentry
 
-\entry{Cross:2009ta}{report}{}
-  \name{author}{4}{}{%
-    {{}%
-     {Cross}{C.}%
-     {S}{S}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Crida}{C.}%
-     {R}{R}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Bennett}{B.}%
-     {T}{T}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Welz}{W.}%
-     {M}{M}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{CS+1}
-  \strng{fullhash}{CSCRBTWM1}
-  \field{sortinit}{C}
-  \field{title}{{Guidelines for Communication with Devices}}
-  \field{type}{techreport}
-  \field{month}{05}
-  \field{year}{2009}
-\endentry
-
 \entry{Davare:2007ue}{thesis}{}
   \name{author}{1}{}{%
     {{}%
@@ -1063,6 +1031,34 @@
   \field{journaltitle}{Publ Astron Soc Pac}
   \field{month}{09}
   \field{year}{2008}
+\endentry
+
+\entry{Primiani:2011vz}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Primiani}{P.}%
+     {Rurik~A}{R.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Weintroub}{W.}%
+     {Jonathan}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {deWerd}{d.}%
+     {Jonathan}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{PRAWJdJ1}
+  \strng{fullhash}{PRAWJdJ1}
+  \field{sortinit}{P}
+  \field{pages}{1\bibrangedash 4}
+  \field{title}{{SMA Wideband Correlator: Memo 1 Polyphase Filter-bank
+  Utilization}}
+  \field{month}{06}
+  \field{year}{2011}
 \endentry
 
 \entry{Rakhshanfar:2011tg}{article}{}

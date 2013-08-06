@@ -14,21 +14,12 @@
 
 Instrument design is often done by building the instrument from scratch.
 This work extends the CASPER philosophy, demonstrating that entire heterogeneous instruments can be designed with minimal user input.
-Rather than designing a completely different instrument for every different specification, this software package is parameterized so a changes can  %TODO: change this - only requires a recompile.
+Rather than designing a completely different instrument for every different specification, this software package is parameterized so new designs can be generated quickly. 
 
-%TODO
 In this chapter, I introduce a toolflow I developed called ORCAS or Optimal Rearrangement of Cluster-based Astronomy Signal processing.
-
-Introduction - resummarize problem solved by this work
-overview of the steps in the process
-
-
-
-%A number of options are available but which is best?
-%Need to understand how to choose the right platform(s) for each implementation
-%With constant changes in technology and algorithm implementations an automatic approach is required
-
-
+ORCAS automatically sifts through different designs and chooses the best platforms based on the final cost of the instrument.
+This automatic approach makes it easy to keep up with constant changes in technology and algorithmic implementations.
+ORCAS is released as an open source Python library, freely available on GitHub at \url{https://github.com/tfiliba/orcas}. 
 
 %Describe what the tool flow should to, for whom, etc
 \section{ORCAS Goals} \label{High Level Toolflow:ORCAS Goals}
@@ -92,12 +83,11 @@ Finally, once each block has been mapped to a piece of hardware, the code can be
 The rest of the chapter will describe each stage of the toolflow in more detail and explain how they are designed to meet the needs of the users they are targeting.
 
 
-
 \section{Instrument Definition} \label{High Level Toolflow:Instrument Definition}
 
 \begin{figure}[ht!]
   \centering
-    \includegraphics[width=0.5\textwidth]{Images/C4/instrument_description.pdf}
+    \includegraphics[width=0.45\textwidth]{Images/C4/instrument_description.pdf}
   \caption{ORCAS Toolflow Instrument Definition}
   \label{fig: C4/instrument_description.pdf}
 \end{figure}
@@ -112,6 +102,17 @@ The idea that the parameters should be so few that they fit on a single sticky n
 An instrument designer who finds that he or she needs additional control beyond what is provided by the instrument description always has the flexibility to work with the dataflow model directly, where many low level parameters are exposed. 
 Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
 
+In software, each instrument type is represented by a Python class. 
+The instrument parameters used when an instrument object is instantiated.
+For example, to create the instrument specified on the sticky note in Figure \ref{fig: C4/instrument_description.pdf} would simply require the following function call (variables are defined for clarity):
+
+\lstinputlisting[language=Python,
+    %caption=My Class,
+    label={fxcorr_defn.py},
+    breaklines=true,
+  ]{code/C4/fxcorr_defn.py}
+
+
 %TODO: exploration
 %TODO: discuss this more thoroughly
 \subsection{Design space exploration}
@@ -121,33 +122,6 @@ This proves valuable when the specification of an instrument isn't fully defined
 In the case of a high resolution spectrometer, the astronomer could adjust the number of coarse and fine channels, keeping the spectral resolution the same, to find the cheapest design that achieves that resolution.
 For polyphase filter banks, the number of taps in the FIR can be varied to assess the increase in cost associated with a better filter response.
 Even non-numerical parameters can be varied, such as the FIR window type, to see how it will affect the eventual design.
-
-
-
-
-
-%TODO: add filter parameters, ntaps, window (?)
-
-
-
-
-%Describe instrument using parameters an astronomer can understand
-%Small number of predefined instrument types
-%Need to input
-%Instrument type (predefined patterns)
-%Total Bandwidth
-%Array size (n)
-%Etc
-%Generates a dataflow representation
-
-
-
-
-
-
-
-
-
 
 \section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}
 %TODO: Add tool name
@@ -159,31 +133,28 @@ Even non-numerical parameters can be varied, such as the FIR window type, to see
 \end{figure}
 
 The second step of the toolflow translates the instrument definition into a dataflow model. 
+The dataflow model represents the instrument as a set of high level blocks (such as FFTs and FIRs) and input and output connections
+Figure \ref{fig: C4/dataflow_model.pdf} shows an abstract example of this type of dataflow.
+
+
 %Dataflow representation of instrument
 %Define input/output connections
 %Define input/output bandwidth
 %Generates a series of blocks configured to talk to each other
 
 \subsection{Computational Blocks}
-Building blocks
-%Collection of blocks necessary to solve most problems
-%Can be parameterized
-%Include a method to assess performance on each (supported) platform
-%Performance model
-%Benchmark
-%Unit tests
-%Uniform interconnect model
-%Optimization: remove interconnect overhead for cores running on the same hardware
+The computational blocks are a set of algorithmic building blocks.
+These blocks are similar to the set of blocks provided by the CASPER library or CUFFT, allowing for parameterization, but unlike the afore mentioned libraries, these blocks do not necessarily include an implementation of the function they claim to provide.
+Instead, each block provides some method to asses the performance of that function on each supported platform.
 
-
-
-%Optimization already exists
-\cite{Govindaraju:2008vx} %replace with more recent fft alt
-\cite{Kestur:2010tn}
-
+One way to assess performance is to simply include the code, generating a model by synthesizing or running the code and getting real performance data.
+But this is not always necessary or desirable.
+Many algorithm designers provide benchmarks that can be used directly without needing to download or run the code \cite{Govindaraju:2008vx} \cite{Kestur:2010tn}.
+The predictable scaling of many DSP functions can also make it easy to create a model for resource utilization \cite{Primiani:2011vz}.
+And finally, the user can always estimate the performance of a block, a useful option when attempting to assess the cost savings of a potential optimization or explore mapping to hardware that does not exist.
 
 \subsection{Connection Types}
-%TODO: edit this a lot
+%TODO: explain what a block type is edit this a lot
 Suppose we know we have 2 types of blocks: $A$, and $B$ and blocks of type $A$ must send their data to blocks of type $B$.
 We need to definite the communication patterns between $A$ blocks and $B$ blocks.
 This could happen in 2 ways, `one-to-one' and `all-to-all'. 
@@ -259,9 +230,15 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 %Now that we have a method for describing a general dataflow, we will describe how each type of instrument definition described in the previous section is converted to a dataflow. 
 %Multiple antennas?
 
+\subsection{Software Representation}
 
+The dataflow model is created in the initialization function for the instrument.
 
-
+\lstinputlisting[language=Python,
+    %caption=My Class,
+    label={fxcorr_fft_cblock.py},
+    breaklines=true,
+  ]{code/C4/fxcorr_fft_cblock.py}
 
 
 \section{Mapping}  \label{High Level Toolflow:Mapping}
