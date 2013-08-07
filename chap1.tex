@@ -1,13 +1,9 @@
 \chapter{Introduction}
-Radio astronomers are trying to answer a very diverse set of questions. 
+Radio astronomers are trying to solve a very diverse set of problem.
+Asking questions such as ``Are we alone," and ``When were the first stars and galaxies formed?" and researching galactic structure and formation, the nature of gravitational wave background, the transient universe, black holes, and extrasolar planets.
 
-%Are we alone?
-%When were the first stars and galaxies formed?
-%Galactic structure and formation (mapping the galaxy)
-%Nature of gravitational wave background (pulsar timing)
-%Transient universe
-%Black hole imaging
-%Searching for extrasolar planets
+Naturally, this curiosity leads to the development of larger and higher bandwidth telescopes creating a flood of data.
+Keeping up with the data requires constant development of new instrumentation 
 
 
 \section{Motivation}
@@ -22,54 +18,17 @@ Radio astronomers are trying to answer a very diverse set of questions.
   \label{fig: C1/telescopes}
 \end{figure}
 
+The diversity of problems and telescopes create a number of parameters an engineer needs to worry about while designing an instrument.
+The instrument be designed based on the algorithm required to process the data, the bandwidth of the data, the number of channels, and the list goes on.
+Figure \ref{fig: C1/telescopes} shows two pictures of two very different telescopes, the Very Large Array, or VLA,  in Socorro, New Mexico and the Arecibo Telescope.
 
-%TODO: Make this prettier, maybe add a graphic
-%\begin{figure}[ht!]
-%  \centering
-%    \includegraphics[width=0.49\textwidth]{Images/C1/alma_correlator.png}
-%    \includegraphics[width=0.49\textwidth]{Images/C1/blue_gene.png}
-%    \includegraphics[width=0.49\textwidth]{Images/C1/vla_correlator.png}
-%  \caption{TODO Building large systems}
-%  \label{fig: C1/largesystems}
-%\end{figure}
-
-%TODO: add some references
-
-%\begin{figure}[ht!]
-%  \centering
-%    \includegraphics[width=0.49\textwidth]{Images/C1/custom_asic.png}
-%    \includegraphics[width=0.49\textwidth]{Images/C1/custom_interconnect.png}
-%  \caption{TODO Building large systems}
-%  \label{fig: C1/largesystems}
-%\end{figure}
-
-
-Traditionally, observatories designed custom instruments that would run on one telescope and solve one problem.
+Traditionally, observatories dealt with this by designing custom instruments that would run on one telescope and solve one problem.
 This custom approach was the only way to get the requisite processing power to analyze the radio signals, but it resulted in costly designs, because the boards, backplanes, chips, protocols, and software all needed to be designed from scratch.
 To make matters worse, this approach resulted in a very long design cycle,  requiring 5-10 years of development before an instrument could be deployed at a telescope and the time the instrument was released, the hardware would be out of date.
 
 Due to their custom implementations, these instruments also lacked flexibility. 
 Each instrument was designed specifically for a single purpose.
 A hardware upgrade or algorithm modification would require a complete redesign of the instrument, and another long design cycle.
-
-While these older designs needed to trade off flexibility for performance, newer technology can offer both performance and flexibility.
-Programmable devices such as FPGAs, GPUs and even CPUs can provide enough processing power to keep up with the data from many new telescopes.
-These devices make it easy to reprogram existing hardware to support newer algorithms, and, since they are programmed using portable languages, provide a quick path to upgrade hardware without redesigning the entire instrument.
-
-With a huge range of technology available, choosing what hardware to use to build an instrument is a challenge. 
-
-\section{Challenges}
-
-
-\subsection{Scientific Challenges}
-
-%Number of antennas
-%Bandwidth
-%Number of channels
-%Filter shapes
-%Integration time
-%Algorithms
-%Etc…
 
 %Spectrometer
 %Beamformer
@@ -101,11 +60,41 @@ With a huge range of technology available, choosing what hardware to use to buil
 %Need to combine the antennas together to form a single image or beam
 %Interferometry computation requirements scale as N2 (N = number of antennas) ~100Tops
 
-\subsection{Technological Challenges}
+%TODO: Make this prettier, maybe add a graphic
+%\begin{figure}[ht!]
+%  \centering
+%    \includegraphics[width=0.49\textwidth]{Images/C1/alma_correlator.png}
+%    \includegraphics[width=0.49\textwidth]{Images/C1/blue_gene.png}
+%    \includegraphics[width=0.49\textwidth]{Images/C1/vla_correlator.png}
+%  \caption{TODO Building large systems}
+%  \label{fig: C1/largesystems}
+%\end{figure}
+
+%TODO: add some references
+
+%\begin{figure}[ht!]
+%  \centering
+%    \includegraphics[width=0.49\textwidth]{Images/C1/custom_asic.png}
+%    \includegraphics[width=0.49\textwidth]{Images/C1/custom_interconnect.png}
+%  \caption{TODO Building large systems}
+%  \label{fig: C1/largesystems}
+%\end{figure}
+
+While these older designs needed to trade off flexibility for performance, newer technology can offer both performance and flexibility.
+Programmable devices such as FPGAs, GPUs and even CPUs can provide enough processing power to keep up with the data from many new telescopes.
+These devices make it easy to reprogram existing hardware to support newer algorithms, and, since they are programmed using portable languages, provide a quick path to upgrade hardware without redesigning the entire instrument.
+
+%TODO: expand this
+With a huge range of technology available, choosing what hardware to use to build an instrument is a challenge. 
+New technology, optimizations, and designs are constantly being developed and with everything constantly changing it's difficult to know what is best.
+
+
+
+\section{Technological Challenges}
 
 When building a large instrument, there is a wide variety of technology to choose from.
 Unlike many applications, where the goal is to provide the fastest possible implementation, in real time radio astronomy instrumentation there is a performance target.
- Understanding the tradeoffs between different implementations is key to cost-effective design.
+Understanding the tradeoffs between different implementations is key to cost-effective design.
 
 \begin{figure}[ht!]
   \centering
@@ -124,7 +113,7 @@ And because the chips will be deployed in relatively low volume, the platforms o
 The tradeoff is in power and performance. 
 The benefit that comes with the platforms on the left is higher performance and lower power consumption. 
 
-To better understand these tradeoffs, I compare the two platforms in the center of the spectrum, the GPU and FPGA.
+To better understand these tradeoffs, consider the two platforms in the center of the spectrum, the GPU and FPGA.
 NVIDIA GPUs can be programmed in CUDA.
 It's C-like structure makes it easy for CPU programmers to pick up and provides a lot of flexibility. 
 CUDA allows the programmer to use conditional and Iterative programming the same way they would use C, easing the transition into GPU programming.

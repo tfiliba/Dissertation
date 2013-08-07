@@ -22,33 +22,13 @@ Keeping up with increasing computation demands has often resulted in the special
 The DiFX Correlator is a scalable software implementation of an FX Correlator  \cite{Deller:2007wy}.
 DiFX was designed as a software correlator that targets CPUs in order to maintain flexibility in the design.
 The DiFX correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
-
-%TODO: If you have a cluster available…
-%Why do cpu-only?
-%It’s easy
-%Compared to 27 antenna 2GHz EVLA in New Mexico
-
- 
-%Describe the VLA
+The correlator is used by recording data at each VLBI site, collecting it, and playing back the recorded data through the correlator.
 
 
-%TODO: expand on VLBI
-%TODO: doesn't need to be real time (using recorded data)
-
-%Designed for VLBI (Very Long Baseline Interferometry)
-
-
-
-%\begin{figure}[h!]
-%  \centering
-%    \includegraphics[width=\textwidth]{Images/C3/difx_scaling.pdf}
-%  \caption[DiFX Correlator Benchmarks]{DiFX Correlator Benchmarks (reprinted from \citeauthor{Deller:2007wy} \cite{Deller:2007wy})}
-%  \label{fig: C3/difx_scaling.pdf}
-%\end{figure}
-
+While this instrument does not run in real time, it is still an important instrument because it represents a parameterized software correlator design.
 Unfortunately, the flexibility of the software implementation comes at a high cost.
-%Figure \ref{fig: C3/difx_scaling.pdf} shows the resources required
 Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
+While this design might be reasonable when a pulsar is readily available, the software implementation is very costly to build from scratch.
 
 %\subsection{LOFAR}
 %%\begin{figure}[ht!]
@@ -66,7 +46,7 @@ Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 ant
 
 
 \subsection{xGPU}
-xGPU is a CUDA package that implements the cross-correlation
+xGPU is a CUDA package that implements the cross-correlation operation of an FX Correlator on NVidia GPUs.
 %TODO: add another graph from paper
 \begin{figure}[ht!]
   \centering
@@ -277,7 +257,7 @@ These files can be accessed using normal file I/O, making it simple to send cont
 
 \subsubsection{SERENDIP V.v}
 
-SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extra terrestrial intelligence by analyzing radio signals.
+SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extra terrestrial intelligence by analyzing radio signals \cite{2010LPICo1538.5378S}.
 SERENDIP V.v is a high resolution SETI spectrometer that was deployed at Arecibo Observatory in 2009 as part of this project.
 The installed instrument was built using an iADC, iBOB and BEE2 board.
 The instrument breaks up a single 200MHz stream into 128 million frequency channels, achieving a resolution of about 1Hz.
@@ -286,11 +266,13 @@ The instrument breaks up a single 200MHz stream into 128 million frequency chann
   \centering
     \includegraphics[width=\textwidth]{Images/C3/setispectrometerv55.pdf}
   \caption{SERENDIP V.v Block Diagram}
-  \label{fig: C3/setispectrometerv55.pdf}
+  \label{fig:C3/setispectrometerv55.pdf}
 \end{figure}
 
-Figure \ref{fig: C3/setispectrometerv55.pdf} shows the dataflow for the spectrometer.
+Figure \ref{fig:C3/setispectrometerv55.pdf} shows the dataflow for the spectrometer.
 The ADC data is fed into an IBOB where it is processed by a decimating downconverter. %TODO: why?
+The downconverter signal is processed by a PFB and then transposed so each PFB channel is further channelized by a complex FFT.
+Finally, the finely channelized data is thresholded, flagging any high power narrow signals that are potentially extraterrestrial.
 
 
 %4k point PFB
@@ -306,48 +288,38 @@ The ADC data is fed into an IBOB where it is processed by a decimating downconve
 %  Build using an iADC, iBOB and BEE2
 %  Can process one polarization from a single beam
 
-
-
-The SERENDIP V.v instrument processes data from the Arecibo L-band Feed Array.
-The spectrometer
-
-
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=0.48\textwidth]{Images/C3/serendip_vv_top.png}
     \includegraphics[width=0.48\textwidth]{Images/C3/serendip_vv_bottom.png}
   \caption{SERENDIP V.v Hardware installed at Arecibo Observatory}
-  \label{fig: C3/serendipvv}
+  \label{fig:C3/serendipvv}
 \end{figure}
 
-Figure \ref{fig: C3/serendipvv} shows the installed instrument at Arecibo Observatory. 
+The SERENDIP V.v instrument processes data from the 7 beam Arecibo L-band Feed Array.
+The spectrometer doesn't have enough processing power to process all the beams at the same time, so they are multiplexed and fed through the spectrometer in a cycle. 
+The instrument was successfully deployed at Arecibo Observatory in June 2009.
+Figure \ref{fig:C3/serendipvv} shows the installed instrument at Arecibo Observatory. 
+The picture on the right shows the beam multiplexor, and the left picture shows the IBOB and BEE2 boards that were used to develop the instrument.
 
 
 
-%SuccessfullydeployedatAreciboObservatoryinJune2009
-%  ImplementedonanIBOBandBEE2board
-%  200MHzbandwidth
-%  28million(227)channels(4kcoarsechannels*32kfinechannels)
-%  1. 5 Hz/channel
-%  0. 67 sec integration time
-%  ObservescommensallywithallALFAobservations
-%  Observesonlyonebeamatatime
-
-%Arecibo L-band Feed Array
-%?  7 pixel dual polarization ?  ALFA RF 1225-1525 MHz
-
-\cite{2010LPICo1538.5378S}
 
 
 \subsubsection{CASPER Correlator}
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C3/casper_correlator.png}
-  \caption{CASPER Correlator Block Diagram}
+  \caption{CASPER Correlator Architecture}
   \label{fig: C3/casper_correlator.png}
 \end{figure}
 
-\cite{Parsons:2008dl}
+The CASPER Correlator is a scalable FPGA correlator design developed using CASPER hardware and libraries \cite{Parsons:2008dl}. 
+Figure \ref{fig: C3/casper_correlator.png} shows the CASPER Correlator architecture implemented using ROACH boards.
+The cross correlation (X Engines) and PFBs (F Engines) are calculated using ROACH boards, and data is transported between the boards using a general purpose 10 Gigibit Ethernet switch.
+This design represents a huge step forward from custom ASIC correlator design, using reprogrammable hardware to update implementations and providing flexibility in the design.
+
+The switch architecture solves the all-to-all cabling problem, making it easy to add more hardware to the correlator and validating the CASPER instrument design philosophy of attaching general purpose hardware to a switch.
 
 %Used to develop Parsons/Manley correlator
 %10GbE switch solves cabling problem
@@ -379,7 +351,8 @@ The packets are sent out over CX4 ports to a 10 gigabit Ethernet switch.
 PASP is designed for flexibility. 
 Building on the CASPER goal to automate the design of commonly used signal processing elements such as FFTs and digital downconverters, PASP automatically designs an entire FPGA instrument using only a few parameters.
 The user can input the desired number of subbands, CPU/GPU cluster size, and packet size and a new design is automatically generated in Simulink.  
-Figure \ref{fig: C4/pasp_high_level_interface.png}
+Figure \ref{fig: C4/pasp_high_level_interface.png} shows the high level interface for the instrument.
+The user can update the design simply by changing a parameter, clicking ok, and recompiling the design.
 
 \begin{figure}[h!]
   \centering
@@ -437,7 +410,7 @@ The design of HRSS is based on the Serendip V.v design presented in Section \ref
 Figure \ref{fig: C4/serendip_vv_to_hrss.png} shows how in HRSS the IBOB and BEE2 are replaced with a single chip FPGA board such as an IBOB or ROACH, and the fine channelization, thresholding and post processing are done on a GPU.
 
 Unlike Serendip V.v, HRSS is a software package to automatically generate spectrometers with minimal user input.
-We have automated the design of the spectrometer, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
+I automated the design of the spectrometer, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
 This spectrometer combines FPGAs running PASP with GPUs, doing coarse channelization on the FPGA and sending each subband to the GPUs for further processing.
 The server software is designed for flexibility, allowing astronomers to easily modify the processing algorithm run on the GPU and customize the instrument to fit their science goals.
 
