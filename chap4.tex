@@ -154,9 +154,22 @@ The predictable scaling of many DSP functions can also make it easy to create a 
 And finally, the user can always estimate the performance of a block, a useful option when attempting to assess the cost savings of a potential optimization or explore mapping to hardware that does not exist.
 
 \subsection{Connection Types}
+In order to reduce the total number of connections that need to be defined, blocks that receive data from and sends data to the same set of block are put into a group.
+Figure \ref{fig: C4/fx_dataflow.pdf} shows an example FX Correlator dataflow model, where blocks grouped together have the same color.
+In this example, the FFTs all take data from an FIR block and must send data to the XEng blocks.
+The name of the group of blocks is referred to as the "block type".
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
+  \caption{Example FX Correlator Dataflow Model Demonstrating Blocktypes}
+  \label{fig: C4/fx_dataflow.pdf}
+\end{figure}
+
 %TODO: explain what a block type is edit this a lot
+Knowing which block types must communicate with each other is not sufficient to specify the dataflow.
 Suppose we know we have 2 types of blocks: $A$, and $B$ and blocks of type $A$ must send their data to blocks of type $B$.
-We need to definite the communication patterns between $A$ blocks and $B$ blocks.
+We also need to definite the communication patterns between $A$ blocks and $B$ blocks.
 This could happen in 2 ways, `one-to-one' and `all-to-all'. 
 
 %TODO: fix references
@@ -233,6 +246,11 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 \subsection{Software Representation}
 
 The dataflow model is created in the initialization function for the instrument.
+Each block type is added to the dataflow by creating an instance of the CBlock class and adding that object to the list of blocks.
+The constructor for the CBlock has the user define the number of blocks in the group, and the input and output connections, indicating both the blocks that it is communicating with, the connection type, and the connection bandwidth.
+A CBlock also needs to be instantiated with a performance model, which is discussed further in the following section.
+The code below gives an example of this kind of instantiation. 
+It creates 16 FFT blocks that must take data from FIR blocks via a 1-to-1 connection, and sends data to XEng blocks via an all-to-all connection.
 
 \lstinputlisting[language=Python,
     %caption=My Class,
@@ -259,7 +277,7 @@ The dataflow model is created in the initialization function for the instrument.
 
 Once the dataflow and the computational blocks are defined, ORCAS must determine how to place each computational block into hardware. 
 In the mapping stage, ORCAS determines what type of hardware should be used for each block, while minimizing the total cost of the hardware (in dollars, watts, or another used-defined metric).
-The icon in Figure \ref{fig: C4/mapped_dataflow.pdf} represents the mapping phase of the toolflow. 
+The icon in Figure \ref{fig: C4/mapped_dataflow.pdf} represents an abstract mapped dataflow. 
 
 %Not certain this belongs here, possibly should go with the models?
 %Before mapping, need to determine which blocks can be mapped to which platforms
@@ -305,7 +323,7 @@ The ILP can also be modified to ensure that there is a single, unique optimal so
 When designs are very symmetric, the ILP will often find an optimal solution quickly but, because it is not unique, the ILP must spend a lot of time convincing itself that the solution is, in fact, optimal.
 Additional constraints can be added to ensure that only one of those solutions is valid, greatly reducing the amount of time it takes to verify optimality.
 
-Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the performance models are used as well as how the ILP is specified and optimized to achieve a feasible runtime. 
+Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the performance models are used as well as how the ILP is specified, implemented, and optimized to achieve a feasible runtime. 
 
 \subsection{Mapped Dataflow Representation}
 
