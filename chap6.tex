@@ -22,7 +22,8 @@ The spectrometer gives an example of the end to end toolflow using a simple data
 %provide analysis comparing this to hand-designed instruments 
 \section{Spectrometer Case Study}
 The spectrometer is a simple instrument, making it easy to follow the end to end toolflow.
-We design a 50 MHz and an 800 MHz spectrometer that breaks the band into 1024 channels.
+We design %a 50 MHz and 
+an 800 MHz spectrometer that breaks the band into 1024 channels.
 %TODO: what is a reasonable integration time here
 
 
@@ -62,6 +63,7 @@ Then the filtered signal is transformed into channels in the FFT and those chann
 
 The parameters for each block come directly from the instrument definition. 
 The FIR parameters come from the number of FIR taps and window shape, the FFT is simply defined by the FFT length parameter and the accumulator also is parameterized by the FFT length as well as the integration time. 
+The code below shows how the blocks are added to the dataflow model.
 
 \lstinputlisting[language=Python,
     %caption=My Class,
@@ -70,6 +72,10 @@ The FIR parameters come from the number of FIR taps and window shape, the FFT is
   ]{code/C6/spec_dflow.py}
 
 \subsection{Spectrometer Mapping}
+As a simple case study, an 1024 channel 800 MHz spectrometer is mapped using the ROACH and GTX 580-based NRAO server as potential platforms. 
+ORCAS produces a solution that maps the entire design to a single ROACH board.
+This solution is obviously correct since the bandwidth cannot be processed by a single GPU and a single ROACH is cheaper than a combination of boards.
+The mapping produced by ORCAS is shown below.
 
 \lstinputlisting[
     %caption=My Class,
@@ -78,16 +84,20 @@ The FIR parameters come from the number of FIR taps and window shape, the FFT is
   ]{code/C6/spec_800_result.txt}
   
 
-\lstinputlisting[
-    %caption=My Class,
-    label={spec_dflow.py},
-    breaklines=true,
-  ]{code/C6/spec_050_result.txt}
+%\lstinputlisting[
+%    %caption=My Class,
+%    label={spec_dflow.py},
+%    breaklines=true,
+%  ]{code/C6/spec_050_result.txt}
   
 %\subsection{Cost}
 %\subsection{Power}
 
 \section{High Resolution Spectrometer Case Study}
+The high resolution spectrometer is a useful instrument for SETI. 
+The two stage channelization creates a large number of channels without using an FFT that is too large to fit on a single board.
+
+
 \subsection{High Resolution Spectrometer Definition}
 The main difference between a spectrometer and a high resolution spectrometer is the need for two stages of channelization rather than just one. 
 The sky bandwidth, integration time, and number of antennas are defined in the same way as the previous spectrometer type. 
@@ -123,20 +133,70 @@ The coarse FFT must feed its data to a separate fine FFT for each coarse channel
 At this point, each coarse channel is processed in an independent pipeline the finely channelized data is accumulated and recorded to disk. 
 The example in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf} shows a spectrometer that divides the data into 4 coarse channels.
 
-results for hi res spectrometer (gbt and seti)
+%\subsection{Cost}
+%\subsection{Power}
 
-Serendip 6 300MHz 7 ant 2 pol
-
-1Hz resolution (256 million channels)
-
-Greenbank 2.5GHz 1 beam 2 pols
-
-1 Hz resolution
-
-Same benchmarks as before, just discuss large bw, multi stage fft
-\subsection{Cost}
-\subsection{Power}
 \subsection{Algorithmic Exploration}
+
+The Arecibo L-band feed array, pictured in Figure \ref{fig: C3/alfa_feed.png} has 7 dual-polarization beams. 
+The SERENDIP V.v instrument was only able to process one beam at a time, but its planned successor, SERENDIP 6, will process 300MHz from each beam-pol.
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C3/alfa_feed.png}
+  \caption{Arecibo ALFA Feed}
+  \label{fig: C3/alfa_feed.png}
+\end{figure}
+
+In this case study, we analyze the design space for a 300 MHz 256 million channel spectrometer, similar to the SERENDIP 6 instrument.
+This instrument provides an interesting case study because the number of channels is so large.
+The number of channels in the coarse and fine FFTs can be varied, as long as the product remains 256 million.
+We explore this design space by varying the dimensions and number of antennas to see how the channel balance affects the final cost of the instrument.
+
+This instrument is designed using ROACH boards and the GTX 580-based NRAO server as supported platforms, and uses the FIR and FFT benchmarks presented in Chapter \ref{chap:Algorithm Partitioning}
+To aid the linear program, we assume reordering the coarse FFT data is infeasible on the GPU and force the design to reorder the data on the FPGA.
+
+
+\begin{sidewaystable}
+\begin{tabular}{| c | c | c | c | c | c |}
+\hline  
+\diaghead{\theadfont Diag ColumnmnHead II}{\textbf{Antennas}}{\textbf{Dimensions}} & 256 by 524,288 & 512 by 262,144 & 1024 by 131,072 & 
+2048 by 65,536 & 4096 by 32,768\\
+\hline  
+1 &  \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 1 GPU \\ 1 ROACH \\ \$10.2k \end{tabular} &\begin{tabular}{c} 1 GPU \\ 1 ROACH \\ \$10.2k \end{tabular}  \\
+\hline
+3  & \begin{tabular}{c} 5 GPUs \\ 1 ROACH \\ \$24.2k \end{tabular} & \begin{tabular}{c} 4 GPUs \\ 1 ROACH \\ \$20.7k \end{tabular} & \begin{tabular}{c} 4 GPUs \\ 1 ROACH \\ \$20.7k \end{tabular} & \begin{tabular}{c} 3 GPUs \\ 1 ROACH \\ \$17.2k \end{tabular} & \begin{tabular}{c} 3 GPUs \\ 2 ROACH \\ \$23.9k \end{tabular} \\
+\hline  
+5 & \begin{tabular}{c} 8 GPUs \\ 2 ROACH \\ \$41.4k \end{tabular} & \begin{tabular}{c} 7 GPUs \\ 2 ROACH \\ \$37.9k \end{tabular} & \begin{tabular}{c} 7 GPUs \\ 2 ROACH \\ \$37.9k \end{tabular} &
+ \begin{tabular}{c} 5 GPUs \\ 2 ROACH \\ \$30.9k \end{tabular} &  \begin{tabular}{c} 5 GPUs \\ 2 ROACH \\ \$30.9k \end{tabular} \\
+\hline  
+7 & \begin{tabular}{c} 12 GPUs \\ 2 ROACH \\ \$55.4k \end{tabular} & Not solved & \begin{tabular}{c} 9 GPUs \\ 3 ROACH \\ \$51.6k \end{tabular}  &
+ \begin{tabular}{c} 8 GPUs \\ 3 ROACH \\ \$48.1k \end{tabular} &  \begin{tabular}{c} 7 GPUs \\ 3 ROACH \\ \$44.6k \end{tabular}\\
+\hline  
+\end{tabular}
+\caption{134 Million Channel High Resolution Spectrometer Design Space}
+\label{tab: C5/highres_spec_design_space}
+\end{sidewaystable} 
+
+Table \ref{tab: C5/highres_spec_design_space} shows the results of this design space exploration. 
+We observe that extreme values for the number of channels tends to increase costs, likely because it's difficult to put larger blocks together on the same board and get high utilization of the hardware.
+Each test was run with a 30 minute time limit on my personal laptop, a 2011 Macbook Air, to ensure that the designs could converge quickly.
+One test, the 7 antenna 512 by 262,144 channel spectrometer did not converge within the specified time.
+While it might be able to converge given more time, the resulting table make it clear that the optimal configuration is unlikely to lie in that square, and there is no need to spend extra time trying to get a solution.
+
+%results for hi res spectrometer (gbt and seti)
+
+%Serendip 6 300MHz 7 ant 2 pol
+
+%1Hz resolution (256 million channels)
+
+%Greenbank 2.5GHz 1 beam 2 pols
+
+%1 Hz resolution
+
+%Same benchmarks as before, just discuss large bw, multi stage fft
+
+
 
 \section{FX Correlator Case Study}
 \subsection{FX Correlator Definition}
@@ -187,39 +247,39 @@ And in the center, since each X-engine requires data from every F-engine, the cr
 
 
 
-xgpu benchmarks, correlator placement
-
-Need benchmarks for xengine
-
-HERA Correlator
-
-572 ant dual pol (currently can run in under 5 minutes)
-
-100 MHz
-
-1024 channels
-
-FPGA F, xGPU X
-
-LWA @ OVRO
-
-10k ant dual pol
-
-120k signals
-
-60MHz
-
-4096 channels
-
-1MWatt est w/GPU x-engine
-
-SKA
-
-4000 ant (8k signals)
-
-10 GHz
-
-16k channels
+%xgpu benchmarks, correlator placement
+%
+%Need benchmarks for xengine
+%
+%HERA Correlator
+%
+%572 ant dual pol (currently can run in under 5 minutes)
+%
+%100 MHz
+%
+%1024 channels
+%
+%FPGA F, xGPU X
+%
+%LWA @ OVRO
+%
+%10k ant dual pol
+%
+%120k signals
+%
+%60MHz
+%
+%4096 channels
+%
+%1MWatt est w/GPU x-engine
+%
+%SKA
+%
+%4000 ant (8k signals)
+%
+%10 GHz
+%
+%16k channels
 
 
 

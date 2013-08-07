@@ -4,6 +4,11 @@
 %State: Can be written now \\
 %List of references already compiled into Papers archive \\
 
+In this chapter we discuss work related to this work in the fields of Radio Astronomy and Electrical Engineering.
+The radio astronomy work presented in this chapter share a common theme of flexibility and paramaterizability, demonstrating how common design patterns in astronomy are already being used to automate instrument implementation.
+The work in electrical engineering focuses on design generation, explaining what type of heterogeneous design was possible before the work, and why it is not sufficient to solve the radio astronomy instrumentation design problem.
+
+
 %TODO: Intro
 \section{Radio Astronomy} \label{Related Work:Radio Astronomy}
 %\subsection{Digital Signal Processing for Radio Astronomy}
@@ -45,19 +50,19 @@ Unfortunately, the flexibility of the software implementation comes at a high co
 %Figure \ref{fig: C3/difx_scaling.pdf} shows the resources required
 Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
 
-\subsection{LOFAR}
-%\begin{figure}[ht!]
-%  \centering
-%    \includegraphics[width=\textwidth]{Images/C3/lofar_performance.pdf}
-%  \caption[LOFAR Correlator Performance]{LOFAR Correlator Performance (reprinted from \citeauthor{vanNieuwpoort:2009p1253} \cite{vanNieuwpoort:2009p1253})}
-%  \label{fig: C3/lofar_performance.pdf}
-%\end{figure}
-%On a blue gene, real time but still costly power hungry solution 64 stations
-%TODO: read this paper
-Like DiFX, the correlator for Low-Frequency Array for Radio Astronomy (or LOFAR) was also built using CPUs \cite{vanNieuwpoort:2009p1253}.
-This project used a Blue Gene BG/P %TODO: check this
-to implement a 64 station correlator.
-The implementation got very high performance out of the cluster, 96\% of the peak, but required an entire cluster and required finely tuned code to achieve that performance. 
+%\subsection{LOFAR}
+%%\begin{figure}[ht!]
+%%  \centering
+%%    \includegraphics[width=\textwidth]{Images/C3/lofar_performance.pdf}
+%%  \caption[LOFAR Correlator Performance]{LOFAR Correlator Performance (reprinted from \citeauthor{vanNieuwpoort:2009p1253} \cite{vanNieuwpoort:2009p1253})}
+%%  \label{fig: C3/lofar_performance.pdf}
+%%\end{figure}
+%%On a blue gene, real time but still costly power hungry solution 64 stations
+%%TODO: read this paper
+%Like DiFX, the correlator for Low-Frequency Array for Radio Astronomy (or LOFAR) was also built using CPUs \cite{vanNieuwpoort:2009p1253}.
+%This project used a Blue Gene BG/P %TODO: check this
+%to implement a 64 station correlator.
+%The implementation got very high performance out of the cluster, 96\% of the peak, but required an entire cluster and required finely tuned code to achieve that performance. 
 
 
 \subsection{xGPU}
@@ -301,15 +306,9 @@ The ADC data is fed into an IBOB where it is processed by a decimating downconve
 %  Build using an iADC, iBOB and BEE2
 %  Can process one polarization from a single beam
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=\textwidth]{Images/C3/alfa_feed.png}
-  \caption{Arecibo ALFA Feed}
-  \label{fig: C3/alfa_feed.png}
-\end{figure}
+
 
 The SERENDIP V.v instrument processes data from the Arecibo L-band Feed Array.
-The array has 7 dual-polarization beams, shown in Figure \ref{fig: C3/alfa_feed.png}.
 The spectrometer
 
 
@@ -360,7 +359,7 @@ Figure \ref{fig: C3/serendipvv} shows the installed instrument at Arecibo Observ
 %\cite{McMahon:2008tk}
 
 Many radio astronomy instruments channelize the antenna data as soon as it is digitized. 
-PASP implements a parameterized, FPGA-based channelizer, shown in Figure \ref{fig: pasp_fpga_arch}.
+The Packetized Astronomy Signal Processor, or PASP implements a parameterized, FPGA-based channelizer, shown in Figure \ref{fig: pasp_fpga_arch}.
 The FPGA interfaces to an ADC board that simultaneously digitizes 2 signals. 
 The samples are sent into a polyphase filter bank (PFB), consisting of an FIR filter and an FFT, which breaks up the entire bandwidth sampled by the ADC into smaller subbands.
 After dividing up the subbands, each band is rescaled. 
