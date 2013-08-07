@@ -19,12 +19,12 @@
 
 
 Radio astronomy simply refers to the type of science that can be done by observing astronomical objects at radio wavelengths, rather than a specific scientific goal. 
-There is a huge variety of different experiments, such as studying the formation and structure of galaxies stars and black holes and searching for gravity waves, traces of the first stars (TODO: ref PAPER/LEDA), or aliens (TODO: ref SETI).
+There is a huge variety of different experiments, such as studying the formation and structure of galaxies stars and black holes and searching for gravity waves, traces of the first stars \cite{Parsons:2009vg}, or aliens \cite{1995ASPC...74..293W}.
 But, despite this variety, the small number of algorithms detailed in this chapter serve as the first step in processing the data for many such projects.
 
 
 
-Radio telescopes produce very high amounts of data (TODO: add estimates, how much data?). 
+Radio telescopes produce very high amounts of data. %(TODO: add estimates, how much data?). 
 The reason for this high influx of data is twofold. 
 First, to enable new science, new radio antenna observe increasingly higher bandwidths. 
 %TODO edit this
@@ -78,7 +78,7 @@ The SERENDIP V.v project is a commensal survey at the Arecibo observatory, meani
 The project is focused on detecting strong narrow band radio signals, requiring a high resolution spectrometer installed at the observing telescope to analyze the data. 
 The spectrometer should resolve channels of less than 2 Hz, so that natural astronomical signals that typically have a wider bandwidth can easily be distinguished from narrower, possibly extraterrestrial, signals. 
 The SERENDIP V.v spectrometer meets this by providing 128 million channels across 200MHz of bandwidth, for an resolution of 1.5 Hz per channel. 
-Since it would be infeasible to channelize a 200MHz into 128 million channels using a single filter bank, the SERENDIP V.v spectrometer uses the high resolution architecture described in figure x. %TODO: add reference to diagram
+Since it would be infeasible to channelize a 200MHz into 128 million channels using a single filter bank, the SERENDIP V.v spectrometer uses the high resolution architecture described in Chapter \ref{chap:Related Work}. %TODO: add reference to diagram
 
 %TODO add scaling info
 
@@ -141,7 +141,6 @@ The project will try to detect gravitational waves by observing an array of puls
 %  \label{fig: C2/diamond_planet.png}
 %\end{wrapfigure}
 
-\cite{Bailes:2011iy}
 %Beyond astronomy, pulsars could also serve as 
 
 \section{Beamforming}
@@ -192,8 +191,8 @@ When forming multiple beams, there is no need to recalculate the Fourier transfo
 %$A$ signals, $n$ frequency channels, $B$ beams and a $$
 So, as the number of beams increases, it can be advantageous to use this algorithm rather than the BF algorithm described in the previous section. 
 
-\subsection{Applications}
-\cite{2012Sci...338..355D}
+%\subsection{Applications}
+%Forming beams improves the signal to noise ratio of the \cite{2012Sci...338..355D}
 %TODO add info on scaling here
 
 %TODO: Add 2 element beamformer
@@ -207,24 +206,20 @@ So, as the number of beams increases, it can be advantageous to use this algorit
 %  \label{fig: C2/eht.pdf}
 %\end{wrapfigure}
 
-\cite{2012Sci...338..355D}
 
 \section{Correlation}
 \label{Real Time Radio Astronomy Algorithms:Correlation}
 Aperture synthesis is another technique to combine the data from many antennas.
-%TODO: why? 2 step process 
 The goal is to form an image of the sky, using 2 steps, correlation followed by imaging.
 In the correlation step, the cross-correlation of each pair of antennas is calculated. 
 Once the cross-correlation is calculated, it is possible to accumulate the data, greatly reducing the amount of data that needs to be processed in the imaging step.
-
-%TODO: sort out this reference
-\cite{Thompson:1986ww}
 
 The uv plane represents the Fourier transform of the 2-dimensional sky image. 
 The cross-correlation of an antenna pair represents a point in the uv plane, called a \emph{visibility}. 
 Since the visibilities are not evenly or continuously sampled, the imager must interpolate points on the uv plane in an evenly spaced grid so the FFT algorithm, which relies on even spacings, can be applied to the data. 
 The imager must also account for the fact that the response of the telescope distorts the image, undoing the effect using iterative algorithms like CLEAN or Maximum Entropy. 
 Once this is done, a two dimensional inverse Fourier transform can be applied to recover the sky image. 
+The book Interferometery and Synthesis Imaging by Thomson, Moran and Swenson \cite{Thompson:1986ww} gives a detailed description of how the end to end synthesis imaging process works, but in this work we will only focus on the real time computation, the cores-correlation.
 
 Typically, large telescope arrays do correlation in real time and finish the imaging offline, but there are a few notable exceptions.
 One of these is the VLBA, or Very Long Baseline Array. 
@@ -244,25 +239,22 @@ So, the final result of the correlator produces the spectrum of the visibilities
 
 \subsection{XF Correlation}
 An XF, or lag, correlator calculates the spectrum by calculating the cross-correlation first (X), followed by a Fourier transform (F).
-
-The calculation of the cross-correlation is very similar to a convolution, in fact the cross-correlation of 2 signals can be re-expressed as a convolution. 
-\[\]
-\[\]
-
-For an telescope with $n$ antennas, this algorithm requires $O(n^2)$ cross-correlations, followed by $O(n^2)$ Fourier transform operations.
- 
-
+For a telescope with $n$ antennas, this algorithm requires $O(n^2)$ cross-correlations, followed by $O(n^2)$ Fourier transform operations.
 
 \subsection{FX Correlation}
-%TODO: explain why
-\cite{Bunton:2000tz}
-
+The calculation of the cross-correlation is very similar to a convolution, in fact the cross-correlation of 2 signals can be re-expressed as a convolution. 
 The cross-correlation theorem further extends the parallel between correlation and convolution, relating the Fourier transform of the cross-correlation of two signals to the Fourier transforms of the original signals. 
-\[ signal = other stuff\]
-
+This allows us to take our original expression for the cross correlation of two antennas and express it as:
 \[H_i[x] = F^*[x] \cdot G[x]\]
 
+This style of correlator design is advantageous for a number of reasons, including the reduction in algorithmic complexity \cite{Bunton:2000tz}.
+Rather than $O(n^2)$ Fourier transform operations, an FX Correlator only needs to compute one Fourier transform for each antenna, reducing the complexity to $O(n)$.
+As the number of antennas gets large, this makes a significant difference in the total amount of computational power required.
+
 \subsection{Applications}
+%TODO: Leda paper
+Correlators are being used to detect the formation of the first stars. 
+The LEDA, PAPER, and HERA \cite{Greenhill:2011wm} projects are all developing large correlators, correlating hundreds of antennas, to get the sensitivity necessary to make a detection.
 
 \begin{figure}[ht!]
   \centering
@@ -271,18 +263,7 @@ The cross-correlation theorem further extends the parallel between correlation a
   \label{fig: C3/vlba.pdf}
 \end{figure}
 
-The Very Long Baseline Interferometery or VLBI technique uses an array of antennas that are extremely far apart to achieve very high angular resolution
-
-
-Event Horizon Telescope (\cite{2012Sci...338..355D})
-
-%%Form an image
-%An interferometer 
-
-%\section{Scientific Goals}
-%Radio astronomy simply refers to the type of science that can be done by observing astronomical objects at radio wavelengths, rather than a specific scientific goal. 
-%There is a huge variety of different experiments, such as searching for gravity waves (TODO: ref nangrav), traces of the first stars (TODO: ref PAPER), or aliens (TODO: ref SETI).
-%But, despite this variety, the small number of algorithms detailed above serve as the first step in processing the data for many such projects.
-%
-%SETI, or the Search for Extra Terrestrial Intelligence, 
+The Very Long Baseline Interferometery or VLBI technique uses an array of antennas that are extremely far apart to achieve very high angular resolution images.
+The Very Long Baseline Array, or VLBA, is a group of telescopes that are used at the same time to do VLBI.
+Figure \ref{fig: C3/vlba.pdf} shows the locations of the VLBA telescopes.
 

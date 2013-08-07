@@ -465,190 +465,6 @@
   \field{title}{{Metro II Execution Semantics for Mapping}}
 \endentry
 
-\entry{2012Sci...338..355D}{article}{}
-  \name{author}{33}{}{%
-    {{}%
-     {Doeleman}{D.}%
-     {Sheperd~S}{S.~S.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Fish}{F.}%
-     {Vincent~L}{V.~L.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Schenck}{S.}%
-     {David~E}{D.~E.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Beaudoin}{B.}%
-     {Christopher}{C.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Blundell}{B.}%
-     {Ray}{R.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Bower}{B.}%
-     {Geoffrey~C}{G.~C.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Broderick}{B.}%
-     {Avery~E}{A.~E.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Chamberlin}{C.}%
-     {Richard}{R.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Freund}{F.}%
-     {Robert}{R.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Friberg}{F.}%
-     {Per}{P.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Gurwell}{G.}%
-     {Mark~A}{M.~A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Ho}{H.}%
-     {Paul T~P}{P.~T.~P.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Honma}{H.}%
-     {Mareki}{M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Inoue}{I.}%
-     {Makoto}{M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Krichbaum}{K.}%
-     {Thomas~P}{T.~P.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Lamb}{L.}%
-     {James}{J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Loeb}{L.}%
-     {Abraham}{A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Lonsdale}{L.}%
-     {Colin}{C.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Marrone}{M.}%
-     {Daniel~P}{D.~P.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Moran}{M.}%
-     {James~M}{J.~M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Oyama}{O.}%
-     {Tomoaki}{T.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Plambeck}{P.}%
-     {Richard}{R.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Primiani}{P.}%
-     {Rurik~A}{R.~A.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Rogers}{R.}%
-     {Alan E~E}{A.~E.~E.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Smythe}{S.}%
-     {Daniel~L}{D.~L.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {SooHoo}{S.}%
-     {Jason}{J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Strittmatter}{S.}%
-     {Peter}{P.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Tilanus}{T.}%
-     {Remo P~J}{R.~P.~J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Titus}{T.}%
-     {Michael}{M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Weintroub}{W.}%
-     {Jonathan}{J.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Wright}{W.}%
-     {Melvyn}{M.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Young}{Y.}%
-     {Ken~H}{K.~H.}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Ziurys}{Z.}%
-     {Lucy~M}{L.~M.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{DSS+1}
-  \strng{fullhash}{DSSFVLSDEBCBRBGCBAECRFRFPGMAHPTPHMIMKTPLJLALCMDPMJMOTPRPRARAEESDLSJSPTRPJTMWJWMYKHZLM1}
-  \field{sortinit}{D}
-  \field{number}{6}
-  \field{pages}{355}
-  \field{title}{{Jet-Launching Structure Resolved Near the Supermassive Black
-  Hole in M87}}
-  \field{volume}{338}
-  \field{journaltitle}{Science}
-  \field{annotation}{%
-  Comments: 12 pages, 3 figures, accepted version%
-  }
-  \field{month}{10}
-  \field{year}{2012}
-\endentry
-
 \entry{Filiba:2011wl}{article}{}
   \name{author}{2}{}{%
     {{}%
@@ -729,6 +545,30 @@
   \field{journaltitle}{High Performance Computing, Networking, Storage and
   Analysis, 2008. SC 2008. International Conference for}
   \field{year}{2008}
+\endentry
+
+\entry{Greenhill:2011wm}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Greenhill}{G.}%
+     {Lincoln~J}{L.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Backer}{B.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GLJBD1}
+  \strng{fullhash}{GLJBD1}
+  \field{sortinit}{G}
+  \field{pages}{10710}
+  \field{title}{{Hydrogen Epoch of Reionization Arrays}}
+  \field{volume}{43}
+  \field{journaltitle}{Bulletin of the American Astronomical Society}
+  \field{month}{01}
+  \field{year}{2011}
 \endentry
 
 \entry{Inc:CkOMExio}{manual}{}
@@ -947,9 +787,6 @@
   \strng{fullhash}{MH1}
   \field{sortinit}{M}
   \field{title}{{Mixed Integer Linear Programming Benchmark}}
-  \verb{url}
-  \verb http://plato.asu.edu/ftp/milpc.html
-  \endverb
 \endentry
 
 \entry{Parsons:2006cu}{article}{}
@@ -1140,6 +977,103 @@
   \field{journaltitle}{Publ Astron Soc Pac}
   \field{month}{09}
   \field{year}{2008}
+\endentry
+
+\entry{Parsons:2009vg}{article}{}
+  \name{author}{15}{}{%
+    {{}%
+     {Parsons}{P.}%
+     {Aaron~R}{A.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Backer}{B.}%
+     {Donald~C}{D.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bradley}{B.}%
+     {Richard~F}{R.~F.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Aguirre}{A.}%
+     {James~E}{J.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Benoit}{B.}%
+     {Erin~E}{E.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Carilli}{C.}%
+     {Chris~L}{C.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Foster}{F.}%
+     {Griffin~S}{G.~S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gugliucci}{G.}%
+     {Nicole~E}{N.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Herne}{H.}%
+     {David}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Jacobs}{J.}%
+     {Daniel~C}{D.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lynch}{L.}%
+     {Mervyn~J}{M.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Manley}{M.}%
+     {Jason~R}{J.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Parashare}{P.}%
+     {Chaitali~R}{C.~R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Werthimer}{W.}%
+     {Daniel~J}{D.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wright}{W.}%
+     {Melvyn C~H}{M.~C.~H.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{PAR+1}
+  \strng{fullhash}{PARBDCBRFAJEBEECCLFGSGNEHDJDCLMJMJRPCRWDJWMCH1}
+  \field{sortinit}{P}
+  \verb{eprint}
+  \verb 0904.2334v2
+  \endverb
+  \field{title}{{The Precision Array for Probing the Epoch of Reionization: 8
+  Station Results}}
+  \field{journaltitle}{arXiv}
+  \field{annotation}{%
+  13 pages, 14 figures, submitted to AJ. Revision 2 corrects a scaling error in
+  the x axis of Fig. 12 that lowers the calculated power spectrum temperature%
+  }
+  \field{eprinttype}{arxiv}
+  \field{eprintclass}{astro-ph.CO}
+  \field{month}{04}
+  \field{year}{2009}
 \endentry
 
 \entry{Primiani:2011vz}{article}{}
@@ -1422,27 +1356,6 @@
   \field{year}{2010}
 \endentry
 
-\entry{vanNieuwpoort:2009p1253}{article}{}
-  \name{author}{2}{}{%
-    {{}%
-     {Van~Nieuwpoort}{V.~N.}%
-     {R}{R}%
-     {}{}%
-     {}{}}%
-    {{}%
-     {Romein}{R.}%
-     {John~W}{J.~W.}%
-     {}{}%
-     {}{}}%
-  }
-  \strng{namehash}{VNRRJW1}
-  \strng{fullhash}{VNRRJW1}
-  \field{sortinit}{V}
-  \field{title}{{Correlating Radio Astronomy Signals with Many-Core Hardware}}
-  \field{journaltitle}{International Journal of Parallel Programming}
-  \field{year}{2009}
-\endentry
-
 \entry{2009PASP..121..857W}{article}{}
   \name{author}{3}{}{%
     {{}%
@@ -1471,6 +1384,40 @@
   \field{journaltitle}{Publ Astron Soc Pac}
   \field{month}{08}
   \field{year}{2009}
+\endentry
+
+\entry{1995ASPC...74..293W}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Werthimer}{W.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ng}{N.}%
+     {D}{D}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bowyer}{B.}%
+     {S}{S}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Donnelly}{D.}%
+     {C}{C}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{WD+1}
+  \strng{fullhash}{WDNDBSDC1}
+  \field{sortinit}{W}
+  \field{pages}{293}
+  \field{title}{{The Berkeley SETI Program: SERENDIP III and IV
+  Instrumentation}}
+  \field{volume}{74}
+  \field{journaltitle}{Astronomical Society of the Pacific Conference Series}
+  \field{year}{1995}
 \endentry
 
 \lossort
