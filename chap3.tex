@@ -46,18 +46,22 @@ While this design might be reasonable when a pulsar is readily available, the so
 
 
 \subsection{xGPU}
-xGPU is a CUDA package that implements the cross-correlation operation of an FX Correlator on NVidia GPUs.
+xGPU is a CUDA package that implements the cross-correlation operation of an FX Correlator on NVidia GPUs \cite{Clark:2011wi}.
+The CUDA kernel is expertly optimized, providing very high throughput and allowing it scale and support very large arrays.
+Figure \ref{fig: C3/gpuxperformance.pdf} shows the performance of the kernel versus array size, scaling the array size all the way to 512 antennas.
+Although the kernel itself is difficult to modify without GPU expertise, the implementation of the package in CUDA ensures that users without optimization experience are able to use the tool to implement large-n correlators.
+
+
 %TODO: add another graph from paper
 \begin{figure}[ht!]
   \centering
     \includegraphics[width=\textwidth]{Images/C3/gpuxperformance.pdf}
-  \caption[xGPU Performance]{xGPU Performance (reprinted from \citeauthor{Clark:2011wi} \cite{Clark:2011wi})}
+  \caption[xGPU Performance]{xGPU Performance as a function of array size (reprinted from \citeauthor{Clark:2011wi} \cite{Clark:2011wi})}
   \label{fig: C3/gpuxperformance.pdf}
 \end{figure}
 
-\cite{Clark:2011wi}
 
-\cite{2009PASP..121..857W}
+
 
 
 \subsection{CASPER}
@@ -66,7 +70,7 @@ At the Collaboration for Astronomy Signal Processing and Electronics Research (C
 
 \begin{quotation}
 The primary goal of CASPER is to streamline and simplify the design flow of radio astronomy instrumentation by promoting design reuse through the development of platform-independent, open-source hardware and software.
-Our aim is to couple the real-time streaming performance of application-specific hardware with the design simplicity of general-purpose software. By providing parameterized, platform-independent "gateware" libraries that run on reconfigurable, modular hardware building blocks, we abstract away low-level implementation details and allow astronomers to rapidly design and deploy new instruments.
+Our aim is to couple the real-time streaming performance of application-specific hardware with the design simplicity of general-purpose software. By providing parameterized, platform-independent ``gateware" libraries that run on reconfigurable, modular hardware building blocks, we abstract away low-level implementation details and allow astronomers to rapidly design and deploy new instruments.
 \end{quotation}
 
 The collaboration, started at UC Berkeley by Dan Werthimer, Don Backer, and Mel Wright, has spread to include astronomers all over the world, as shown in Figure \ref{fig: C3/casper_collaborators.png}. 
@@ -453,17 +457,16 @@ Using this interface, we successfully replaced the CUFFT processing with softwar
 %The subbands are put into packets on the FPGA and sent over a 10 gigabit Ethernet switch to a cluster of servers.
 %The servers receive the data from the switch and process it using spectroscopy software provided in the software package or special purpose application software written by the user and linked into the provided packet processing infrastructure.
 
-\section{Tuning} \label{Related Work:Tuning}
-\subsection{Metropolis}
+\section{Algorithm Tuning} \label{Related Work:Tuning}
+Much of the work in Electrical Engineering relating to this kind of mapping use a fixed hardware model.
+In this section, we describe some of that work, and explain why it is not suitable to radio astronomy instrument design.
 
-The Metropolis project focused on mapping algorithms onto embedded systems \cite{Davare:2007ue}. 
+%\subsection{Metropolis}
+
+The Metropolis project focused on mapping algorithms onto embedded systems \cite{Davare:2007ue} \cite{Densmore:tm}. 
 The tool provides a framework for an abstract block based description of the algorithm. 
 This description makes it easy to stitch algorithms together without specifying the eventual hardware implementation, providing a simple path to simulation and algorithm development that is separate from the implemented design. 
 Then, the tool automatically maps the description onto an existing heterogeneous embedded system. 
-
-%TODO: review references
-\cite{Balarin:2003kc}
-\cite{Densmore:tm}
 
 %Mapping is focused on scheduling onto heterogeneous platforms
 %Strong focus on embedded systems
@@ -493,26 +496,22 @@ This tool assumes it must schedule a discrete task onto a fixed piece of hardwar
 In the applications described in Chapter \ref{chap:Real Time Radio Astronomy Algorithms}, the computation should always be running and needs to meet some minimum performance target.
 Once the performance target is met, it is better to have a tool that will minimize other costs like power or amount of hardware, rather attempting to improve the runtime of the algorithm. 
 
+%\subsection{Scheduling}
+There are many other scheduling projects that have issues similar to Metropolis.
+%An integer linear programming model for mapping applications on hybrid systems
+Axel \cite{Tsoi:2010we} uses map-reduce to map computation onto existing cluster nodes.
+Theodoridis et. al present a tool in \cite{Theodoridis:2009gd} that uses Integer Linear programming to determine if an application can feasibly be run on an an existing heterogeneous system.
+Again, both of these projects require a fixed hardware model, but this prerequisite that does not exist before a radio astronomy instrument is designed.
 
 
-
-
-
-
-
-%Lisa Marie Guerra (?)
-
-
-\subsection{Scheduling}
-An integer linear programming model for mapping applications on hybrid systems
 
 %TODO: sort these out
-\cite{Gibeling:2008vg}
+%\cite{Gibeling:2008vg}
 
-\cite{Theodoridis:2009gd}
 
-\cite{Tsoi:2010we}
 
-\cite{Jun:2008vv}
 
-\cite{Rakhshanfar:2011tg}
+
+%\cite{Jun:2008vv}
+
+%\cite{Rakhshanfar:2011tg}

@@ -8,7 +8,7 @@
 % these commands in the abstract anyway.
 
 %CASPER Workshop Abstract
-%I will present my work developing a tool to automatically partition radio astronomy instruments across a heterogeneous cluster, taking advantage of the strengths different technologies have to offer. There are tradeoffs between different computing architectures, such as FPGAs, GPUs, and ASICs, but assessing those differences manually and determining how to partition an instrument  can prove difficult. I will describe a technique where each function in a high level instrument gets profiled on different architectures. The architectural mapping is then done by an optimization technique called integer linear programming (ILP). The ILP is takes the function models as well as a cost model as input and uses them to determine what architecture is best for every function.  In conjunction with the automatic instrument generation technique used in the Packetized Astronomy Signal Processing (PASP) instrument, this work provides the framework for automatic radio astronomy instrument generation based on short, high level instrument descriptions.
+
 
 %TODO: This is a copy of the qual abstract, needs to include results, be rewritten
 
@@ -16,35 +16,43 @@ Traditional radio astronomy instrumentation relies on custom built designs, spec
 Traditional high performance computing (HPC) uses general purpose clusters and tools to parallelize the each algorithm across a cluster. 
 In real time radio astronomy processing, a simple CPU/GPU cluster alone is insufficient to process the data. 
 Instead, digitizing and initial processing of high bandwidth data received from a single antenna is often done in FPGA as it is infeasible to get the data into a single server. 
+
 %In this case, the instrument hardware is not used as general purpose, despite the fact that the FPGAs are reprogrammable.
 %Post-processing can easily be done in a CPU or GPU once the FPGA has split up the data into smaller bandwidths or reduced the data. 
 
-I propose to develop a universal architecture where each problem is partitioned across a heterogeneous cluster, taking advantage of the strengths different technologies have to offer.
-I propose we take an HPC approach to instrument development with a heterogeneous cluster that has both FPGAs and traditional servers.
-This cluster can be reprogrammed as necessary in the same way an HPC cluster is used to run many different applications on the same hardware.
+%I propose to develop a universal architecture where each problem is partitioned across a heterogeneous cluster, taking advantage of the strengths different technologies have to offer.
+%I propose we take an HPC approach to instrument development with a heterogeneous cluster that has both FPGAs and traditional servers.
+%This cluster can be reprogrammed as necessary in the same way an HPC cluster is used to run many different applications on the same hardware.
 
-The challenge in this heterogeneous of approach is partitioning the problem. 
-Normal HPC uses a homogeneous cluster where the nodes are interchangeable.
-In a heterogeneous cluster, there is an additional issue of determining how to partition the problem across different types of hardware. 
-I propose to design a tool that automatically determines how to partition instruments for radio astronomy.
-In order to do this work, I will need to model the platforms and based on a description of the final instrument, generate a processing pipeline.
-The partitioning needs to be done using a variety of techniques to assess the hardware.
-A static model of the hardware is useful to determine the amount of processing available in different types of hardware.
-Dynamic benchmarking would also be needed to deal with varying server architectures and determine how much processing and bandwidth the cpu/gpu servers can handle.
-Finally, to capture any overlooked subtleties or deal with things the tools cannot handle, the user will be able to input hints as to how the instrument should be generated.
+Choosing which platform to use is for different parts of an instrument is a growing challenge.
+With instrument specifications and platforms constantly changing as technology progresses, the design space for these instruments is unstable and often unpredictable.
+Furthermore, the astronomers designing these instruments may not be technology experts, and assessing tradeoffs between different computing architectures, such as FPGAs, GPUs, and ASICs and determining how to partition an instrument  can prove difficult.
+In this work, I present a tool called Optimal Rearrangement of Cluster-based Astronomy Signal Processing, or ORCAS, that automatically determines how to optimally partition an instrument across different types of hardware for radio astronomy based on a high level description of the instrument and a set of benchmarks.
+
+In ORCAS, each function in a high level instrument gets profiled on different architectures. 
+The architectural mapping is then done by an optimization technique called integer linear programming (ILP). 
+The ILP is takes the function models as well as the cost model as input and uses them to determine what architecture is best for every function in the instrument.  
+ORCAS judges optimality based on a cost function.
+Rather than throwing a lot of high powered computational resources at the problem, ORCAS minimizes the total monetary cost or power utilization of the instrument.
+
+%In order to do this work, I will need to model the platforms and based on a description of the final instrument, generate a processing pipeline.
+%The partitioning needs to be done using a variety of techniques to assess the hardware.
+%A static model of the hardware is useful to determine the amount of processing available in different types of hardware.
+%Dynamic benchmarking would also be needed to deal with varying server architectures and determine how much processing and bandwidth the cpu/gpu servers can handle.
+%Finally, to capture any overlooked subtleties or deal with things the tools cannot handle, the user will be able to input hints as to how the instrument should be generated.
 
 %Discussion of actual instruments to develop
 % Expand GBT and LEDA, discuss VEGAS
-The development of this tool will be driven by 2 instruments. First, the design of the GBT spectrometer, a spectrometer designed to support many different modes using the same cluster. 
-By using the tool to design this spectrometer, additional modes can be easily added and if the cluster is expanded the each mode can be redesigned to do additional processing that takes advantage of the extra hardware.
-I will also be working on the LEDA correlator. This is a low bandwidth, large N correlator, which is an ideal application for heterogeneous clusters. 
+%The development of this tool will be driven by 2 instruments. First, the design of the GBT spectrometer, a spectrometer designed to support many different modes using the same cluster. 
+%By using the tool to design this spectrometer, additional modes can be easily added and if the cluster is expanded the each mode can be redesigned to do additional processing that takes advantage of the extra hardware.
+%I will also be working on the LEDA correlator. This is a low bandwidth, large N correlator, which is an ideal application for heterogeneous clusters. 
 
 %Discussion of benchmarks
-We can assess the performance of this automatic partitioning tool in a number of ways. 
-First, this tool should significantly reduce NRE and time to science.
-By automatically generating the instrument the need for engineers who understand both science goals and programming is removed. 
-However, this benefit should not come with a large increase in cost.
-The instruments produced by this tool will be compared to optimized implementations with the same parameters on the basis of hardware utilization and power consumption.
+%We can assess the performance of this automatic partitioning tool in a number of ways. 
+%First, this tool should significantly reduce NRE and time to science.
+%By automatically generating the instrument the need for engineers who understand both science goals and programming is removed. 
+%However, this benefit should not come with a large increase in cost.
+%The instruments produced by this tool will be compared to optimized implementations with the same parameters on the basis of hardware utilization and power consumption.
 
 
 

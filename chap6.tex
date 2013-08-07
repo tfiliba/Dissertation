@@ -245,50 +245,13 @@ The left half of the figure has three F-engines, for each of the three antennas.
 The right half has four X-engines, one for each channel.
 And in the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the FFT blocks are connected in an all-to-all configuration.
 
+\subsection{FX Correlator Mapping}
+The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 572 antennas.
+%TODO: remove
+
+\emph{Note: The benchmarks are still being refined. An updated version of the results will be available on Monday}
+
+The 572 antenna design is based on the planned HERA Correlator.
+This correlator processes 100 MHz of data and divides it into 1024 channels.
 
 
-%xgpu benchmarks, correlator placement
-%
-%Need benchmarks for xengine
-%
-%HERA Correlator
-%
-%572 ant dual pol (currently can run in under 5 minutes)
-%
-%100 MHz
-%
-%1024 channels
-%
-%FPGA F, xGPU X
-%
-%LWA @ OVRO
-%
-%10k ant dual pol
-%
-%120k signals
-%
-%60MHz
-%
-%4096 channels
-%
-%1MWatt est w/GPU x-engine
-%
-%SKA
-%
-%4000 ant (8k signals)
-%
-%10 GHz
-%
-%16k channels
-
-
-
-
-%\subsection{Cost}
-%\subsection{Power}
-%
-%\section{Model Scaling}
-%What about really big stuff?
-%
-%\section{Mixed Cost Models}
-%Discuss mixing power+price
