@@ -402,14 +402,14 @@ As computation improves, the instrument can be reconfigured to send more bandwid
 \begin{figure}[h!]
   \centering
     \includegraphics[width=\textwidth]{Images/C4/serendip_vv_to_hrss.png}
-  \caption{TODO}
+  \caption{HRSS Design Based on SERENDIP V.v}
   \label{fig: C4/serendip_vv_to_hrss.png}
 \end{figure}
 
-The design of HRSS is based on the Serendip V.v design presented in Section \ref{Related Work:Radio Astronomy}.
+The design of HRSS is based on the SERENDIP V.v design presented in Section \ref{Related Work:Radio Astronomy}.
 Figure \ref{fig: C4/serendip_vv_to_hrss.png} shows how in HRSS the IBOB and BEE2 are replaced with a single chip FPGA board such as an IBOB or ROACH, and the fine channelization, thresholding and post processing are done on a GPU.
 
-Unlike Serendip V.v, HRSS is a software package to automatically generate spectrometers with minimal user input.
+Unlike SERENDIP V.v, HRSS is a software package to automatically generate spectrometers with minimal user input.
 I automated the design of the spectrometer, creating a parameterized spectrometer that only requires a recompile to implement a change in specification.
 This spectrometer combines FPGAs running PASP with GPUs, doing coarse channelization on the FPGA and sending each subband to the GPUs for further processing.
 The server software is designed for flexibility, allowing astronomers to easily modify the processing algorithm run on the GPU and customize the instrument to fit their science goals.
