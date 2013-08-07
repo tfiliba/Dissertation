@@ -24,49 +24,49 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: thesis-blx.bib
 Database file #2: references.bib
 Warning--string name "n/a" is undefined
---line 158 of file references.bib
+--line 173 of file references.bib
 Biblatex version: 1.7
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
-You've used 29 entries,
+You've used 31 entries,
             6019 wiz_defined-function locations,
-            1305 strings with 15491 characters,
-and the built_in function-call counts, 109797 in all, are:
-= -- 3637
-> -- 4155
-< -- 855
-+ -- 1556
-- -- 1876
-* -- 10994
-:= -- 7215
+            1314 strings with 15952 characters,
+and the built_in function-call counts, 117567 in all, are:
+= -- 3878
+> -- 4442
+< -- 906
++ -- 1665
+- -- 2003
+* -- 11808
+:= -- 7722
 add.period$ -- 0
-call.type$ -- 29
-change.case$ -- 339
-chr.to.int$ -- 94
-cite$ -- 56
-duplicate$ -- 12904
-empty$ -- 10743
-format.name$ -- 3468
-if$ -- 23392
+call.type$ -- 31
+change.case$ -- 356
+chr.to.int$ -- 100
+cite$ -- 60
+duplicate$ -- 13866
+empty$ -- 11518
+format.name$ -- 3744
+if$ -- 25002
 int.to.chr$ -- 0
-int.to.str$ -- 60
+int.to.str$ -- 64
 missing$ -- 0
-newline$ -- 1340
-num.names$ -- 1234
-pop$ -- 9508
+newline$ -- 1449
+num.names$ -- 1316
+pop$ -- 10204
 preamble$ -- 1
-purify$ -- 548
+purify$ -- 582
 quote$ -- 0
-skip$ -- 5847
+skip$ -- 6257
 stack$ -- 0
-substring$ -- 1427
-swap$ -- 4390
-text.length$ -- 1029
-text.prefix$ -- 118
+substring$ -- 1475
+swap$ -- 4702
+text.length$ -- 1093
+text.prefix$ -- 120
 top$ -- 1
-type$ -- 1087
+type$ -- 1163
 warning$ -- 0
-while$ -- 584
+while$ -- 622
 width$ -- 0
-write$ -- 1310
+write$ -- 1417
 (There was 1 warning)

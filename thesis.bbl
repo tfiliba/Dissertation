@@ -731,6 +731,20 @@
   \field{year}{2008}
 \endentry
 
+\entry{Inc:CkOMExio}{manual}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Inc}{I.}%
+     {Gurobi~Optimization}{G.~O.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{IGO1}
+  \strng{fullhash}{IGO1}
+  \field{sortinit}{I}
+  \field{title}{{Gurobi Optimizer Reference Manual}}
+\endentry
+
 \entry{Jun:2008vv}{article}{}
   \name{author}{3}{}{%
     {{}%
@@ -787,6 +801,101 @@
   \field{year}{2010}
 \endentry
 
+\entry{Koch:2011cw}{article}{}
+  \name{author}{16}{}{%
+    {{}%
+     {Koch}{K.}%
+     {Thorsten}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Achterberg}{A.}%
+     {Tobias}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Andersen}{A.}%
+     {Erling}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bastert}{B.}%
+     {Oliver}{O.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Berthold}{B.}%
+     {Timo}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bixby}{B.}%
+     {Robert~E}{R.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Danna}{D.}%
+     {Emilie}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gamrath}{G.}%
+     {Gerald}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gleixner}{G.}%
+     {Ambros~M}{A.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Heinz}{H.}%
+     {Stefan}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lodi}{L.}%
+     {Andrea}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mittelmann}{M.}%
+     {Hans}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ralphs}{R.}%
+     {Ted}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Salvagnin}{S.}%
+     {Domenico}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Steffy}{S.}%
+     {Daniel~E}{D.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wolter}{W.}%
+     {Kati}{K.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KT+1}
+  \strng{fullhash}{KTATAEBOBTBREDEGGGAMHSLAMHRTSDSDEWK1}
+  \field{sortinit}{K}
+  \field{number}{2}
+  \field{pages}{103\bibrangedash 163}
+  \field{title}{{MIPLIB 2010}}
+  \field{volume}{3}
+  \field{journaltitle}{Math. Prog. Comp.}
+  \field{month}{06}
+  \field{year}{2011}
+\endentry
+
 \entry{Kondo:2010uk}{article}{}
   \name{author}{5}{}{%
     {{}%
@@ -826,21 +935,21 @@
   \field{year}{2010}
 \endentry
 
-\entry{Margot:2010tl}{article}{}
+\entry{Mittelmann:RLCvpfwn}{misc}{}
   \name{author}{1}{}{%
     {{}%
-     {Margot}{M.}%
-     {F}{F}%
+     {Mittelmann}{M.}%
+     {H}{H}%
      {}{}%
      {}{}}%
   }
-  \strng{namehash}{MF1}
-  \strng{fullhash}{MF1}
+  \strng{namehash}{MH1}
+  \strng{fullhash}{MH1}
   \field{sortinit}{M}
-  \field{pages}{647\bibrangedash 686}
-  \field{title}{{Symmetry in integer linear programming}}
-  \field{journaltitle}{50 Years of Integer Programming 1958-2008}
-  \field{year}{2010}
+  \field{title}{{Mixed Integer Linear Programming Benchmark}}
+  \verb{url}
+  \verb http://plato.asu.edu/ftp/milpc.html
+  \endverb
 \endentry
 
 \entry{Parsons:2006cu}{article}{}
