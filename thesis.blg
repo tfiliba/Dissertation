@@ -23,50 +23,50 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: thesis-blx.bib
 Database file #2: references.bib
-Warning--string name "n/a" is undefined
---line 195 of file references.bib
+Warning--entry type for "Mittelmann:RLCvpfwn" isn't style-file defined
+--line 52 of file references.bib
 Biblatex version: 1.7
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
-You've used 32 entries,
+You've used 27 entries,
             6019 wiz_defined-function locations,
-            1323 strings with 15873 characters,
-and the built_in function-call counts, 117533 in all, are:
-= -- 3891
-> -- 4410
-< -- 933
-+ -- 1608
-- -- 1957
-* -- 11512
-:= -- 7647
+            1298 strings with 15256 characters,
+and the built_in function-call counts, 108552 in all, are:
+= -- 4128
+> -- 4012
+< -- 973
++ -- 1619
+- -- 1694
+* -- 10239
+:= -- 6906
 add.period$ -- 0
-call.type$ -- 32
-change.case$ -- 366
+call.type$ -- 27
+change.case$ -- 505
 chr.to.int$ -- 106
-cite$ -- 62
-duplicate$ -- 13829
-empty$ -- 11636
-format.name$ -- 3612
-if$ -- 25170
+cite$ -- 52
+duplicate$ -- 12641
+empty$ -- 10437
+format.name$ -- 3212
+if$ -- 23380
 int.to.chr$ -- 0
-int.to.str$ -- 66
+int.to.str$ -- 61
 missing$ -- 0
-newline$ -- 1394
-num.names$ -- 1357
-pop$ -- 10453
+newline$ -- 1278
+num.names$ -- 1348
+pop$ -- 8832
 preamble$ -- 1
-purify$ -- 578
+purify$ -- 697
 quote$ -- 0
-skip$ -- 6298
+skip$ -- 5966
 stack$ -- 0
-substring$ -- 1495
-swap$ -- 4681
-text.length$ -- 1107
-text.prefix$ -- 125
+substring$ -- 2269
+swap$ -- 4325
+text.length$ -- 930
+text.prefix$ -- 94
 top$ -- 1
-type$ -- 1201
+type$ -- 1008
 warning$ -- 0
-while$ -- 644
+while$ -- 561
 width$ -- 0
-write$ -- 1361
+write$ -- 1250
 (There was 1 warning)
