@@ -232,7 +232,7 @@ Getting the performance model for a specific block simply requires a looking up 
 
 \begin{figure}[ht!]
   \centering
-    \includegraphics[width=0.75\textwidth]{Images/C6/pfb_gpu_bench.png}
+    \includegraphics[width=0.85\textwidth]{Images/C6/pfb_gpu_bench.png}
     \includegraphics[width=0.75\textwidth]{Images/C6/fft_gpu_bench.png}
   \caption{PFB FIR and FFT benchmark data on the GTX 580}
   \label{fig: C6/gpu_bench.png}
@@ -254,6 +254,20 @@ The xGPU paper has a number of graphs demonstrating kernel performance that can 
 Performance data can also be represented using formulas. 
 Figure \ref{fig: C6/fpga_bench.png} clearly shows some predictable trends in the FIR and FFT utilization.
 Primiami, et al turned this predictability into a set of equations that determine the requisite resources with a set of formulas \cite{Primiani:2011vz}.
+
+\begin{figure}[ht!]
+  \centering
+    \includegraphics[width=\textwidth]{Images/C6/xeng_fpga_bench.png}
+  \caption{Cross-Correlator X-engine DSP Utilization}
+  \label{fig: C6/xeng_fpga_bench.png}
+\end{figure}
+
+A more extreme example of predictability arises in the CASPER X-Engine.
+DSP utilization on FPGAs has a predictable linear relationship with the number of antennas correlated.
+Figure \ref{fig: C6/xeng_fpga_bench.png} displays a bar chart of the real benchmark data with a line interpolated through the points.
+The line passes through every point, and we see the relationship can be characterized by the following equation:
+
+\[ DSPs = 8*antennas+16 \]
 
 We can also use existing benchmarks to project how a block might perform on newer technology.
 In FPGAs, we notice the number of resources required for a block remains nearly constant between different chips.
@@ -310,14 +324,15 @@ Both can be calculated simply by iterating through the boards used and adding th
 Table \ref{tab: C5/costs} shows the costs for many platforms commonly used in CASPER instruments.
 
 \begin{table}
-\begin{tabular}{| l | l | l | l | l | l |}
+\centering
+\begin{tabular}{| l | l | l | l | l |}
 \hline  
-\textbf{Platform} & Specification & Monetary Cost & Idle power & Average power & Maximum power \\
+\textbf{Platform} & Specification & Monetary Cost & Idle power & Maximum power \\
 \hline  
-ROACH & Virtex 5 SX95T & \$6,700 & 55 W & 65 W & 75 W \\
-ROACH 2 & Virtex 6 SX475T & \$10,500 & 60 W & 70 W & 80 W \\
-ROACH 3 & Virtex 7 VX980T & & 60 W & 70 W & 80 W \\
-NRAO Server & GTX 580 & \$3,500 & 225 W & 400 W & 475 W \\
+ROACH & Virtex 5 SX95T & \$6,700 & 55 W & 75 W \\
+ROACH 2 & Virtex 6 SX475T & \$10,500 & 60 W & 80 W \\
+ROACH 3 & Virtex 7 VX980T & board is still in development & 60 W & 80 W \\
+NRAO Server & GTX 580 & \$3,500 & 225 W & 475 W \\
 \hline  
 \end{tabular}
 \caption{Monetary and Power Costs for Common CASPER Platforms}
@@ -330,22 +345,36 @@ Adding another platform, like a 'Free ROACH', with same specifications as a ROAC
 This feature is a useful way to determine if it is worthwhile to replace existing hardware for an instrument upgrade.
 
 The final entry in Table \ref{tab: C5/costs} is a high performance server, and the reported costs include a GTX 580 GPU, but that might not be the best GPU to use.
+Note that the ROACH 3 hasn't been built, so the dollar cost is unknown but we can estimate the power consumption.
 The data in Table \ref{tab: C5/GPU} is useful to determine how a different GPU will affect the total cost of the server.
 
 \begin{table}
-\begin{tabular}{| l | l | l | l | l |}
+\centering
+\begin{tabular}{| l | l | l | l |}
 \hline  
-GPU & Cost & Idle power & Average power & Maximum power \\
+GPU & Cost & Idle power & Maximum power \\
 \hline  
-GTX 580& \$500 & 125 W & 150 W & 175 W \\
-GTX 680 & \$500 &100 W & & \\
-GTX 690& \$1,000 & & & \\
+GTX 580& \$500 & 125 W & 175 W \\
+GTX 680 & \$500 &100 W & 195 W \\
+GTX 690& \$1,000 & 130 W & 300 W \\
 \hline  
 \end{tabular}
 \caption{GPU Board Costs}
 \label{tab: C5/GPU}
 \end{table} 
 
+\section{Design Options}
+The cost optimization is guaranteed to find the cheapest instrument, but it's not necessarily going to be easy to build.
+Since the ILP will attempt to use every possible resource, it may end up with complex and asymmetrical designs.
+To simplify these designs, two options can be enabled that will add extra constraints to the ILP.
+
+The first option is called \emph{single design}. 
+This option forces every every board of a certain platform type to implement the same design.
+Instead of allowing any block to go on any board, the designs must be replicated.
+The second option is \emph{single implementation}.
+This forces every block with the same block type to be implemented on the same platform type.
+More simply, if the platforms available are a server and ROACH and we are placing FIR blocks all the FIR blocks must be placed on a ROACH or all the FIR blocks must be placed on a server.
+These options could drive the cost up, but the tradeoff may prove beneficial, as they both reduce debugging time and complexity in the final design.
 
 
 \section{Optimization}

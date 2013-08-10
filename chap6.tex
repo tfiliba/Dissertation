@@ -79,7 +79,7 @@ The mapping produced by ORCAS is shown below.
 
 \lstinputlisting[
     %caption=My Class,
-    label={spec_dflow.py},
+    label={spec_800_result.txt},
     breaklines=true,
   ]{code/C6/spec_800_result.txt}
   
@@ -158,25 +158,14 @@ To aid the linear program, we assume reordering the coarse FFT data is infeasibl
 
 
 \begin{sidewaystable}
-\begin{tabular}{| c | c | c | c | c | c |}
-\hline  
-\diaghead{\theadfont Diag ColumnmnHead II}{\textbf{Antennas}}{\textbf{Dimensions}} & 256 by 524,288 & 512 by 262,144 & 1024 by 131,072 & 
-2048 by 65,536 & 4096 by 32,768\\
-\hline  
-1 &  \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 2 GPUs \\ 1 ROACH \\ \$13.7k \end{tabular} & \begin{tabular}{c} 1 GPU \\ 1 ROACH \\ \$10.2k \end{tabular} &\begin{tabular}{c} 1 GPU \\ 1 ROACH \\ \$10.2k \end{tabular}  \\
-\hline
-3  & \begin{tabular}{c} 5 GPUs \\ 1 ROACH \\ \$24.2k \end{tabular} & \begin{tabular}{c} 4 GPUs \\ 1 ROACH \\ \$20.7k \end{tabular} & \begin{tabular}{c} 4 GPUs \\ 1 ROACH \\ \$20.7k \end{tabular} & \begin{tabular}{c} 3 GPUs \\ 1 ROACH \\ \$17.2k \end{tabular} & \begin{tabular}{c} 3 GPUs \\ 2 ROACH \\ \$23.9k \end{tabular} \\
-\hline  
-5 & \begin{tabular}{c} 8 GPUs \\ 2 ROACH \\ \$41.4k \end{tabular} & \begin{tabular}{c} 7 GPUs \\ 2 ROACH \\ \$37.9k \end{tabular} & \begin{tabular}{c} 7 GPUs \\ 2 ROACH \\ \$37.9k \end{tabular} &
- \begin{tabular}{c} 5 GPUs \\ 2 ROACH \\ \$30.9k \end{tabular} &  \begin{tabular}{c} 5 GPUs \\ 2 ROACH \\ \$30.9k \end{tabular} \\
-\hline  
-7 & \begin{tabular}{c} 12 GPUs \\ 2 ROACH \\ \$55.4k \end{tabular} & Not solved & \begin{tabular}{c} 9 GPUs \\ 3 ROACH \\ \$51.6k \end{tabular}  &
- \begin{tabular}{c} 8 GPUs \\ 3 ROACH \\ \$48.1k \end{tabular} &  \begin{tabular}{c} 7 GPUs \\ 3 ROACH \\ \$44.6k \end{tabular}\\
-\hline  
-\end{tabular}
+\input{Tables/wbspec_table_old.tex}
 \caption{134 Million Channel High Resolution Spectrometer Design Space}
 \label{tab: C5/highres_spec_design_space}
 \end{sidewaystable} 
+
+%\begin{sidewaystable}
+%\input{Tables/wbspec_table.tex}
+%\end{sidewaystable} 
 
 Table \ref{tab: C5/highres_spec_design_space} shows the results of this design space exploration. 
 We observe that extreme values for the number of channels tends to increase costs, likely because it's difficult to put larger blocks together on the same board and get high utilization of the hardware.
@@ -231,27 +220,29 @@ Each X-Engine takes a single channel of data from every antenna in the array, cr
 Figure \ref{fig: C4/fx_x_engine.pdf} shows the pipeline for a single X-Engine. 
 Since each X-Engine only operates on a single channel, the total number of X-Engines in the correlator must be the same as the number of channels in the FFT.
 
+
 %TODO: add detection step
 \begin{figure}[h!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/fx_dataflow.pdf}
   \caption{Example FX Correlator Dataflow Model}
-  \label{fig: C4/fx_dataflow.pdf}
+  \label{fig: C6/fx_dataflow.pdf}
 \end{figure}
 
 The dataflow for an FX correlator will vary quite a bit based on the input parameters. 
-Figure \ref{fig: C4/fx_dataflow.pdf} shows an example there antenna four channel FX correlator. 
+Figure \ref{fig: C6/fx_dataflow.pdf} shows an example there antenna four channel FX correlator. 
 The left half of the figure has three F-engines, for each of the three antennas.
 The right half has four X-engines, one for each channel.
 And in the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the FFT blocks are connected in an all-to-all configuration.
 
 \subsection{FX Correlator Mapping}
-The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 572 antennas.
-%TODO: remove
-
-\emph{Note: The benchmarks are still being refined. An updated version of the results will be available on Monday}
-
+The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 572 dual polarization antennas.
 The 572 antenna design is based on the planned HERA Correlator.
 This correlator processes 100 MHz of data and divides it into 1024 channels.
 
+\begin{table}
+\input{Tables/fx_corr_table.tex}
+\caption{FX Correlator Design Space}
+\label{tab: C6/FX Correlator Design Space}
+\end{table} 
 
