@@ -236,13 +236,58 @@ The right half has four X-engines, one for each channel.
 And in the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the FFT blocks are connected in an all-to-all configuration.
 
 \subsection{FX Correlator Mapping}
-The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 572 dual polarization antennas.
-The 572 antenna design is based on the planned HERA Correlator.
-This correlator processes 100 MHz of data and divides it into 1024 channels.
+The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 512 dual polarization antennas.
+The design is based on the planned HERA Correlator that processes 100 MHz of data and divides it into 1024 channels.
+
+I use the technique of block combining described in Section \ref{Algorithm Partitioning:Optimization} to ensure the problem can be solved quickly even when the number of antennas is large.
+The FIR and FFT are combined into a single block called a PFB.
+
+The symmetry of the correlator dataflow makes this a good instrument to observe the effects of the ILP options, single design and single implementation.
+Just by looking at the results for the 16 antenna mapping with both options disabled, it is already apparent that the ILP is putting small blocks anywhere it can fit them, without much regard for the existing symmetry.
+We see in the results below that the transpose block, that rearranges data, has been allocated asymmetrically.
+
+\lstinputlisting[
+    %caption=My Class,
+    label={corr_si0_sd0_16_result.txt},
+    breaklines=true,
+  ]{code/C6/corr_si0_sd0_16_result.txt}
+  
+Enabling both options gives a slightly higher cost since an additional ROACH board is required, but this makes the design symmetric.
+One observed side effect of this approach is the fact that the design might end up creating more blocks than the design originally required.
+Consider the case where seven `A' blocks need to be distributed among four boards. 
+If the single design option is off, the ILP can allocate those blocks however it wants.
+But enabling the single design option makes it impossible to allocate them across those four boards and would come up with a solution that requires seven boards.
+This is clearly inefficient and is solved by relaxing the constraint on the total number of blocks.
+Rather than requiring the total number of implemented `A' blocks to sum to the total number of required blocks, the constraint requires that the number of implemented `A' blocks is greater than or equal to the number of required blocks.
+In the example, it would allow the instantiated design to add another `A' block and just put two blocks on each board.
+Relaxing this constraint can also inadvertently create extra blocks that aren't needed.
+The results from the 16 antenna placement with both options enabled, listed below, over specify the number of ADCs simply because the space was available.
+  
+  \lstinputlisting[
+    %caption=My Class,
+    label={corr_si1_sd1_16_result.txt},
+    breaklines=true,
+  ]{code/C6/corr_si1_sd1_16_result.txt}
+  
+Analyzing the larger design space, we see this trend continue. 
+Table \ref{tab: C6/fx_corr_si0_sd0.tex} and Table \ref{tab: C6/fx_corr_si1_sd1.tex} show the entire design space optimized for dollars.
+The tests with the options disabled consistently use fewer boards, resulting in a lower cost design.
+In both cases, we see a quadratic scaling in the number of GPUs required and a linear scaling in the number of ROACH boards indicating that the cross correlation step should be implemented on a GPU and the channelization should be on an FPGA.
+
+We also note that enabling these options increases the execution time of the ILP.
+The execution time benchmarks were run on a server with two Quad-Core AMD Opteron 2376 Processors and 16GB of RAM.
+The increase in runtime when enabling either or both options is expected since these options directly affect the ILP structure by adding a number of constraints.
+
+
 
 \begin{table}
-\input{Tables/fx_corr_table.tex}
-\caption{FX Correlator Design Space}
-\label{tab: C6/FX Correlator Design Space}
+\centering
+\input{Tables/fx_corr_si0_sd0.tex}
+\caption{FX Correlator Design Space with Single Implementation and Single Design options disabled optimized for dollars}
+\label{tab: C6/fx_corr_si0_sd0.tex}
+
+\input{Tables/fx_corr_si1_sd1.tex}
+\caption{FX Correlator Design Space with Single Implementation and Single Design options enabled optimized for dollars}
+\label{tab: C6/fx_corr_si1_sd1.tex}
 \end{table} 
 

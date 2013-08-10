@@ -378,6 +378,7 @@ These options could drive the cost up, but the tradeoff may prove beneficial, as
 
 
 \section{Optimization}
+\label{Algorithm Partitioning:Optimization}
 While Integer Linear Programming has a number of desirable properties, the lack of an efficient algorithm to solve it  constitutes a significant obstacle in designing an ILP with reasonable performance.
 This section describes how the solver selection, design of this ILP, and the introduction of a few extra constraints serve to improve the performance and scalability of the program defined in this chapter. 
 
@@ -424,6 +425,17 @@ While this may be a feasible solution for a computer expert who might have some 
 This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCAS Goals}.
 The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
 To maintain usability for domain experts, guided optimization will not be the sole solution to this issue.
+
+\subsection{Combining Blocks}
+A good way to improve the runtime is to combine blocks that are likely to be placed on the same board.
+Many CASPER designs implement a polyphase filter bank using an FIR filter that is directly connected to an FFT.
+Observing that these should probably be close to each other, the FIR and FFT blocks can be replaced by a PFB.
+The resource utilization model for a combined block is created by adding the resource utilizations for each subblock.
+
+This technique can also be used to combine blocks of the same type. 
+ILP design optimization will become infeasible if there are many blocks that require a small amount of resources.
+If the design is symmetric, as is often the case in radio astronomy, small blocks on the same type will end up in groups on the same board.
+Grouping them together before running the ILP will result in the same design but a dramatically reduced runtime.
 
 \subsection{Breaking Symmetry} 
 %TODO 
