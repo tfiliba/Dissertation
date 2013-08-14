@@ -13,20 +13,21 @@ I demonstrate three types of instrument design, and explore how changing the par
 
 
 \section{Future Work}
-This success of this work opens up a lot of related projects to improve upon the existing mapping capabilities.
+The success of this work opens up a lot of related projects to improve upon the existing mapping capabilities.
 While the instruments developed with ORCAS are designed for radio astronomy, ORCAS was developed as a general purpose tool and the expansion of the instrument set into other fields would provide interesting new challenges.
 The existence of a DSP library and benchmarks would make it easy to transition to other DSP applications.
 
 %Design interconenct
-Since other applications might not need a full-crossbar network it would also be useful to integrate network design into the ILP.
-It is reasonable to assume this network exists and ignore the cost in radio astronomy because it is necessary.
+Since other applications might not need a full-crossbar network, it would also be useful to integrate network design into the ILP.
+In radio astronomy, it is reasonable to assume this network exists and ignore the cost when designing instruments.
 The toolflow currently allows the user to minimize the number of ports required but this still assumes the presence of a full-crossbar interconnect.
-In applications with different network architectures, the costs can significantly change with the network design as well as the platforms used and future versions of this tool that are used for these applications will need to take those costs into account.
+In applications with different network architectures, the costs can significantly change with the network design as well as the platforms used; future versions of this tool that are used for these applications will need to take those costs into account.
+
 
 There are also improvements that can be made to the model, but they need to be balanced with the ILP to ensure fast runtimes.
-As telescopes get larger, a single computational block may need to span multiple boards.
+As telescope arrays get larger, a single computational block may need to span multiple boards.
 As we saw in the FX Correlator case study, this is going to be the case for the X-Engine in the near future.
-Simply supporting that capability would be useful, but it would be better if model was able to determine how to split these blocks between boards.
+Simply supporting that capability would be useful, but it would be better if the model was able to determine how to split these blocks between boards.
 
 %Do a better job of preserving symmetry
 Finally, the ILP aims to reduce cost in any way possible and often does so by cramming unrelated blocks onto the same platform.

@@ -157,7 +157,7 @@ Next, we must take into account the structure of the algorithm to determine whet
 
 While the constraints on the total input and output bandwidth might seem simple, ensuring the values for $nr_{i,b}$ and $ns_{i,b}$ are sane requires additional constraints.
 Suppose we know we have 2 types of blocks: $A$, and $B$. 
-$A$ is a source of data, meaning it does not data from any computation block. 
+$A$ is a source of data, meaning it does not receive data from any computation block. 
 Similarly, block $B$ is a sink, with no data to send to another block.
 Regardless of how many $A$ and $B$ blocks get placed on platform $i$, none of the $A$ blocks will need to receive data and none of the $B$ blocks will need to send data. 
 Knowing that $A$ is a source and $B$ is a sink tells us that $nr_{i,A}=0$ and $ns_{i,B}=0$. 
@@ -216,12 +216,12 @@ Benchmarks of compiled and running code provide the best information, but are al
 Estimates are faster to obtain but won't be as accurate. 
 Nevertheless, many DSP blocks have predictable performance and a performance estimate based on similar benchmarks can be very reliable.
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.75\textwidth]{Images/C6/pfb_bench.png}
-     \includegraphics[width=0.75\textwidth]{Images/C6/fft_bench.png}
-  \caption{PFB FIR and FFT benchmark data on the Virtex V SX95T}
-  \label{fig: C6/fpga_bench.png}
+\begin{figure}[htp!]
+\centering
+\includegraphics[width=0.8\textwidth]{Images/C6/pfb_bench.png}
+\includegraphics[width=0.8\textwidth]{Images/C6/fft_bench.png}
+\caption{PFB FIR and FFT benchmark data on the Virtex 5 SX95T}
+\label{fig: C6/fpga_bench.png}
 \end{figure}
 
 Benchmarks of the mapped design or running code serve as a very accurate way to assess performance.
@@ -230,10 +230,10 @@ The graphs show the utilization of registers, LUTs, BRAMs and DSPs used on the V
 The top graph is the data for an 800 MHz FIR filter with 4 taps, and the bottom shows utilization for an 800 MHz FFT.
 Getting the performance model for a specific block simply requires a looking up the FFT size in the graph.
 
-\begin{figure}[ht!]
+\begin{figure}[htp!]
   \centering
-    \includegraphics[width=0.85\textwidth]{Images/C6/pfb_gpu_bench.png}
-    \includegraphics[width=0.75\textwidth]{Images/C6/fft_gpu_bench.png}
+    \includegraphics[width=0.8\textwidth]{Images/C6/pfb_gpu_bench.png}
+    \includegraphics[width=0.8\textwidth]{Images/C6/fft_gpu_bench.png}
   \caption{PFB FIR and FFT benchmark data on the GTX 580}
   \label{fig: C6/gpu_bench.png}
 \end{figure}
@@ -242,7 +242,7 @@ Similarly, Figure \ref{fig: C6/gpu_bench.png} has benchmarks for the same blocks
 These benchmarks measure the runtime of each function. 
 
 Many papers also provide these kinds of benchmarks, making it easy to get accurate numbers without installing or running the code.
-The xGPU paper has a number of graphs demonstrating kernel performance that can be used directly as an ORCAS benchmark, which will be shown in Chapter \ref{chap:Analysis}.
+The xGPU paper \cite{Clark:2011wi} has a number of graphs demonstrating kernel performance that can be used directly as an ORCAS benchmark, which will be shown in Chapter \ref{chap:Analysis}.
 
 %\begin{figure}[ht!]
 %  \centering
@@ -253,7 +253,7 @@ The xGPU paper has a number of graphs demonstrating kernel performance that can 
 
 Performance data can also be represented using formulas. 
 Figure \ref{fig: C6/fpga_bench.png} clearly shows some predictable trends in the FIR and FFT utilization.
-Primiami, et al turned this predictability into a set of equations that determine the requisite resources with a set of formulas \cite{Primiani:2011vz}.
+Primiami et al. turned this predictability into a set of equations that determine the requisite resources with a set of formulas \cite{Primiani:2011vz}.
 
 \begin{figure}[ht!]
   \centering
@@ -276,7 +276,8 @@ Aside from the number of LUTs, which slightly dropped between the Virtex 5 and V
 Although the utilization will change, because different chips will provide different amounts of resources, recording the number of resources required on one chip makes it possible to predict the utilization on another chip.
 
 \begin{table}
-\begin{tabular}{| l | l | l | l | l | l |}
+\centering
+\begin{tabular}{| l | r | r | r | r | r |}
 \hline  
 \textbf{Resource} & Virtex 5 SX95T & Virtex 6 SX475T & Virtex 7 VX980T \\
 \hline  
@@ -291,7 +292,7 @@ DSPs & 60 & 60 & 60 \\
 \label{tab: C5/compare_resource}
 \end{table} 
 
-Similarly projections can be made with new processor technology. 
+Similarly, projections can be made with new processor technology. 
 Even if a new technology is not yet available to buy, a conservative and optimistic estimate of the speedup can be used to generate a conservative and optimistic estimate of the instrument cost using that new technology. 
 
 %TODO: put this somewhere
@@ -325,7 +326,7 @@ Table \ref{tab: C5/costs} shows the costs for many platforms commonly used in CA
 
 \begin{table}
 \centering
-\begin{tabular}{| l | l | l | l | l |}
+\begin{tabular}{| l | l | r | r | r |}
 \hline  
 \textbf{Platform} & Specification & Monetary Cost & Idle power & Maximum power \\
 \hline  
@@ -341,12 +342,13 @@ NRAO Server & GTX 580 & \$3,500 & 225 W & 475 W \\
 
 %TODO: Discuss this
 The model can also take into account donated or existing hardware that will not contribute to the monetary cost of an instrument.
-Adding another platform, like a 'Free ROACH', with same specifications as a ROACH but a monetary cost of \$0 will allow the model to use the hardware without incurring any cost.
+Adding another platform, like a `Free ROACH', with same specifications as a ROACH but a monetary cost of \$0 will allow the model to use the hardware without incurring any cost.
 This feature is a useful way to determine if it is worthwhile to replace existing hardware for an instrument upgrade.
 
 The final entry in Table \ref{tab: C5/costs} is a high performance server, and the reported costs include a GTX 580 GPU, but that might not be the best GPU to use.
-Note that the ROACH 3 hasn't been built, so the dollar cost is unknown but we can estimate the power consumption.
 The data in Table \ref{tab: C5/GPU} is useful to determine how a different GPU will affect the total cost of the server.
+Also note that the ROACH 3 hasn't been built, so the dollar cost is unknown but we can estimate the power consumption.
+
 
 \begin{table}
 \centering
@@ -373,7 +375,7 @@ This option forces every every board of a certain platform type to implement the
 Instead of allowing any block to go on any board, the designs must be replicated.
 The second option is \emph{single implementation}.
 This forces every block with the same block type to be implemented on the same platform type.
-More simply, if the platforms available are a server and ROACH and we are placing FIR blocks all the FIR blocks must be placed on a ROACH or all the FIR blocks must be placed on a server.
+More simply, if the platforms available are a GTX 580 server and a ROACH and we are placing FIR blocks, all the FIR blocks must be placed on ROACH boards or all the FIR blocks must be placed on GTX 580 servers.
 These options could drive the cost up, but the tradeoff may prove beneficial, as they both reduce debugging time and complexity in the final design.
 
 
@@ -387,7 +389,7 @@ The ILP is described using an open source Python package called PuLP, available 
 PuLP does not include an integer linear program solver.
 Instead, it supports a number of existing solvers, allowing the user to choose which one to use.
 
-ORCAS was originally tested using the GNU Linear Programming Kit or GLPK \cite[Anonymous:2mgLnSkr], a free open source package that is supported by PuLP.
+ORCAS was originally tested using the GNU Linear Programming Kit or GLPK \cite{Anonymous:2mgLnSkr}, a free open source package that is supported by PuLP.
 Unfortunately, as the instrument models became more complex, GLPK often failed to converge on an optimal solution after running for 6 hours on my personal laptop, a 2011 Macbook Air and an attempt to get better performance by using a high powered server was futile.
 
 Because PuLP makes it simple to change the solver, only requiring a change to the single line of code that calls the solver, I decided to test other solvers before editing the ILP.
@@ -421,7 +423,7 @@ Gurobi was able to solve the existing models within minutes and is the solver us
 Another solution relies on user aid to guide the mapping.
 The ILP may spend time going over solutions that are obviously wrong to a human user.
 In this case, the user could intervene by setting some of the ILP variables manually and letting the ILP find a solution for the remaining variables.
-While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are as familiar with the hardware and computational block implementations. 
+While this may be a feasible solution for a computer expert who might have some idea of what the optimal mapping should be, this not a useful technique for the domain specific experts who are not as familiar with the hardware and computational block implementations. 
 This violates one of the basic goals of this tool described in Section \ref{High Level Toolflow:ORCAS Goals}.
 The tool needs to be accessible and usable by domain specific experts as well as computer experts, and dealing with symmetry in this way will require a computer expert in the loop to generate a mapping and get a cost estimate.
 To maintain usability for domain experts, guided optimization will not be the sole solution to this issue.
@@ -433,8 +435,8 @@ Observing that these should probably be close to each other, the FIR and FFT blo
 The resource utilization model for a combined block is created by adding the resource utilizations for each subblock.
 
 This technique can also be used to combine blocks of the same type. 
-ILP design optimization will become infeasible if there are many blocks that require a small amount of resources.
-If the design is symmetric, as is often the case in radio astronomy, small blocks on the same type will end up in groups on the same board.
+ILP design optimization will become infeasible if there are many blocks that require very few resources.
+If the design is symmetric, as is often the case in radio astronomy, small blocks of the same type will end up in groups on the same board.
 Grouping them together before running the ILP will result in the same design but a dramatically reduced runtime.
 
 \subsection{Breaking Symmetry} 
@@ -454,10 +456,12 @@ In this type of program, symmetry significantly increases the amount of time req
 The boards that have the same platform type are interchangeable, so if board $i$ implements some design and board $j$ implements a different design in the optimal solution, there is another optimal solution where their designs are swapped.
 % TODO add example (?)
 % TODO add a graphic for this example
-For example, suppose 2 ROACH boards are available to implement a FIR filter and an FFT. 
+For example, suppose 2 ROACH boards are available to implement an FIR filter and an FFT. 
 The ILP might observe that both blocks cannot fit on a single board and assigns the FIR to the first ROACH and the FFT to the second ROACH.
 This obviously seems like an optimal solution, but the ILP may also need to check the case where the FFT is placed on ROACH\_0 and the FIR is on ROACH\_1, only to find that it has the same cost as the previous result.
-In this simple example there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
+Figure \ref{fig:C5/symmetry.pdf} shows a more complex example of a cross-correlator where the cross correlation step can be implemented on either ROACH board. 
+Again, there are two possible solutions the ILP can find before convincing itself that either is optimal.
+In these simple example there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
 
 %TODO: Figure descr
 
@@ -465,8 +469,8 @@ Searching symmetric solutions can become a major time sink, because the ILP solv
 
 
 % Early stopping (non-optimal result)The simplest solution is stopping the ILP solver before returns an optimal mapping. 
-This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, (determining that is analogous to solving the ILP).
-Early stopping works well when it's clear that symmetry is the cause of the long runtime and the amount of time it would take to get one of the isomorphic optimal solutions is short. 
+This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, since determining that is analogous to solving the ILP.
+Early stopping works well when it's clear that symmetry is the cause of the long runtime and the amount of time it would take to find one of the isomorphic optimal solutions is short. 
 Even so, the lack of predictable and repeatable results makes early stopping an unappealing solution.
 
 %TODO: subset mapping
@@ -474,32 +478,33 @@ Even so, the lack of predictable and repeatable results makes early stopping an 
 % Break symmetry - this is a good idea
 The solutions above outline ways to cope with the existing symmetry. 
 Another way to reduce the runtime is to remove the symmetry altogether. 
-In order to do this, the ILP must be modified so that only 1 of the isometric optimal solutions is a valid solution to the ILP. 
+In order to do this, the ILP must be modified so that only one of the isometric optimal solutions is a valid solution to the ILP. 
 First, a variable $lex\_order_i$ is added for each board.
-This variable is meant to uniquely identifies the design running on the board; it is simply the concatenation of all the $n_{i,b}$ variables for that board.
-Note that the ordering of $n_{i,b}$ variables when the concatenation is done is irrelevant, the only thing that matters is that the order is consistent for every board.
+This variable is meant to uniquely identify the design running on the board; it is simply the concatenation of all the $n_{i,b}$ variables for that board.
+Note that the ordering of $n_{i,b}$ variables in the concatenation is irrelevant.
+The only thing that matters is that the order is consistent for every board.
 When $lex\_order_i =lex\_order_j$ we can infer that for all blocks $b$, $n_{i,b} = n_{j,b}$.
 Otherwise, there must be some block $b$ where $n_{i,b} \neq n_{j,b}$.
 Now that the designs can be identified, they can be ordered. 
-They are simply ordered lexicographically, by adding the constraints in Equation \ref{eqn:leq_constraint} for every $i \geq 1$
+They are simply ordered lexicographically, by adding the constraints described in Equation \ref{eqn:leq_constraint}.
 
 \begin{align} \label{eqn:leq_constraint}
-lex\_order_{i-1} \geq lex\_order_i
+\forall i \geq 1: lex\_order_{i-1} \geq lex\_order_i
 \end{align}
 
-While this make the ILP, adding both constraints and variables, it reduces the amount of time the solver takes to find a solution. %TODO add a benchmark if feasible (?)
+While this makes the ILP more complex, adding both constraints and variables, it reduces the amount of time the solver takes to find a solution. %TODO add a benchmark if feasible (?)
 This lexicographic ordering makes it impossible to swap designs between different blocks, resulting in unique and valid mappings. 
 
-Revisiting the symmetry example at the beginning of this section, the design with 1 FIR and no FFTs would be encoded with a $lex\_order = 10$, and the design the no FIRs and a single FFT would get the encoding $lex\_order = 01$. 
+Revisiting the symmetry example at the beginning of this section, the design with one FIR and no FFTs would be encoded with a $lex\_order = 10$, and the design the no FIRs and a single FFT would get the encoding $lex\_order = 01$. 
 When the FIR is placed on ROACH\_0, then $lex\_order_0 = 10 \geq lex\_order_0 = 01$, satisfying the new constraint.
-The solution where the blocks are swapped and FIR is on ROACH\_1 violates the new constraint  $lex\_order_0 = 01 \not \geq lex\_order_0 = 10$, and will not be considered by the ILP solver.
+The solution where the blocks are swapped and the FIR is on ROACH\_1 violates the new constraint  $lex\_order_0 = 01 \not \geq lex\_order_0 = 10$, and will not be considered by the ILP solver.
 
 Generalizing this, it is impossible to take a valid solution (with the lexicographic constraint) and get another valid solution by swapping distinct designs between boards.
 Suppose, without loss of generality, board $i$ has a design with $lex\_order_i = x$ and board $j$ has a distinct design with $lex\_order_j = y$ and $i < j$.
 Knowing that the design is valid implies $x \geq y$. 
 Another optimal mapping exists where the designs are swapped and $lex\_order_i = y$, $lex\_order_j = x$, but we are guaranteed that this is not a valid solution to the ILP because it violates the lexicographic ordering constraint.
 
-These constraints have been implemented in the final ILP and drastically reduces the amount of time it takes to solve the ILP. 
+These constraints have been implemented in the final ILP and they drastically reduce the amount of time it takes to solve the ILP. 
 The additional constraints do not change the cost of the optimal solution, instead they just reduce the number of valid optimal solutions. 
 By modifying the ILP, the performance is greatly improved without sacrificing optimality or usability.
 
@@ -523,7 +528,7 @@ Figure \ref{fig:C5/mapped_dataflow.png} shows an example of the output produced 
 The design is a simple wideband spectrometer model.
 The mapping indicates that the design will use one ROACH board and two GTX 580 servers, placing the FIR and coarse FFT on the FPGA and the remaining fine FFTs on the GPU.
 
-\begin{figure}[ht!]
+\begin{figure}[htb!]
   \centering
      \includegraphics[width=0.75\textwidth]{Images/C5/mapped_dataflow.png}
   \caption{ORCAS Output}

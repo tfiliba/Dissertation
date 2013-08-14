@@ -457,6 +457,11 @@
   \field{year}{2011}
 \endentry
 
+\entry{Anonymous:2mgLnSkr}{misc}{}
+  \field{sortinit}{G}
+  \field{title}{{GNU Linear Programming Kit}}
+\endentry
+
 \entry{Govindaraju:2008vx}{inproceedings}{}
   \name{author}{5}{}{%
     {{}%

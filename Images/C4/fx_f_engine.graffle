@@ -14,7 +14,7 @@
 	<key>BackgroundGraphic</key>
 	<dict>
 		<key>Bounds</key>
-		<string>{{0, 0}, {576, 733}}</string>
+		<string>{{0, 0}, {575.99999332427979, 733}}</string>
 		<key>Class</key>
 		<string>SolidGraphic</string>
 		<key>ID</key>
@@ -46,7 +46,7 @@
 	<key>Creator</key>
 	<string>Terry Filiba</string>
 	<key>DisplayScale</key>
-	<string>1 0/72 in = 1 0/72 in</string>
+	<string>1 0/72 in = 1.0000 in</string>
 	<key>GraphDocumentVersion</key>
 	<integer>8</integer>
 	<key>GraphicsList</key>
@@ -60,11 +60,44 @@
 				<integer>24</integer>
 			</dict>
 			<key>ID</key>
-			<integer>31</integer>
+			<integer>72</integer>
 			<key>Points</key>
 			<array>
-				<string>{161.63100001488874, 47.130482052607697}</string>
-				<string>{196.50099998511129, 47.130482052607697}</string>
+				<string>{242.56550216674805, 40.871514271826655}</string>
+				<string>{273.5, 40.871514271826655}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>stroke</key>
+				<dict>
+					<key>HeadArrow</key>
+					<string>FilledArrow</string>
+					<key>Legacy</key>
+					<true/>
+					<key>TailArrow</key>
+					<string>0</string>
+				</dict>
+			</dict>
+			<key>Tail</key>
+			<dict>
+				<key>ID</key>
+				<integer>70</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>Class</key>
+			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
+				<integer>70</integer>
+			</dict>
+			<key>ID</key>
+			<integer>71</integer>
+			<key>Points</key>
+			<array>
+				<string>{156.6309994108546, 40.960235715142154}</string>
+				<string>{187.56550275589345, 40.913257855478172}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -86,7 +119,57 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{197.001, 20}, {54, 54.261000000000003}}</string>
+			<string>{{188.06550216674805, 13.740995713746884}, {54, 54.261000000000003}}</string>
+			<key>Class</key>
+			<string>ShapedGraphic</string>
+			<key>FontInfo</key>
+			<dict>
+				<key>Color</key>
+				<dict>
+					<key>w</key>
+					<string>0</string>
+				</dict>
+				<key>Font</key>
+				<string>Helvetica</string>
+				<key>NSKern</key>
+				<real>0.0</real>
+				<key>Size</key>
+				<real>12</real>
+			</dict>
+			<key>ID</key>
+			<integer>70</integer>
+			<key>Shape</key>
+			<string>Rectangle</string>
+			<key>Style</key>
+			<dict>
+				<key>fill</key>
+				<dict>
+					<key>Color</key>
+					<dict>
+						<key>b</key>
+						<string>0.27451</string>
+						<key>g</key>
+						<string>1</string>
+						<key>r</key>
+						<string>1</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>Text</key>
+			<dict>
+				<key>Text</key>
+				<string>{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
+
+\f0\fs24 \cf0 \expnd0\expndtw0\kerning0
+FFT}</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Bounds</key>
+			<string>{{274, 13.741004692810947}, {54, 54.261000000000003}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -114,11 +197,11 @@
 					<key>Color</key>
 					<dict>
 						<key>b</key>
-						<string>0.117647</string>
+						<string>0.561493</string>
 						<key>g</key>
-						<string>0.392157</string>
-						<key>r</key>
 						<string>1</string>
+						<key>r</key>
+						<string>0.527922</string>
 					</dict>
 				</dict>
 			</dict>
@@ -131,12 +214,12 @@
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
 
 \f0\fs24 \cf0 \expnd0\expndtw0\kerning0
-FFT}</string>
+Corner Turn}</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{107.131, 20}, {54, 54.261000000000003}}</string>
+			<string>{{102.131, 13.871497856873447}, {54, 54.261000000000003}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -164,9 +247,9 @@ FFT}</string>
 					<key>Color</key>
 					<dict>
 						<key>b</key>
-						<string>0.27451</string>
+						<string>0</string>
 						<key>g</key>
-						<string>1</string>
+						<string>0.501961</string>
 						<key>r</key>
 						<string>1</string>
 					</dict>
@@ -186,7 +269,7 @@ FIR}</string>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{17, 20}, {54.261000000000003, 54.261000000000003}}</string>
+			<string>{{12, 13.871497856873447}, {54.261000000000003, 54.261000000000003}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>HFlip</key>
@@ -235,8 +318,8 @@ FIR}</string>
 			<integer>21</integer>
 			<key>Points</key>
 			<array>
-				<string>{71.761000014888694, 47.130518997410604}</string>
-				<string>{106.6309999851113, 47.130518997410604}</string>
+				<string>{66.761000014888694, 41.002016854284051}</string>
+				<string>{101.6309999851113, 41.002016854284051}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -304,7 +387,7 @@ FIR}</string>
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-06-27 05:04:04 +0000</string>
+	<string>2013-08-14 04:37:20 +0000</string>
 	<key>Modifier</key>
 	<string>Terry Filiba</string>
 	<key>NotesVisible</key>
@@ -335,7 +418,7 @@ FIR}</string>
 		<key>NSPaperSize</key>
 		<array>
 			<string>size</string>
-			<string>{612, 792}</string>
+			<string>{611.99999332427979, 792}</string>
 		</array>
 		<key>NSPrintReverseOrientation</key>
 		<array>
@@ -385,7 +468,7 @@ FIR}</string>
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{49, 6}, {710, 872}}</string>
+		<string>{{596, -6}, {710, 872}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>

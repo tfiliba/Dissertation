@@ -21,14 +21,14 @@ Keeping up with increasing computation demands has often resulted in the special
 %DiFX (Distributed FX Correlator) is a scalable software implementation
 The DiFX Correlator is a scalable software implementation of an FX Correlator  \cite{Deller:2007wy}.
 DiFX was designed as a software correlator that targets CPUs in order to maintain flexibility in the design.
-The DiFX correlator was originally developed to do VLBI (Very Long Baseline interfereometery). 
+The DiFX correlator was originally developed to do VLBI (Very Long Baseline interferometery). 
 The correlator is used by recording data at each VLBI site, collecting it, and playing back the recorded data through the correlator.
 
 
 While this instrument does not run in real time, it is still an important instrument because it represents a parameterized software correlator design.
 Unfortunately, the flexibility of the software implementation comes at a high cost.
 Nearly 100 nodes are required to cross correlate 64 MHz of bandwidth from 10 antennas. 
-While this design might be reasonable when a pulsar is readily available, the software implementation is very costly to build from scratch.
+While this design might be reasonable when a cluster is readily available, the software implementation is very costly to build from scratch.
 
 %\subsection{LOFAR}
 %%\begin{figure}[ht!]
@@ -145,7 +145,7 @@ This makes it simple to design a cluster, and allows continuous upgrades as tech
 Currently, CASPER has designed the IBOB, or Interconnect Break-out Board, ROACH and ROACH2 boards. 
 The IBOB was originally designed as an interface to digitize antenna data and send it to a server, but the powerful Virtex-II Pro make it very useful for channelizing data as well.
 The ROACH board is shown in Figure \ref{fig: C3/roach.pdf} with an iADC board connected via Z-DOK+ and an ethernet cable to get data off the board,
-This board is pin-compatible with two large FPGA chips, the Virtex 5 SX95T and LX100T, with the SX95T being preferred for its large number of DSP-48s.
+This board is pin-compatible with two large FPGA chips, the Virtex 5 SX95T and LX110T, with the SX95T being preferred for its large number of DSP blocks.
 The ROACH has 2 Z-DOK+ connectors and supports up to 4 10-gigabit Ethernet links.
 The ROACH2 is an upgrade to the ROACH board to take advantage of the newer Xilinx chips.
 The Virtex 5 chips have been upgraded to the Virtex 6 SX475T, and this board supports up to 8 10-gigabit Ethernet links.
@@ -262,7 +262,7 @@ These files can be accessed using normal file I/O, making it simple to send cont
 \subsubsection{SERENDIP V.v}
 
 SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extra terrestrial intelligence by analyzing radio signals \cite{2010LPICo1538.5378S}.
-SERENDIP V.v is a high resolution SETI spectrometer that was deployed at Arecibo Observatory in 2009 as part of this project.
+SERENDIP V.v is a high resolution SETI spectrometer that was deployed at Arecibo Observatory in 2009.
 The installed instrument was built using an iADC, iBOB and BEE2 board.
 The instrument breaks up a single 200MHz stream into 128 million frequency channels, achieving a resolution of about 1Hz.
 
@@ -304,7 +304,7 @@ The SERENDIP V.v instrument processes data from the 7 beam Arecibo L-band Feed A
 The spectrometer doesn't have enough processing power to process all the beams at the same time, so they are multiplexed and fed through the spectrometer in a cycle. 
 The instrument was successfully deployed at Arecibo Observatory in June 2009.
 Figure \ref{fig:C3/serendipvv} shows the installed instrument at Arecibo Observatory. 
-The picture on the right shows the beam multiplexor, and the left picture shows the IBOB and BEE2 boards that were used to develop the instrument.
+The picture on the right shows the beam multiplexer, and the left picture shows the IBOB and BEE2 boards that were used to develop the instrument.
 
 
 

@@ -28,6 +28,7 @@ Radio telescopes produce very high amounts of data. %(TODO: add estimates, how m
 The reason for this high influx of data is twofold. 
 First, to enable new science, new radio antenna observe increasingly higher bandwidths. 
 %TODO edit this
+%TODO: and to surveil a large part of the sky
 Second, to sate the need for larger collecting area, rather than designing a single large dish, many new telescopes are being designed as antenna arrays, where the data from multiple antennas is combined to act as a single large dish.
 While it may be cheaper and easier to get a larger collecting area using small dishes rather than a single large dish, this adds additional complexity processing the data coming off the telescope.
 Rather than processing a single stream of data, now the instrument must process and combine multiple streams to make the array seem like a single large dish.
@@ -55,14 +56,14 @@ Correlation doesn't aim to form a single beam, but instead is the first step tow
 \label{Real Time Radio Astronomy Algorithms:Spectroscopy}
 A spectrometer is simply an instrument that produces an integrated, or averaged, frequency domain spectrum from a time domain signal. 
 A real time spectrometer works by constantly computing a spectrum over short windows of data (channelization), then each channel is summed for a predetermined amount of time to compute the average power in that channel (accumulation). 
-Figure x shows a block diagram for a simple spectrometer design. 
+%Figure x shows a block diagram for a simple spectrometer design. 
 %(TODO: add spectrometer block diagram)
 After digitization, there is the channelization step, where the signal is processed by a digital filter bank, and then the channels are accumulated. 
 
 \subsection{High resolution spectroscopy}
 Increasing resolution often requires an increase in complexity in the spectrometer design. 
 Once the number of required channels is sufficiently high, it becomes infeasible to compute the spectrum using a single filter bank. 
-To cope with this, the channelization is done in two steps as shown in figure. 
+To cope with this, the channelization is done in two steps. % as shown in figure. 
 In the first step, the signal is divided into coarse channels using a filter bank. 
 At this point the channels are much wider than intended and can't be accumulated yet. 
 After coarse channelization, the spectrometer treats the data from a single channel as time domain data and passes it through a filter bank again. 
@@ -91,7 +92,7 @@ Since it would be infeasible to channelize a 200MHz into 128 million channels us
 A pulsar processor is an instrument designed specifically to observe transient events, such as pulsars. 
 A pulsar is a rotating neutron star that emits an electromagnetic beam. 
 When the beam sweeps past Earth, due to the rotation of the star, it is observed as a pulse of wideband noise. 
-As the pulse travels through the interstellar medium (the matter filling interstellar space), the pulsar gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
+As the pulse travels through the interstellar medium (the matter filling interstellar space), the signal gets dispersed, meaning the low frequencies arrive before high frequencies, despite the fact that they were emitted at the same time. 
 
 %TODO: event horizon telescope
 \begin{wrapfigure}{L}{0.50\textwidth}
@@ -108,7 +109,7 @@ Instead, the algorithm becomes specialized to detect this type of quickly occurr
 The high resolution data is then sent to a process called dedispersion, which undoes the dispersion caused by the ISM, realigning the pulse.
 %TODO: describe dm, pulsar searching
 There are 2 techniques to do this.
-First, the pulse can be dedispersed by shifting the frequency channels by different amounts to compensate for the different delays as shown in figure x, in a process called \emph{incoherent dedispersion}. %TODO: add figure,
+First, the pulse can be dedispersed by shifting the frequency channels by different amounts to compensate for the different delays, in a process called \emph{incoherent dedispersion}. %TODO: add figure,
 This process can't be used to reconstruct the original pulse, but due to its relatively low compute cost, is a useful algorithm to search for new pulsars.
 The second technique, \emph{coherent dedispersion}, models the effect of the ISM as a convolving filter. 
 To remove this effect, the signal is deconvolved with the model.
@@ -148,9 +149,8 @@ The project will try to detect gravitational waves by observing an array of puls
 Beamforming is a technique for combining data from an array of antennas.
 The beamformer combines the data from multiple antennas into a single beam pointed at a single point in the sky.
 This is achieved by delaying the signal from each antenna by a different amount and then summing the delayed signals. 
-As illustrated in figure x, %TODO: 2 element beamformer 
-the signal from the intended source will not arrive at all the antennas at the same time. 
-The delay compensates for the disparity between the arrival times, and ocne the signals are summed it creates constructive interference in the direction of the source, and destructive interference in other directions. 
+The signal from the intended source will not arrive at all the antennas at the same time. 
+The delay compensates for the disparity between the arrival times, and once the signals are summed it creates constructive interference in the direction of the source, and destructive interference in other directions. 
 These delays can be changed to point the beam at a different source or to track a single source moving across the sky.
 
 
@@ -219,7 +219,7 @@ The cross-correlation of an antenna pair represents a point in the uv plane, cal
 Since the visibilities are not evenly or continuously sampled, the imager must interpolate points on the uv plane in an evenly spaced grid so the FFT algorithm, which relies on even spacings, can be applied to the data. 
 The imager must also account for the fact that the response of the telescope distorts the image, undoing the effect using iterative algorithms like CLEAN or Maximum Entropy. 
 Once this is done, a two dimensional inverse Fourier transform can be applied to recover the sky image. 
-The book Interferometery and Synthesis Imaging by Thomson, Moran and Swenson \cite{Thompson:1986ww} gives a detailed description of how the end to end synthesis imaging process works, but in this work we will only focus on the real time computation, the cores-correlation.
+The book Interferometery and Synthesis Imaging by Thomson, Moran and Swenson \cite{Thompson:1986ww} gives a detailed description of how the end to end synthesis imaging process works, but in this work we will only focus on the real time computation, the cross-correlation.
 
 Typically, large telescope arrays do correlation in real time and finish the imaging offline, but there are a few notable exceptions.
 One of these is the VLBA, or Very Long Baseline Array. 
