@@ -4,16 +4,16 @@
 %State: Can be written now \\
 %List of references already compiled into Papers archive \\
 
-In this chapter we discuss work related to this work in the fields of Radio Astronomy and Electrical Engineering.
+In this chapter we discuss work related to this dissertation in the fields of radio astronomy and electrical engineering.
 The radio astronomy work presented in this chapter share a common theme of flexibility and paramaterizability, demonstrating how common design patterns in astronomy are already being used to automate instrument implementation.
-The work in electrical engineering focuses on design generation, explaining what type of heterogeneous design was possible before the work, and why it is not sufficient to solve the radio astronomy instrumentation design problem.
+The work in electrical engineering focuses on design generation, explaining what type of heterogeneous design was possible before this work, and why the past work is not sufficient to solve the radio astronomy instrumentation design problem.
 
 
 %TODO: Intro
 \section{Radio Astronomy} \label{Related Work:Radio Astronomy}
 %\subsection{Digital Signal Processing for Radio Astronomy}
 The need for high bandwidth processing manifests in many different radio astronomy applications.
-Keeping up with increasing computation demands has often resulted in the specialized design of spectrometers.
+Keeping up with increasing computation demands has often resulted in the specialized design of instruments.
 
 %TODO: Intro
 \subsection{Distributed FX Correlator (DiFX)}
@@ -21,7 +21,7 @@ Keeping up with increasing computation demands has often resulted in the special
 %DiFX (Distributed FX Correlator) is a scalable software implementation
 The DiFX Correlator is a scalable software implementation of an FX Correlator  \cite{Deller:2007wy}.
 DiFX was designed as a software correlator that targets CPUs in order to maintain flexibility in the design.
-The DiFX correlator was originally developed to do VLBI (Very Long Baseline interferometery). 
+The DiFX correlator was originally developed to do VLBI (very long baseline interferometery). 
 The correlator is used by recording data at each VLBI site, collecting it, and playing back the recorded data through the correlator.
 
 
@@ -49,7 +49,7 @@ While this design might be reasonable when a cluster is readily available, the s
 xGPU is a CUDA package that implements the cross-correlation operation of an FX Correlator on NVidia GPUs \cite{Clark:2011wi}.
 The CUDA kernel is expertly optimized, providing very high throughput and allowing it scale and support very large arrays.
 Figure \ref{fig: C3/gpuxperformance.pdf} shows the performance of the kernel versus array size, scaling the array size all the way to 512 antennas.
-Although the kernel itself is difficult to modify without GPU expertise, the implementation of the package in CUDA ensures that users without optimization experience are able to use the tool to implement large-n correlators.
+Although the kernel itself is difficult to modify without GPU expertise, the implementation of the package in CUDA ensures that users without optimization experience are able to use the tool to implement large correlators.
 
 
 %TODO: add another graph from paper
@@ -66,7 +66,7 @@ Although the kernel itself is difficult to modify without GPU expertise, the imp
 
 \subsection{CASPER}
 
-At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we are developing  common libraries and hardware that can be used by radio astronomers developing instrumentation. The mission statement, available on the group website casper.berkeley.edu, concisely summarizes the goals of the group:
+At the Collaboration for Astronomy Signal Processing and Electronics Research (CASPER), we are developing  common libraries and hardware that can be used by radio astronomers developing instrumentation. The mission statement, available on the group website \url{casper.berkeley.edu}, concisely summarizes the goals of the group:
 
 \begin{quotation}
 The primary goal of CASPER is to streamline and simplify the design flow of radio astronomy instrumentation by promoting design reuse through the development of platform-independent, open-source hardware and software.
@@ -75,7 +75,7 @@ Our aim is to couple the real-time streaming performance of application-specific
 
 The collaboration, started at UC Berkeley by Dan Werthimer, Don Backer, and Mel Wright, has spread to include astronomers all over the world, as shown in Figure \ref{fig: C3/casper_collaborators.png}. 
 The group collaborates with many large digital engineering groups including groups from the Jet Propulsion Laboratory (JPL), the National Radio Astronomy Observatory (NRAO), the Arecibo Observatory, SKA South Africa, and the Giant Metrewave Radio Telescope (GMRT) in India. 
-The diversity and far reach in this collaboration ensures that the tools continue to be general purpose and widely accessible. 
+The diversity and far reach in this collaboration ensure that the tools continue to be general purpose and widely accessible. 
 
 
 \begin{figure}[h!]
@@ -142,13 +142,13 @@ This makes it simple to design a cluster, and allows continuous upgrades as tech
   \label{fig: C3/roach.pdf}
 \end{figure}
 
-Currently, CASPER has designed the IBOB, or Interconnect Break-out Board, ROACH and ROACH2 boards. 
+Currently, CASPER has designed the IBOB, or Interconnect Break-out Board, ROACH and ROACH 2 boards. 
 The IBOB was originally designed as an interface to digitize antenna data and send it to a server, but the powerful Virtex-II Pro make it very useful for channelizing data as well.
 The ROACH board is shown in Figure \ref{fig: C3/roach.pdf} with an iADC board connected via Z-DOK+ and an ethernet cable to get data off the board,
 This board is pin-compatible with two large FPGA chips, the Virtex 5 SX95T and LX110T, with the SX95T being preferred for its large number of DSP blocks.
-The ROACH has 2 Z-DOK+ connectors and supports up to 4 10-gigabit Ethernet links.
-The ROACH2 is an upgrade to the ROACH board to take advantage of the newer Xilinx chips.
-The Virtex 5 chips have been upgraded to the Virtex 6 SX475T, and this board supports up to 8 10-gigabit Ethernet links.
+The ROACH has two Z-DOK+ connectors and supports up to four 10-gigabit Ethernet links.
+The ROACH 2 is an upgrade to the ROACH board that takes advantage of the newer Xilinx chips.
+The Virtex 5 chips have been upgraded to the Virtex 6 SX475T, and this board supports up to eight 10-gigabit Ethernet links.
 
 
 
@@ -179,7 +179,7 @@ The library blocks are built out of Xilinx System Generator primitive blocks.
 These primitives make it possible to retarget Simulink designs to different Xilinx FPGAs without changed the original implementation.
 Figure \ref{fig: C3/adder_tree_diagram} shows a simple example of one of the library blocks, an adder tree.
 The adder tree is used to implement pipeplined, parallel addition using a binary tree.
-The top left is the library with the adder tree block, and the bottom right is the implementation of the adder tree block with there inputs.
+The top left is the library with the adder tree block, and the bottom right is the implementation of the adder tree block with three inputs.
 
 \begin{figure}[!h]
   \centering
@@ -202,7 +202,7 @@ Every parameterized CASPER block uses at least one of these scripts to redraw th
 \end{figure}
 
 %TODO: remove this is achieved by
-The CASPER library includes commonly used DSP blocks in radio astronomy instruments.
+The CASPER library includes DSP blocks commonly used in radio astronomy instruments.
 For example, the CASPER library provides FFTs, FIR filters, accumulators, digital downconverters, digital mixers which can be linked together to make an instrument. 
 Each block is parameterized, making them useful for a variety of instruments. 
 Figure \ref{fig:casper_fft_lib.pdf} shows the FFT library, which contains different types of FFTs, including blocks that can process multiple samples in parallel and blocks that are optimized to compute the FFT of a real signal. 
@@ -238,7 +238,7 @@ Despite the additional FPGA resources required by the FIR filter before the FFT,
 \begin{figure}
   \centering
      \includegraphics[width=0.75\textwidth]{Images/C3/yellow_blocks.pdf}
-  \caption{CASPER Library IO Blocks}
+  \caption{CASPER Library I/O Blocks}
   \label{fig:C3/yellow_blocks.pdf}
 \end{figure}
 
@@ -261,10 +261,10 @@ These files can be accessed using normal file I/O, making it simple to send cont
 
 \subsubsection{SERENDIP V.v}
 
-SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extra terrestrial intelligence by analyzing radio signals \cite{2010LPICo1538.5378S}.
+SERENDIP, or the Search for Extraterrestrial Radio Emissions from Nearby Developed Intelligent Populations, aims to find extraterrestrial intelligence by analyzing radio signals \cite{2010LPICo1538.5378S}.
 SERENDIP V.v is a high resolution SETI spectrometer that was deployed at Arecibo Observatory in 2009.
 The installed instrument was built using an iADC, iBOB and BEE2 board.
-The instrument breaks up a single 200MHz stream into 128 million frequency channels, achieving a resolution of about 1Hz.
+The instrument breaks up a single 200 MHz stream into 128 million frequency channels, achieving a resolution of about 1Hz.
 
 \begin{figure}[ht!]
   \centering
@@ -320,7 +320,7 @@ The picture on the right shows the beam multiplexer, and the left picture shows 
 
 The CASPER Correlator is a scalable FPGA correlator design developed using CASPER hardware and libraries \cite{Parsons:2008dl}. 
 Figure \ref{fig: C3/casper_correlator.png} shows the CASPER Correlator architecture implemented using ROACH boards.
-The cross correlation (X Engines) and PFBs (F Engines) are calculated using ROACH boards, and data is transported between the boards using a general purpose 10 Gigibit Ethernet switch.
+The cross correlation (X-Engines) and PFBs (F-Engines) are calculated using ROACH boards, and data is transported between the boards using a general purpose 10 Gigibit Ethernet switch.
 This design represents a huge step forward from custom ASIC correlator design, using reprogrammable hardware to update implementations and providing flexibility in the design.
 
 The switch architecture solves the all-to-all cabling problem, making it easy to add more hardware to the correlator and validating the CASPER instrument design philosophy of attaching general purpose hardware to a switch.
@@ -346,7 +346,7 @@ The packets are sent out over CX4 ports to a 10 gigabit Ethernet switch.
 \begin{figure}[h!]
   \centering
     \includegraphics[width=1\textwidth]{Images/C4/pasp_fpga_arch.png}
-  \caption{PASP Dataflow}
+  \caption{PASP Dataflow (reprinted from Filiba and Werthimer \cite{Filiba:2011wl})}
   \label{fig: pasp_fpga_arch}
 \end{figure}
 
@@ -356,7 +356,7 @@ PASP is designed for flexibility.
 Building on the CASPER goal to automate the design of commonly used signal processing elements such as FFTs and digital downconverters, PASP automatically designs an entire FPGA instrument using only a few parameters.
 The user can input the desired number of subbands, CPU/GPU cluster size, and packet size and a new design is automatically generated in Simulink.  
 Figure \ref{fig: C4/pasp_high_level_interface.png} shows the high level interface for the instrument.
-The user can update the design simply by changing a parameter, clicking ok, and recompiling the design.
+The user can update the design simply by changing a parameter, clicking ok, and recompiling the design. \cite{Filiba:2011wl}
 
 \begin{figure}[h!]
   \centering
@@ -368,7 +368,7 @@ The user can update the design simply by changing a parameter, clicking ok, and 
 The interface to PASP is a simple menu that consists of four parameters.
 From the menu, \emph{Number of IPs} determines the number of IP addresses the instrument will need to send data to, defined by the size of the cluster it must communicate with.
 \emph{Samples per Packet} defines the packet size, adjustable to ensure that the packet rate is low enough for the server to handle.
-And \emph{Number of Channels} defines the FFT length.
+\emph{Number of Channels} defines the FFT length.
 The last parameter \emph{Reorder in QDR}, allows the packet buffering to be handled by off chip QDR memory.
 This is only a parameter and not the default because it is only supported by certain boards.
 
@@ -381,7 +381,7 @@ This is only a parameter and not the default because it is only supported by cer
 
 Changing any parameter causes the entire low-level design to be redrawn. 
 Figure \ref{fig: C4/pasp_low_level.png} shows the low level implementation of the instrument.
-Although this diagram is complex. it is generated automatically by PASP and the user never needs to look at this design to implement a working instrument.
+Although this diagram is complex, it is generated automatically by PASP and the user never needs to look at this design to implement a working instrument.
 
 PASP has a wide variety of potential applications due to the flexibility of the server software. 
 In the next sections, we describe a few specific applications than can make use of this package.
@@ -390,7 +390,7 @@ In the next sections, we describe a few specific applications than can make use 
 This instrument was originally designed to do pulsar science. 
 The fast channelization on the FPGA with no data reduction makes it an ideal pulsar spectrometer, since no information is lost before sending the data to the servers.
 GPUs provide a good platform for pulsar processing algorithms such as coherent dedispersion \cite{Ransom:2009wz}, which can easily be used as the processing function for the server software distributed in our package. 
-Similar to SETI instruments, pulsar instruments designed using this package can also keep up with improvements in technology with a simple recompile.
+Similar to SETI instruments, pulsar instruments designed using this package can also keep up with improvements in technology with a simple recompile. \cite{Filiba:2011wl}
 
 %TODO: add info about deployed instruments
 This design has been used in pulsar processors that have been deployed at the Parkes Observatory, Nançay Decimetric Radio Telescope, and Effelsberg Radio Telescope and aided in the discovery of a new astronomical object, a diamond planet \cite{Bailes:2011iy}.
@@ -401,7 +401,7 @@ In the search for extraterrestrial intelligence (SETI), the ability to keep up w
 SETI aims to process the maximum bandwidth possible with very high resolution spectroscopy.
 This instrument allows SETI projects to easily keep up with improvements on the telescope and increasing computational power.
 An increase in detector bandwidth, improving the breadth of the search, can be processed simply recompiling the FPGA design and distributing the extra subbands to new servers. 
-As computation improves, the instrument can be reconfigured to send more bandwidth to each computer, reducing the required cluster size, or improve the resolution of the instrument by doing a larger FFT on the server.
+As computation improves, the instrument can be reconfigured to send more bandwidth to each computer, reducing the required cluster size, or improve the resolution of the instrument by doing a larger FFT on the server. \cite{Filiba:2011wl}
 
 \begin{figure}[h!]
   \centering
@@ -444,7 +444,7 @@ Once the data is on the GPU, the software calls a process function and passes it
 An initialization function is called before the data processing begins to do any setup needed by the processing function, and an corresponding destroy function cleans up once the processing is complete.
 In the spectroscopy software included in the package, the initialization function creates the FFT plan, the processing function calls CUFFT, and the destroy function deletes the FFT plan.
 Modifying the application run on the GPU simply requires a redefinition of these three functions.
-Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.
+Using this interface, we successfully replaced the CUFFT processing with software developed for SETI searches designed by Kondo et al. \cite{Kondo:2010uk}.  \cite{Filiba:2011wl}
 
 %The high level parameters in this package allow us to use FPGAs while abstracting away implementation details specific to the FPGA.
 %To give the user control over their data processing algorithm, an application specific GPU program can be written and easily interfaced with the existing receive software in the package.
@@ -458,7 +458,7 @@ Using this interface, we successfully replaced the CUFFT processing with softwar
 %The servers receive the data from the switch and process it using spectroscopy software provided in the software package or special purpose application software written by the user and linked into the provided packet processing infrastructure.
 
 \section{Algorithm Tuning} \label{Related Work:Tuning}
-Much of the work in Electrical Engineering relating to this kind of mapping use a fixed hardware model.
+Much of the work in Electrical Engineering relating to this kind of mapping uses a fixed hardware model.
 In this section, we describe some of that work, and explain why it is not suitable to radio astronomy instrument design.
 
 %\subsection{Metropolis}
@@ -500,7 +500,7 @@ Once the performance target is met, it is better to have a tool that will minimi
 There are many other scheduling projects that have issues similar to Metropolis.
 %An integer linear programming model for mapping applications on hybrid systems
 Axel \cite{Tsoi:2010we} uses map-reduce to map computation onto existing cluster nodes.
-Theodoridis et. al present a tool in \cite{Theodoridis:2009gd} that uses Integer Linear programming to determine if an application can feasibly be run on an an existing heterogeneous system.
+Theodoridis et al. present a tool in \cite{Theodoridis:2009gd} that uses integer linear programming to determine if an application can feasibly be run on an an existing heterogeneous system.
 Again, both of these projects require a fixed hardware model, but this prerequisite that does not exist before a radio astronomy instrument is designed.
 
 

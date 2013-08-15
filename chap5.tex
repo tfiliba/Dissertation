@@ -71,7 +71,7 @@ Second, they make sure that the correct design gets implemented.
 
 
 \subsection{Platform Resources}
-Any resource some board that gets used by mapping computation blocks to that board must be accounted for in the linear program. 
+Any resource on a board that gets used by mapping computation blocks to that board must be accounted for in the linear program. 
 This is abstracted in the ILP using by adding single constraint for each resource.
 
 \subsubsection{Resource Limitations}
@@ -88,8 +88,8 @@ Each resource will require a separate constraint in the ILP of this form. By ens
 
 \subsubsection{Dataflow Model Constraints}
 After getting assurance that no resources are overused, it is important to verify that the correct design was implemented. 
-The resource utilization on the value of $n_{i,b}$, but there are is an additional constraint on these variables.
-Namely, that the correct number of blocks actually get implemented. 
+The resource utilization constrains the value of $n_{i,b}$, but there is an additional constraint on these variables.
+Namely, the ILP must ensure that the correct number of blocks actually gets implemented. 
 This adds a simple constraint to each block type:
 
 %TODO: check that this can't be geq (probably can't because of certain types of links)
@@ -185,10 +185,10 @@ Setting the $ns$ and $nr$ variable is a little more complicated for the `all-to-
 When any of the $B$ blocks are not on the board $i$, then every $A$ block must send data to the cluster, and $ns_{i,A} = n_{i,A}$.
 Otherwise, none of the $A$ blocks need to send and $ns_{i,A}=0$.
 Similarly on the receive side, if any of the $A$ blocks are not of board $i$, $nr_{i,B}=n_{i,B}$, otherwise $nr_{i,B}=0$.
-The conditional logic is easily implemented in an ILP, as describe in X. %TODO: add reference to ILP tips and tricks
+The conditional logic is easily implemented in an ILP. %TODO: add reference to ILP tips and tricks
 
-When a block must send to or receive data from multiple different block types, the is constraint the same way an `all-to-all' connection gets constrained. 
-If any of the blocks it must link to reside outside the board, it is assumed that all of the data must be sent over the link to the cluster.
+%When a block must send to or receive data from multiple different block types, the is constraint the same way an `all-to-all' connection gets constrained. 
+%If any of the blocks it must link to reside outside the board, it is assumed that all of the data must be sent over the link to the cluster.
 
 %TODO: some numbers on why this is ok
 Implementing the ILP this way results in an overestimation of the required bandwidth. 
@@ -198,7 +198,7 @@ A more exact version of this calculation would also take into account the smalle
 As described in Section \ref{Related Work:Radio Astronomy}, many architectures have this type of connection but there very few cases where the $A$ and $B$ blocks connected this way reside on the same board. 
 
 \section{ILP Implementation}
-In software, the ILP can be generated automatically using the dataflow model contained in an instrument object.
+In software, the ILP can be generated automatically using the dataflow model contained in an Instrument object.
 The generic Instrument class has a single function, called runILP() that iterates through the dataflow model, creating variables and constraints, determines the cost model depending on what the user wants to optimize for and runs an ILP solver to generate an optimal mapping.
 Adding on to the instrument creation example in Section \ref{High Level Toolflow:Instrument Definition}, we show how the user can create and map an instrument using only two function calls in the following code.
 
@@ -226,9 +226,11 @@ Nevertheless, many DSP blocks have predictable performance and a performance est
 
 Benchmarks of the mapped design or running code serve as a very accurate way to assess performance.
 Figure \ref{fig: C6/fpga_bench.png} shows the type of benchmarks that would be useful for an FPGA block, measuring utilization of available FPGA resources.
+These benchmarks were taken by compiling small designs that only had the target block.
+The designs and compilation results are in the ORCAS Git repository.
 The graphs show the utilization of registers, LUTs, BRAMs and DSPs used on the Virtex 5 SX95T. 
 The top graph is the data for an 800 MHz FIR filter with 4 taps, and the bottom shows utilization for an 800 MHz FFT.
-Getting the performance model for a specific block simply requires a looking up the FFT size in the graph.
+Getting the performance model for a specific block simply requires looking up the FFT size in the graph.
 
 \begin{figure}[htp!]
   \centering
@@ -240,6 +242,8 @@ Getting the performance model for a specific block simply requires a looking up 
 
 Similarly, Figure \ref{fig: C6/gpu_bench.png} has benchmarks for the same blocks, FIR filter above and FFT below, but these are tested on a GTX 580 GPU. 
 These benchmarks measure the runtime of each function. 
+The benchmark data was taken by running the routine one hundred times on the target architecture to get an average runtime.
+These benchmarks are also available in the Git repository for this project.
 
 Many papers also provide these kinds of benchmarks, making it easy to get accurate numbers without installing or running the code.
 The xGPU paper \cite{Clark:2011wi} has a number of graphs demonstrating kernel performance that can be used directly as an ORCAS benchmark, which will be shown in Chapter \ref{chap:Analysis}.
@@ -253,7 +257,7 @@ The xGPU paper \cite{Clark:2011wi} has a number of graphs demonstrating kernel p
 
 Performance data can also be represented using formulas. 
 Figure \ref{fig: C6/fpga_bench.png} clearly shows some predictable trends in the FIR and FFT utilization.
-Primiami et al. turned this predictability into a set of equations that determine the requisite resources with a set of formulas \cite{Primiani:2011vz}.
+Primiami et al. turned this predictability into a set of equations that determine the requisite resources \cite{Primiani:2011vz}.
 
 \begin{figure}[ht!]
   \centering
@@ -371,7 +375,7 @@ Since the ILP will attempt to use every possible resource, it may end up with co
 To simplify these designs, two options can be enabled that will add extra constraints to the ILP.
 
 The first option is called \emph{single design}. 
-This option forces every every board of a certain platform type to implement the same design.
+This option forces every board of a certain platform type to implement the same design.
 Instead of allowing any block to go on any board, the designs must be replicated.
 The second option is \emph{single implementation}.
 This forces every block with the same block type to be implemented on the same platform type.
@@ -461,7 +465,7 @@ The ILP might observe that both blocks cannot fit on a single board and assigns 
 This obviously seems like an optimal solution, but the ILP may also need to check the case where the FFT is placed on ROACH\_0 and the FIR is on ROACH\_1, only to find that it has the same cost as the previous result.
 Figure \ref{fig:C5/symmetry.pdf} shows a more complex example of a cross-correlator where the cross correlation step can be implemented on either ROACH board. 
 Again, there are two possible solutions the ILP can find before convincing itself that either is optimal.
-In these simple example there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
+In these simple examples there was only one other solution to search, but as the ILP and the search space grows the number of solutions that are symmetric to the optimal case will also grow. %TODO: est of how fast?
 
 %TODO: Figure descr
 
@@ -469,7 +473,7 @@ Searching symmetric solutions can become a major time sink, because the ILP solv
 
 
 % Early stopping (non-optimal result)The simplest solution is stopping the ILP solver before returns an optimal mapping. 
-This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not the a globally optimal mapping, determine if it is close to the optimal solution, since determining that is analogous to solving the ILP.
+This returns the current best result the solver knows of, but it cannot guarantee that the solution is globally optimal or, in the case where it is not a globally optimal mapping, determine if it is close to the optimal solution, since determining that is analogous to solving the ILP.
 Early stopping works well when it's clear that symmetry is the cause of the long runtime and the amount of time it would take to find one of the isomorphic optimal solutions is short. 
 Even so, the lack of predictable and repeatable results makes early stopping an unappealing solution.
 
@@ -523,15 +527,17 @@ By modifying the ILP, the performance is greatly improved without sacrificing op
 \section{Final Mapping}
 %Variables
 %Design choices
-The final mapping produced by the ILP is just a list of variable indicating which blocks go on which boards and the cost of the design.
-Figure \ref{fig:C5/mapped_dataflow.png} shows an example of the output produced by ORCAS.
-The design is a simple wideband spectrometer model.
-The mapping indicates that the design will use one ROACH board and two GTX 580 servers, placing the FIR and coarse FFT on the FPGA and the remaining fine FFTs on the GPU.
-
 \begin{figure}[htb!]
   \centering
      \includegraphics[width=0.75\textwidth]{Images/C5/mapped_dataflow.png}
   \caption{ORCAS Output}
   \label{fig:C5/mapped_dataflow.png}
 \end{figure}
+
+The final mapping produced by the ILP is just a list of variable indicating which blocks go on which boards and the cost of the design.
+Figure \ref{fig:C5/mapped_dataflow.png} shows an example of the output produced by ORCAS.
+The design is a simple wideband spectrometer model.
+The mapping indicates that the design will use one ROACH board and two GTX 580 servers, placing the FIR and coarse FFT on the FPGA and the remaining fine FFTs on the GPU.
+
+
 

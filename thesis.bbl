@@ -1082,6 +1082,24 @@
   \field{year}{2009}
 \endentry
 
+\entry{Schollar:2012vwa}{report}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Schollar}{S.}%
+     {Christopher}{C.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SC1}
+  \strng{fullhash}{SC1}
+  \field{sortinit}{S}
+  \field{number}{48}
+  \field{title}{{Profiling xGPU code on the GTX580 and GTX680}}
+  \field{type}{techreport}
+  \field{month}{09}
+  \field{year}{2012}
+\endentry
+
 \entry{2010LPICo1538.5378S}{article}{}
   \name{author}{13}{}{%
     {{}%

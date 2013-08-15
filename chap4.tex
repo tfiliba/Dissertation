@@ -25,10 +25,10 @@ ORCAS is released as an open source Python library, freely available on GitHub a
 \section{ORCAS Goals} \label{High Level Toolflow:ORCAS Goals}
 ORCAS extends the CASPER philosophy discussed in Section \ref{Related Work:Radio Astronomy} by providing an end-to-end toolflow that allows the user to go from a high level description of the instrument to a low level mapping automatically. 
 While the CASPER toolflow has proven successful in the FPGA domain, it's not always clear that FPGAs are the most cost-effective implementation for a given instrument.
-The ORCAS captures the successful elements of the CASPER tools while extending its reach to the heterogeneous domain. 
+ORCAS captures the successful elements of the CASPER tools while extending its reach to the heterogeneous domain. 
 One of the most important elements of the CASPER tools is the library of DSP blocks. 
 The CASPER library blocks are constantly being updated, ensuring that the library can always be compiled on the latest technology.
-By incorporating existing libraries implemented for CPUs, such as FFTW,  of GPUs, like cuBLAS, xGPU, and CUFFT, ORCAS can also keep up with changing technology, without the need for constant updates to the tool itself.
+By incorporating existing libraries implemented for CPUs, such as FFTW,  or GPUs, like cuBLAS, xGPU, and CUFFT, ORCAS can also keep up with changing technology, without the need for constant updates to the tool itself.
 The flexibility of the libraries also allows us to buy technology at the last minute, ensuring we get the cheapest price available for an instrument that will provide the needed performance.
 
 In addition to the elements drawn from the CASPER library, ORCAS emphasizes a twofold approach to cost reduction in instrument design.
@@ -103,8 +103,8 @@ An instrument designer who finds that he or she needs additional control beyond 
 Additional instruments or new parameters for existing instruments can be added by defining how those parameters affect the final dataflow diagram. 
 
 In software, each instrument type is represented by a Python class. 
-The instrument parameters used when an instrument object is instantiated.
-For example, to create the instrument specified on the sticky note in Figure \ref{fig: C4/instrument_description.pdf} would simply require the following function call (variables are defined for clarity):
+The instrument parameters are used when an instrument object is instantiated.
+For example, creating the instrument specified on the sticky note in Figure \ref{fig: C4/instrument_description.pdf} simply requires the following function call (variables are defined for clarity):
 
 \lstinputlisting[language=Python,
     %caption=My Class,
@@ -125,16 +125,16 @@ Even non-numerical parameters can be varied, such as the FIR window type, to see
 
 \section{Dataflow Model} \label{High Level Toolflow:Dataflow Model}
 %TODO: Add tool name
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.75\textwidth]{Images/C4/dataflow_model.pdf}
-  \caption{The ORCAS Toolflow: Dataflow Model}
-  \label{fig: C4/dataflow_model.pdf}
-\end{figure}
+%\begin{figure}[ht!]
+%  \centering
+%    \includegraphics[width=0.75\textwidth]{Images/C4/dataflow_model.pdf}
+%  \caption{The ORCAS Toolflow: Dataflow Model}
+%  \label{fig: C4/dataflow_model.pdf}
+%\end{figure}
 
 The second step of the toolflow translates the instrument definition into a dataflow model. 
-The dataflow model represents the instrument as a set of high level blocks (such as FFTs and FIRs) and input and output connections
-Figure \ref{fig: C4/dataflow_model.pdf} shows an abstract example of this type of dataflow.
+The dataflow model represents the instrument as a set of high level blocks (such as FFTs and FIRs) and input and output connections.
+The second icon in Figure \ref{fig: C4/toolflow_horizontal.pdf} shows an abstract example of this type of dataflow.
 
 
 %Dataflow representation of instrument
@@ -144,8 +144,8 @@ Figure \ref{fig: C4/dataflow_model.pdf} shows an abstract example of this type o
 
 \subsection{Computational Blocks}
 The computational blocks are a set of algorithmic building blocks.
-These blocks are similar to the set of blocks provided by the CASPER library or CUFFT, allowing for parameterization, but unlike the afore mentioned libraries, these blocks do not necessarily include an implementation of the function they claim to provide.
-Instead, each block provides some method to asses the performance of that function on each supported platform.
+These blocks are similar to the set of blocks provided by the CASPER library or CUFFT, allowing for parameterization, but unlike the afore mentioned libraries, these blocks do not necessarily include an implementation of the function they claim to compute.
+Instead, each block provides some method to assess the performance of that function on each supported platform.
 
 One way to assess performance is to simply include the code, generating a model by synthesizing or running the code and getting real performance data.
 But this is not always necessary or desirable.
@@ -154,10 +154,10 @@ The predictable scaling of many DSP functions can also make it easy to create a 
 And finally, the user can always estimate the performance of a block, a useful option when attempting to assess the cost savings of a potential optimization or explore mapping to hardware that does not exist.
 
 \subsection{Connection Types}
-In order to reduce the total number of connections that need to be defined, blocks that receive data from and sends data to the same set of block are put into a group.
+In order to reduce the total number of connections that need to be defined, blocks that receive data from and send data to the same set of blocks are put into a group.
 Figure \ref{fig: C4/fx_dataflow.pdf} shows an example FX Correlator dataflow model, where blocks grouped together have the same color.
 In this example, the FFTs all take data from an FIR block and must send data to the XEng blocks.
-The name of the group of blocks is referred to as the "block type".
+The name of the group of blocks is referred to as the `block type'.
 
 \begin{figure}[h!]
   \centering
@@ -183,16 +183,16 @@ This could happen in 2 ways, `one-to-one' and `all-to-all'.
 
 A `one-to-one' connection is where every $A$ block communicates with exactly one $B$ block, as shown in Figure \ref{fig:C4/one-to-one.pdf}. 
 With this type of connection, the number of $A$ blocks must be equal to the number of $B$ blocks.
-The F-engines in a FX correlator are a good example of this type of connection. 
-The correlator has an F-engine for each antenna, each containing the same blocks linked in the same way. 
-Within an F-engine, a PFB\_FIR filter must communicate with a single FFT.
-In general, every PFB\_FIR within an F-engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
+The F-Engines in an FX correlator are a good example of this type of connection. 
+The correlator has an F-Engine for each antenna, each containing the same blocks linked in the same way. 
+Within an F-Engine, an FIR filter must communicate with a single FFT.
+In general, every FIR within an F-Engine, blocktype `A' must communicate with exactly one FFT, blocktype `B'. 
 
 An `all-to-all' connection occurs when every $A$ block must send some data to ever $B$ block. 
 Figure \ref{fig:C4/one-to-one.pdf} shows what an all-to-all connection between three $A$ blocks and three $B$ blocks will look like. 
 In this case, every $A$ block must send some data to every $B$ block. 
-For example, the type of connection between the per-antenna FFTs and the per-channel X-engines in an FX correlator would be `all-to-all'. 
-Each X-engine needs a small amount of data from every F-engine to compute the cross-correlations from a single channel. 
+For example, the type of connection between the per-antenna FFTs and the per-channel X-Engines in an FX correlator would be `all-to-all'. 
+Each X-Engine needs a small amount of data from every F-Engine to compute the cross-correlations from a single channel. 
 In the `all-to-all' case, there is no reason for the number of sending nodes needs to be the same as the number of receiving nodes. 
 %The n's do not get introduced until the ILP is defined
 %This means that $n_{i,A}$ and $n_{i,B}$ do not have to be equal, and as long as the data can be distributed appropriately, there is no enforced relationship between the two variables. 
@@ -210,8 +210,8 @@ In the `all-to-all' case, there is no reason for the number of sending nodes nee
 
 
 
-It might seem like there are two more possible types of connection that need to be defined, `one-to-all' and `all-to-one' .
-A data flow with a `one-to-all' connection, shown on the left in Figure \ref{fig: C4/one-to-all_vs_all-to-one} would have exactly one $A$ block that needs to send data to many $B$ blocks. 
+It might seem like there are two more possible types of connection that need to be defined, `one-to-all' and `all-to-one'.
+A dataflow with a `one-to-all' connection, shown on the left in Figure \ref{fig: C4/one-to-all_vs_all-to-one} would have exactly one $A$ block that needs to send data to many $B$ blocks. 
 This is exemplified in the dataflow for a high-resolution spectrometer.
 The coarse channelization is done in a single FFT block, which then needs to send the data to many other FFTs to do the fine channelization. 
 The `all-to-one' connection is also shown on the right in Figure \ref{fig: C4/one-to-all_vs_all-to-one}
@@ -226,7 +226,7 @@ Because of this, there is no need to include or support these cases as unique co
 
 
 While it may seem like additional link types exist like `all-to-some' or `one-to-some', this turns out to be impossible. 
-Either a block of type $A$ cannot send its data to only some blocks of type $B$ because of the way blocktypes are defined.
+A block of type $A$ cannot send its data to only some blocks of type $B$ because of the way blocktypes are defined.
 Any block of the same type should be interchangeable with another block of the same type.
 In an `all-to-some' connection, blocks of type $A$ would need to send data to $B_1$ but not send data to $B_2$.
 But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{not} interchangeable and therefore cannot have the same blocktype.
@@ -247,7 +247,7 @@ But that connection patterns implies that the blocks $B_1$ and $B_2$ are \emph{n
 
 The dataflow model is created in the initialization function for the instrument.
 Each block type is added to the dataflow by creating an instance of the CBlock class and adding that object to the list of blocks.
-The constructor for the CBlock has the user define the number of blocks in the group, and the input and output connections, indicating both the blocks that it is communicating with, the connection type, and the connection bandwidth.
+The constructor for the CBlock has the user define the number of blocks in the group, and the input and output connections, indicating the blocks it must communicate with, the connection type, and the connection bandwidth.
 A CBlock also needs to be instantiated with a performance model, which is discussed further in the following section.
 The code below gives an example of this kind of instantiation. 
 It creates 16 FFT blocks that must take data from FIR blocks via a 1-to-1 connection, and sends data to XEng blocks via an all-to-all connection.
@@ -268,16 +268,16 @@ It creates 16 FFT blocks that must take data from FIR blocks via a 1-to-1 connec
 %  \label{fig: C4/toolflow_horizontal_s3.pdf}
 %\end{figure}
 
-\begin{figure}[ht!]
-  \centering
-    \includegraphics[width=0.75\textwidth]{Images/C4/mapped_dataflow.pdf}
-  \caption{The ORCAS Toolflow: Mapped Dataflow Representation}
-  \label{fig: C4/mapped_dataflow.pdf}
-\end{figure}
+%\begin{figure}[ht!]
+%  \centering
+%    \includegraphics[width=0.75\textwidth]{Images/C4/mapped_dataflow.pdf}
+%  \caption{The ORCAS Toolflow: Mapped Dataflow Representation}
+%  \label{fig: C4/mapped_dataflow.pdf}
+%\end{figure}
 
 Once the dataflow and the computational blocks are defined, ORCAS must determine how to place each computational block into hardware. 
 In the mapping stage, ORCAS determines what type of hardware should be used for each block, while minimizing the total cost of the hardware (in dollars, watts, or another used-defined metric).
-The icon in Figure \ref{fig: C4/mapped_dataflow.pdf} represents an abstract mapped dataflow. 
+The third icon in Figure \ref{fig: C4/toolflow_horizontal.pdf} represents an abstract mapped dataflow. 
 
 %Not certain this belongs here, possibly should go with the models?
 %Before mapping, need to determine which blocks can be mapped to which platforms
@@ -337,12 +337,12 @@ Chapter \ref{chap:Algorithm Partitioning} goes into more detail on how the perfo
 
 Once the mapping is complete, the dataflow model is updated to describe what type of hardware will be used to implement each computational block.
 Figure \ref{fig: C4/fx_mapped.pdf} shows two or many possible mappings for the FX Correlator dataflow shown in Figure \ref{fig: C4/fx_dataflow.pdf}.
-In the top dataflow, each F-engine and X-engine require so many resources that they must be implemented on separate boards.
-Each F-engines is implemented on an FPGA-based ROACH board and the X-engines are implemented in GPUs.
-The bottom dataflow shows a less resource-hungry correlator, allowing all the F-engines and two X-engines to share a single board for computation.
+In the top dataflow, each F-Engine and X-Engine require so many resources that they must be implemented on separate boards.
+Each F-Engine is implemented on an FPGA-based ROACH board and the X-Engines are implemented in GPUs.
+The bottom dataflow shows a less resource-hungry correlator, allowing all the F-Engines and two X-Engines to share a single board for computation.
 
-In all designs, any link between two blocks that are not mapped to the same board must pass through a switch. 
-In the example, all the links between FFTs and cross-correlation blocks must run through the switch.
+In all designs, any links between two blocks that are not mapped to the same board must pass through a switch. 
+In the example, all the links between corner turners and cross-correlation blocks must run through the switch.
 This is represented in the diagram by a single connection from each ROACH and GPU board to the switch.
 
 

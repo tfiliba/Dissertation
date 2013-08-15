@@ -58,7 +58,7 @@ The 800 MHz spectrometer is created simply by defining the parameters and instan
 The spectrometer instrument definition generates a very simple dataflow. 
 Figure \ref{fig: C4/spectrometer_dataflow.pdf} shows the general dataflow model for a single antenna spectrometer. 
 This model can be applied to any spectrometer, as the spectrometer parameters do not affect how many computational blocks are required or the interconnect layout. 
-The ADC feeds data into a FIR filter. 
+The ADC feeds data into an FIR filter. 
 Then the filtered signal is transformed into channels in the FFT and the complex samples from the FFT are converted to power data by the detect block.
 Finally, the data from each channel is accumulated and saved to disk. Regardless of the parameters the astronomer chooses, the dataflow will be the same. 
 
@@ -128,8 +128,8 @@ Both can be described in MHz per channel.
 
 The high resolution spectrometer dataflow does depend on the parameters specified in the instrument description. 
 An example dataflow is shown in Figure \ref{fig: C4/hires_spectrometer_dataflow.pdf}. 
-The first three blocks in the dataflow are exactly the same as the Spectrometer dataflow described in the previous section. 
-An ADC feeds data into a FIR filter followed by an FFT and reorders the data in the corner turn block, grouping data from the same channel together. 
+The first three blocks in the dataflow are exactly the same as the spectrometer dataflow described in the previous section. 
+An ADC feeds data into an FIR filter followed by an FFT and reorders the data in the corner turn block, grouping data from the same channel together. 
 After the corner turn, the algorithm is modified to accommodate the higher resolution required. 
 The first FFT divides the band into a number of coarse channels and then each coarse channel must be further divided into a number of fine channels. 
 The coarse FFT must feed its data to a separate fine FFT for each coarse channel, so the number of fine FFTs in the dataflow diagram will vary based on the number of coarse channels.
@@ -172,7 +172,7 @@ To aid the linear program, we assume reordering the coarse FFT data is infeasibl
 
 Table \ref{tab: C5/highres_spec_design_space} shows the results of this design space exploration. 
 The optimal configurations for each row are highlighted in purple.
-We observe that extreme values for the number of channels tends to increase costs, likely because it's difficult to put larger blocks together on the same board and get high utilization of the hardware.
+We observe that extreme values for the number of channels tend to increase costs, likely because it's difficult to put larger blocks together on the same board and get high utilization of the hardware.
 Each test was run with a 30 minute time limit on my personal laptop, a 2011 Macbook Air, to ensure that the designs could converge quickly.
 One test, the 7 antenna 512 by 262,144 channel spectrometer did not converge within the specified time.
 While it might be able to converge given more time, the resulting table makes it clear that the optimal configuration is unlikely to lie in that square, and there is no need to spend extra time trying to get a solution.
@@ -208,8 +208,8 @@ The FX dataflow model is based on the algorithm used by the CASPER correlator de
 
 An F-Engine, pictured in Figure \ref{fig: C4/fx_f_engine.pdf} is responsible for channelizing the data from a single antenna. 
 %TODO: explain or reference PFB (should be explained in C2 or 3?)
-It takes in data from an ADC, and channelizes the data using a FIR and FFT to create a polyphase filter bank, or PFB. 
-Then the data from the PFB is rearranged by the corner turn block, so that data from the same channel is grouped together.
+It takes in data from an ADC, and channelizes the data using an FIR and FFT to create a polyphase filter bank, or PFB. 
+Then the data from the PFB is rearranged by the corner turn block, by grouping together data from the same channels.
 The number of F-Engines in the correlator dataflow will vary with the number of antennas.
 
 %TODO: add detection step
@@ -220,7 +220,7 @@ The number of F-Engines in the correlator dataflow will vary with the number of 
   \label{fig: C4/fx_x_engine.pdf}
 \end{figure}
 
-The second pipeline, the X-Engine processes the channelized data. 
+The second pipeline, the X-Engine, processes the channelized data. 
 Each X-Engine takes a single channel of data from every antenna in the array, cross-correlates the data, calculates the power of the baselines in the detect stage, accumulates each baseline and stores the accumulated data to disk. 
 Figure \ref{fig: C4/fx_x_engine.pdf} shows the pipeline for a single X-Engine. 
 Since each X-Engine only operates on a single channel, the total number of X-Engines in the correlator must be the same as the number of channels in the FFT.
@@ -237,19 +237,22 @@ Since each X-Engine only operates on a single channel, the total number of X-Eng
 The dataflow for an FX correlator will vary quite a bit based on the input parameters. 
 Figure \ref{fig: C6/fx_dataflow.pdf} shows an example three antenna four channel FX correlator. 
 The left half of the figure has three F-engines, one for each of the three antennas.
-The right half has four X-engines, one for each channel.
-In the center, since each X-engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the Corner Turn blocks are connected in an all-to-all configuration.
+The right half has four X-Engines, one for each channel.
+In the center, since each X-Engine requires data from every F-engine, the cross-correlation blocks, represented by an \emph{X} and the Corner Turn blocks are connected in an all-to-all configuration.
 
 \subsection{FX Correlator Mapping}
-The FX Correlator is evaluated by investigating at how correlator design scales from 16 to 512 dual polarization antennas.
+The FX Correlator is evaluated by investigating how correlator design scales from 16 to 512 dual polarization antennas.
+Note that a 512 dual polarization antenna has 1024 inputs because each antenna produces 2 streams of data.
 The design is based on the planned HERA Correlator that processes 100 MHz of data and divides it into 1024 channels.
 
-I use the technique of block combining described in Section \ref{Algorithm Partitioning:Optimization} to ensure the problem can be solved quickly even when the number of antennas is large.
-The FIR and FFT are combined into a single block called a PFB.
+I use the technique of block combining described in Section \ref{Algorithm Partitioning:Optimization} in two ways to ensure the problem can be solved quickly even when the number of antennas is large.
+We expect the FIR and FFT will be placed together so these blocks are combined into a single block called a PFB.
+Then, since we expect to see multiple PFBs on the same board, every group of four PFBs is combined into a single block that requires four times the resources of a single PFB.
+The X-Engines are combined in the same way, since processing a single channel takes very few resources.
 
 The symmetry of the correlator dataflow makes this a good instrument to observe the effects of the ILP options, single design and single implementation.
 Just by looking at the results for the 16 antenna mapping with both options disabled, it is already apparent that the ILP is putting small blocks anywhere it can fit them, without much regard for the existing symmetry.
-In the results below we see that the transpose block has been allocated asymmetrically.
+In the results below we see that the XEng blocks have been allocated asymmetrically.
 
 \lstinputlisting[
     %caption=My Class,
@@ -257,7 +260,7 @@ In the results below we see that the transpose block has been allocated asymmetr
     breaklines=true,
   ]{code/C6/corr_si0_sd0_16_result.txt}
   
-Enabling both options gives a slightly higher cost since an additional ROACH board is required, but this makes the design symmetric.
+In this case, enabling both options doesn't alter the cost but for larger correlators making the design symmetric will require additional ROACH boards.
 One observed side effect of this approach is the fact that the design might end up creating more blocks than the design originally required.
 Consider the case where seven `A' blocks need to be distributed among four boards. 
 If the single design option is off, the ILP can allocate those blocks however it wants.
@@ -266,7 +269,7 @@ This is clearly inefficient and is solved by relaxing the constraint on the tota
 Rather than requiring the total number of implemented `A' blocks to sum to the total number of required blocks, the constraint requires that the number of implemented `A' blocks is greater than or equal to the number of required blocks.
 In the example, it would allow the instantiated design to add another `A' block and just put two blocks on each board.
 Relaxing this constraint can also inadvertently create extra blocks that aren't needed.
-The results from the 16 antenna placement with both options enabled, listed below, overspecify the number of ADCs simply because the space was available.
+The mapping fo the 16 antenna placement with both options enabled, listed below, overspecifes the number of XEng blocks to make all the GPU designs the same.
   
   \lstinputlisting[
     %caption=My Class,
@@ -274,9 +277,10 @@ The results from the 16 antenna placement with both options enabled, listed belo
     breaklines=true,
   ]{code/C6/corr_si1_sd1_16_result.txt}
   
-Analyzing the larger design space, we see this trend continue. 
+%Analyzing the larger design space, we see this trend continue. 
 Table \ref{tab: C6/fx_corr_si0_sd0.tex} and Table \ref{tab: C6/fx_corr_si1_sd1.tex} show the entire design space optimized for dollars.
-The tests with the options disabled consistently use fewer boards, resulting in a lower cost design.
+%The tests with the options disabled consistently use fewer boards, resulting in a lower cost design.
+The tests with both options enabled consistently require at least as many boards as the placement that did not preserve symmetry.
 In both cases, we see a quadratic scaling in the number of GPU servers required and a linear scaling in the number of ROACH boards indicating that the cross correlation step should be implemented on GPUs and the channelization should be on FPGAs.
 
 We also note that enabling these options increases the execution time of the ILP.
@@ -288,11 +292,30 @@ The increase in runtime when enabling either or both options is expected since t
 \begin{table}
 \centering
 \input{Tables/fx_corr_si0_sd0.tex}
-\caption{FX Correlator Design Space with Single Implementation and Single Design options disabled optimized for dollars}
+\caption{FX Correlator Design Space using ROACH boards and GTX 680 servers with Single Implementation and Single Design options disabled optimized for dollars}
 \label{tab: C6/fx_corr_si0_sd0.tex}
 
 \input{Tables/fx_corr_si1_sd1.tex}
-\caption{FX Correlator Design Space with Single Implementation and Single Design options enabled optimized for dollars}
+\caption{FX Correlator Design Space using ROACH boards and GTX 680 servers with Single Implementation and Single Design options enabled optimized for dollars}
 \label{tab: C6/fx_corr_si1_sd1.tex}
+\end{table} 
+
+Since HERA is a planned instrument it is also interesting to see how this design will map onto newer technology and compare that to the planned design.
+To do this, I analyze the same design but I use the ROACH 2 board and a server that contains two GTX 690s costing \$5,500 as target platforms.
+Rather than get new benchmarks for the GTX 690 and a ROACH 2, I use existing benchmarks to estimate the performance of these blocks on the new architecture.
+The FPGA benchmarks are obtained by assuming the number of resources required will be the same on the ROACH 1 and the ROACH 2.
+These resource benchmarks are divided by the amount of available resources on the ROACH 2 to get the percent utilization for each resource.
+The GTX 690 board has two Keplar GPUs while the GTX 680 only has one, so, for the server, we assume the performance of a server with two GTX 690 boards is four times the performance of a server with a single GTX 680.
+CASPER Memo 48 \cite{Schollar:2012vwa} has performance data for the cross correlation block on a GTX 680, so the utilization is reduced by a factor of four to estimate the cross correlation performance on the target server.
+The FIR and FFT performance is estimated by using the resource utilization for the GTX 580 and reducing it by a factor of four.
+This provides a reasonable estimate, since the GTX 680 may provide a performance increase over the GTX 580, but we don't expect a significant increase without reoptimizing the code.
+
+Figure \ref{tab: C6/fx_corr_si1_sd1_nextgen.tex} shows the performance data for the same design on the newer platforms with single design and single implementation enabled
+The smaller correlators don't see a significant price benefit from the added resources, likely because of bandwidth limitations, but the larger correlators are able to take advantage of the additional resources and the 512 antenna correlator gets a cost reduction of over 50\% simply by switching to the next generation technology.
+
+\begin{table}
+\input{Tables/fx_corr_si1_sd1_nextgen.tex}
+\caption{FX Correlator Design Space using ROACH 2 boards and Dual GTX 690 servers  with Single Implementation and Single Design options enabled optimized for dollars}
+\label{tab: C6/fx_corr_si1_sd1_nextgen.tex}
 \end{table} 
 

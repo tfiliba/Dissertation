@@ -24,14 +24,14 @@ Instead, digitizing and initial processing of high bandwidth data received from 
 %I propose we take an HPC approach to instrument development with a heterogeneous cluster that has both FPGAs and traditional servers.
 %This cluster can be reprogrammed as necessary in the same way an HPC cluster is used to run many different applications on the same hardware.
 
-Choosing which platform to use is for different parts of an instrument is a growing challenge.
+Choosing which platform to use for different parts of an instrument is a growing challenge.
 With instrument specifications and platforms constantly changing as technology progresses, the design space for these instruments is unstable and often unpredictable.
 Furthermore, the astronomers designing these instruments may not be technology experts, and assessing tradeoffs between different computing architectures, such as FPGAs, GPUs, and ASICs and determining how to partition an instrument  can prove difficult.
 In this work, I present a tool called Optimal Rearrangement of Cluster-based Astronomy Signal Processing, or ORCAS, that automatically determines how to optimally partition an instrument across different types of hardware for radio astronomy based on a high level description of the instrument and a set of benchmarks.
 
 In ORCAS, each function in a high level instrument gets profiled on different architectures. 
 The architectural mapping is then done by an optimization technique called integer linear programming (ILP). 
-The ILP is takes the function models as well as the cost model as input and uses them to determine what architecture is best for every function in the instrument.  
+The ILP takes the function models as well as the cost model as input and uses them to determine what architecture is best for every function in the instrument.  
 ORCAS judges optimality based on a cost function and generates an instrument design that minimizes the total monetary cost, power utilization, or another user-defined cost.
 
 %In order to do this work, I will need to model the platforms and based on a description of the final instrument, generate a processing pipeline.

@@ -24,7 +24,7 @@ Figure \ref{fig: C1/telescopes} shows two pictures of two very different telesco
 
 Traditionally, observatories dealt with this by designing custom instruments that would run on one telescope and solve one problem.
 This custom approach was the only way to get the requisite processing power to analyze the radio signals, but it resulted in costly designs, because the boards, backplanes, chips, protocols, and software all needed to be designed from scratch.
-To make matters worse, this approach resulted in a very long design cycle,  requiring 5-10 years of development before an instrument could be deployed at a telescope and the time the instrument was released, the hardware would be out of date.
+To make matters worse, this approach resulted in a very long design cycle,  requiring 5-10 years of development before an instrument could be deployed at a telescope and by the time the instrument was released, the hardware would be out of date.
 
 Due to their custom implementations, these instruments also lacked flexibility. 
 Each instrument was designed specifically for a single purpose.
@@ -108,7 +108,7 @@ They can use CPUs, GPUs, FPGAs, and ASICs.
 Figure \ref{fig: C1/design_space.pdf} shows each of these as a spectrum from general purpose to custom.
 The CPUs and, to a lesser extend GPUs, provide a very general purpose design experience, while FPGAs and ASICs require custom designs.
 This spectrum also can be used to generalize a number of other properties of the presented hardware.
-Platforms further right require higher design times and design complexity and less flexibility in the final design.
+Platforms further right require higher design times and design complexity and provide less flexibility in the final design.
 And because the chips will be deployed in relatively low volume, the platforms on the right will also cost more money. 
 The tradeoff is in power and performance. 
 The platforms on the right provide higher performance and lower power consumption.
@@ -116,7 +116,7 @@ The platforms on the right provide higher performance and lower power consumptio
 
 To better understand these tradeoffs, consider the two platforms in the center of the spectrum, the GPU and FPGA.
 NVIDIA GPUs can be programmed in CUDA.
-It's C-like structure makes it easy for CPU programmers to pick up and provides a lot of flexibility. 
+Its C-like structure makes it easy for CPU programmers to pick up and provides a lot of flexibility. 
 CUDA allows the programmer to use conditional and iterative programming the same way they would use C, easing the transition into GPU programming.
 FPGAs are programmed using a hardware description language, or HDL, which is less flexible and harder to learn than CUDA.
 In the FPGA computing model the data is streaming and everything is happening at the same time, requiring specialized programming.
@@ -125,14 +125,25 @@ On the other hand, FPGAs offer an order of magnitude improvement in performance 
 Each GPU requires hundreds of watts of power while an FPGA can be powered with tens of watts and a GPU can only process hundreds of megahertz of antenna data while an FPGA is capable of processing multiple gigahertz.
 
 Although it may be easy to enumerate the differences between these platforms, understanding which is best is more difficult.
-In most cases, a heterogeneous approach is best, 
+In most cases, a heterogeneous approach is best. 
 The best mix of platforms will ultimately depend on the desired instrument, available technology, as well as the price and power restrictions.
 This means that a brand new implementation must be designed for every new instrument.
 
+Traditionally, designing an instrument can be a very long process. 
+The astronomer will determine what type of instrument they want to build and what the specifications should be.
+The specification is handed off to a computer expert who will determine what platforms need to be used.
+The computer expert evaluates potential platforms.
+At best this may take a few hours if the computer expert is familiar with similar designs, but when working with newer technology or larger instruments this can take at least a week, possibly even months, giving the engineer time determine how to make the design fit.
+Any changes in the design will force the entire design process to iterate again, as was my experience developing part of a pulsar processor.
+To make matters worse, this process does not guarantee an optimal result. 
+The engineer may have a bias towards the technology she or he is familiar with.
+Benchmarks for different technologies are very difficult to compare, as they represent different things, so the engineer might decide to simply check if it works on the preferred technology without testing alternate designs.
 
 \section{Optimal Rearrangement of Cluster-based Astronomy Signal Processing}
 This dissertation explores an automated approach to instrument design using a tool called Optimal Rearrangement of Cluster-based Astronomy Signal Processing or ORCAS.
-This tool was designed to provide cost-optimal mappings in a short amount of time.
+The major contributions of this work are a toolflow that allows radio astronomy experts to design cost-optimal high performance instruments without the aid of a computer expert, the ability to quickly explore different designs in the algorithmic design space, and support for disparate benchmarks to find an optimal instrument design.
+
+This tool provides cost-optimal mappings in a short amount of time.
 ORCAS allows the developer to define the instrument at a high level and a cost function defining some cost the developer is aiming to minimize.
 The cost function can represent something as simple as the price of the instrument or can be used to represent more complex parameters of the instrument such as design time.
 

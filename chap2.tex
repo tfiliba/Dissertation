@@ -26,7 +26,7 @@ But, despite this variety, the small number of algorithms detailed in this chapt
 
 Radio telescopes produce very high amounts of data. %(TODO: add estimates, how much data?). 
 The reason for this high influx of data is twofold. 
-First, to enable new science, new radio antenna observe increasingly higher bandwidths. 
+First, to enable new science, new radio antennas observe increasingly higher bandwidths. 
 %TODO edit this
 %TODO: and to surveil a large part of the sky
 Second, to sate the need for larger collecting area, rather than designing a single large dish, many new telescopes are being designed as antenna arrays, where the data from multiple antennas is combined to act as a single large dish.
@@ -34,7 +34,7 @@ While it may be cheaper and easier to get a larger collecting area using small d
 Rather than processing a single stream of data, now the instrument must process and combine multiple streams to make the array seem like a single large dish.
 As the size of the arrays and bandwidths for single dishes simultaneously increase, the data produced cannot be feasibly recorded in real-time. 
 To cope with the progress in science and antenna technology, there is a constant need for new systems to process, rather than record, this data in real time.
-Each of these instruments begin processing the data immediately after it is digitized, and need to reduce the data without loosing scientific information.
+Each of these instruments begin processing the data immediately after it is digitized, and need to reduce the data without losing scientific information.
 Once the data is partially processed, and reduced to a manageable bandwidth, it can be stored and processed further offline.
 %, where there is no longer a need for low-latency, high-bandwidth hardware.
 
@@ -78,8 +78,8 @@ The SERENDIP V.v project is a commensal survey at the Arecibo observatory, meani
 
 The project is focused on detecting strong narrow band radio signals, requiring a high resolution spectrometer installed at the observing telescope to analyze the data. 
 The spectrometer should resolve channels of less than 2 Hz, so that natural astronomical signals that typically have a wider bandwidth can easily be distinguished from narrower, possibly extraterrestrial, signals. 
-The SERENDIP V.v spectrometer meets this by providing 128 million channels across 200MHz of bandwidth, for an resolution of 1.5 Hz per channel. 
-Since it would be infeasible to channelize a 200MHz into 128 million channels using a single filter bank, the SERENDIP V.v spectrometer uses the high resolution architecture described in Chapter \ref{chap:Related Work}. %TODO: add reference to diagram
+The SERENDIP V.v spectrometer meets this by providing 128 million channels across 200 MHz of bandwidth, for an resolution of 1.5 Hz per channel. 
+Since it would be infeasible to channelize a 200 MHz signal into 128 million channels using a single filter bank, the SERENDIP V.v spectrometer uses the high resolution architecture described in Chapter \ref{chap:Related Work}. %TODO: add reference to diagram
 
 %TODO add scaling info
 
@@ -116,7 +116,7 @@ To remove this effect, the signal is deconvolved with the model.
 This is more compute intensive than incoherent dedispersion, but can recover the original pulse.
 
 After dedispersion, there is a still a lot of data and the pulse has very low SNR. 
-The next step in processing is \emph{folding}, or adds together many pulses, reducing the amount of data and improving the SNR.
+The next step in processing is \emph{folding}, or adding together many pulses, reducing the amount of data and improving the SNR.
 At this point, the data has been significantly reduced and can be recorded. 
 
 %TODO add scaling into
@@ -160,7 +160,7 @@ Since the digitized signal from a radio telescopes receiver is discrete, and the
 The delay in clock cycles is represented as $d/s$ and broken up into it's integer and fractional parts. 
 First, the integer part is applied as a coarse delay, $n_f = \lfloor d/s \rfloor$. 
 This can simply be implemented by buffering the signal.
-Applying the  fractional delay $p \bmod s$ is more complex. 
+Applying the  fractional delay $d \bmod s$ is more complex. 
 Since there is no observed data at that time, the signal fractional samples are calculated by convolving the signal with an interpolation filter $b$.
 Applying these 2 steps, results in a new delayed signal $f[n] = f[n-n_f]\ast b_{fi}$
 

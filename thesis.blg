@@ -28,45 +28,45 @@ Warning--entry type for "Mittelmann:RLCvpfwn" isn't style-file defined
 Biblatex version: 1.7
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
-You've used 28 entries,
+You've used 29 entries,
             6019 wiz_defined-function locations,
-            1301 strings with 15320 characters,
-and the built_in function-call counts, 110011 in all, are:
-= -- 4167
-> -- 4012
-< -- 987
-+ -- 1620
-- -- 1694
-* -- 10281
-:= -- 6932
+            1307 strings with 15425 characters,
+and the built_in function-call counts, 112598 in all, are:
+= -- 4249
+> -- 4101
+< -- 1015
++ -- 1639
+- -- 1720
+* -- 10448
+:= -- 7077
 add.period$ -- 0
-call.type$ -- 28
-change.case$ -- 509
-chr.to.int$ -- 106
-cite$ -- 54
-duplicate$ -- 12845
-empty$ -- 10679
-format.name$ -- 3212
-if$ -- 23742
+call.type$ -- 29
+change.case$ -- 518
+chr.to.int$ -- 112
+cite$ -- 56
+duplicate$ -- 13157
+empty$ -- 10976
+format.name$ -- 3260
+if$ -- 24331
 int.to.chr$ -- 0
-int.to.str$ -- 62
+int.to.str$ -- 64
 missing$ -- 0
-newline$ -- 1283
-num.names$ -- 1348
-pop$ -- 9152
+newline$ -- 1301
+num.names$ -- 1389
+pop$ -- 9466
 preamble$ -- 1
-purify$ -- 700
+purify$ -- 710
 quote$ -- 0
-skip$ -- 6042
+skip$ -- 6200
 stack$ -- 0
-substring$ -- 2277
-swap$ -- 4376
-text.length$ -- 943
-text.prefix$ -- 95
+substring$ -- 2296
+swap$ -- 4479
+text.length$ -- 969
+text.prefix$ -- 96
 top$ -- 1
-type$ -- 1046
+type$ -- 1083
 warning$ -- 0
-while$ -- 563
+while$ -- 584
 width$ -- 0
-write$ -- 1254
+write$ -- 1271
 (There was 1 warning)

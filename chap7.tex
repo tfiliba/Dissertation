@@ -10,7 +10,17 @@ This dissertation presents an end to end solution that allows domain experts to 
 The ORCAS tool is able to generate these designs quickly, making it a useful tool to explore the design space of different astronomy algorithms.
 I demonstrate three types of instrument design, and explore how changing the parameters affects the implementation and costs of these instruments.
 
+In the results, it is clear that this approach is much quicker than designing instruments by hand. 
+The ORCAS flow is able to map small designs in a few seconds and larger designs still take less than an hour to map.
+Coupled with optimization techniques that reduce the number of blocks that need to be placed, ORCAS provides a scalable solution for mapping large instruments.
+By allowing the user to leverage existing benchmarks, ORCAS reduces a traditional design cycle of a least a week down to an hour.
+Furthermore, ORCAS provides a better design experience than the traditional approach.
+The quick feedback is a key strength of this work, allowing the astronomer to vary the parameters of the algorithm and see how it affects the total cost.
 
+Even when a benchmark isn't available, ORCAS makes it easy to add an estimated benchmark based on an existing one.
+To get more accurate results, getting new data for a single benchmark is very fast.
+The GPU benchmarks can be run in a few minutes and an FPGA benchmark for a small block can get results in under an hour.
+So even if new benchmark data is needed, the entire design cycle will still take less than a day.
 
 \section{Future Work}
 The success of this work opens up a lot of related projects to improve upon the existing mapping capabilities.
