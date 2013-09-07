@@ -1,0 +1,12 @@
+cost = 21500.0
+'ADC'_is_on_ROACH2 = 1.0
+'PFB'_is_on_ROACH2 = 1.0
+'Transpose'_is_on_ROACH2 = 1.0
+'XEng'_is_on_DualGTX690 = 1.0
+num'ADC'_on_'ROACH2'_0 = 8.0
+num'PFB'_on_'ROACH2'_0 = 8.0
+num'Transpose'_on_'ROACH2'_0 = 8.0
+num'XEng'_on_'DualGTX690'_0 = 100.0
+num'XEng'_on_'DualGTX690'_1 = 100.0
+total_DualGTX690 = 2.0
+total_ROACH2 = 1.0

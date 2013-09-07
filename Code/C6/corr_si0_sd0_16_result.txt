@@ -1,0 +1,15 @@
+Optimal
+cost = 30600.0
+num'ADC'_on_'ROACH'_0 = 3.0
+num'ADC'_on_'ROACH'_1 = 1.0
+num'PFB'_on_'ROACH'_0 = 2.0
+num'PFB'_on_'ROACH'_1 = 1.0
+num'PFB'_on_'ROACH'_2 = 1.0
+num'Transpose'_on_'ROACH'_1 = 2.0
+num'Transpose'_on_'ROACH'_2 = 2.0
+num'XEng'_on_'GTX580'_0 = 50.0
+num'XEng'_on_'GTX580'_1 = 50.0
+num'XEng'_on_'GTX580'_2 = 26.0
+num'XEng'_on_'ROACH'_2 = 2.0
+total_GTX580 = 3.0
+total_ROACH = 3.0
